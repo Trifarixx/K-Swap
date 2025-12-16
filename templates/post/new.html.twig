@@ -4,9 +4,9 @@
 
 {% block body %}
 <div class="app-layout">
-    {% include 'sidebar.html.twig' %}
-    <main class="main-content flex justify-center items-start">
-        
+
+     <!-- 3. MAIN CONTENT (Le cœur du site) -->
+    <main class="main-content flex-center-page" style="grid-column: 0 / 0;">        
         <div class="post-creation-card">
             <h1 class="card-header-title">
                 <span class="material-symbols-rounded">edit_square</span>
@@ -14,7 +14,6 @@
             </h1>
 
             {{ form_start(form) }}
-                
                 <div class="mb-4">
                     {{ form_widget(form.commentaire, {
                         'attr': {
@@ -46,14 +45,10 @@
 
             {{ form_end(form) }}
         </div>
-
     </main>
-
-    <div class="right-panel"></div>
 </div>
 
 <script>
-    // Petit script pour changer le texte quand une image est sélectionnée
     document.querySelector('.file-upload-input').addEventListener('change', function(e) {
         const fileName = e.target.files[0]?.name;
         const label = document.querySelector('.file-upload-label span:last-child');

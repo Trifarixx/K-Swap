@@ -31,10 +31,9 @@ export default class extends Controller {
         const nextPage = this.pageValue + 1;
 
         // On appelle le serveur
-        const response = await fetch(`${this.url}?page=${nextPage}&ajax=1`);
+        const response = await fetch(`${this.urlValue}?page=${nextPage}&ajax=1`);
         const html = await response.text();
 
-        // On ajoute le contenu à la fin de la liste
         this.containerTarget.insertAdjacentHTML("beforeend", html);
 
         // On met à jour la page actuelle

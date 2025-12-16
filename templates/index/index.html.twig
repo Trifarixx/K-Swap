@@ -19,7 +19,6 @@
     <!-- 3. MAIN CONTENT (Le cœur du site) -->
     <main class="main-content">
     <div class="hero-card">
-        <h2 class="hero-title">Derniers Avis</h2>
     </div>
 
     <div class="feed-container"
@@ -31,11 +30,6 @@
             <div data-infinite-scroll-target="container">
                 {% include 'index/_feed_items.html.twig' %}
             </div>
-
-            <div data-infinite-scroll-target="loading" class="loading-spinner">
-                <span class="material-symbols-rounded fa-spin">refresh</span> Chargement...
-            </div>
-
         </div>
     </main>
 

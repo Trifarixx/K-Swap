@@ -1,5 +1,6 @@
 {% for avis in avis_list %}
     <article class="feed-card fade-in">
+        
         <div class="feed-header">
             <div class="user-info">
                 {% if avis.user.avatar %}
@@ -12,31 +13,44 @@
                     <span class="post-date">{{ avis.dateCreation|date('d M Y à H:i') }}</span>
                 </div>
             </div>
-            <div class="rating-badge">
-                <span class="material-symbols-rounded">star</span>
-                <span>{{ avis.note }}/5</span>
-            </div>
+
+            {% if avis.note %}
+                <div class="rating-badge">
+                    <span class="material-symbols-rounded">star</span>
+                    <span>{{ avis.note }}/5</span>
+                </div>
+            {% endif %}
         </div>
 
         <div class="feed-content">
             <p>{{ avis.commentaire }}</p>
         </div>
 
-        <div class="feed-album">
-            <div class="album-mini">
-                {% if avis.discographie.pochette %}
-                     <img src="{{ asset(avis.discographie.pochette) }}" alt="Cover">
-                {% else %}
-                     <div class="album-placeholder">CD</div>
-                {% endif %}
-                <div class="album-details">
-                    <span class="album-title">{{ avis.discographie.titre }}</span>
-                    <span class="album-artist">{{ avis.discographie.artiste.nomScene }}</span>
-                </div>
+        {% if avis.image %}
+            <div class="post-image mb-4 rounded-xl overflow-hidden mt-3">
+                <img src="{{ asset('uploads/posts/' ~ avis.image) }}" alt="Post image" class="w-full h-auto object-cover">
             </div>
-            <button class="btn-icon">
-                <span class="material-symbols-rounded">favorite</span>
-            </button>
-        </div>
-    </article>
+        {% endif %}
+
+        {% if avis.discographie %}
+            <div class="feed-album">
+                <div class="album-mini">
+                    {% if avis.discographie.pochette %}
+                        <img src="{{ asset(avis.discographie.pochette) }}" alt="Cover">
+                    {% else %}
+                        <div class="album-placeholder">CD</div>
+                    {% endif %}
+                    <div class="album-details">
+                        <span class="album-title">{{ avis.discographie.titre }}</span>
+                        <span class="album-artist">{{ avis.discographie.artiste.nomScene }}</span>
+                    </div>
+                </div>
+                
+                <button class="btn-icon">
+                    <span class="material-symbols-rounded">favorite</span>
+                </button>
+            </div>
+        {% endif %}
+
+        </article>
 {% endfor %}

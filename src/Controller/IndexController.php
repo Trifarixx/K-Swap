@@ -19,7 +19,7 @@ final class IndexController extends AbstractController
 
         // 2. On récupère les données
         $avisList = $avisRepository->findFeed($page, $limit);
-        $totalAvis = count($avisList);
+        $totalAvis = $avisRepository->count([]); 
         $pagesTotal = ceil($totalAvis / $limit);
 
         // 3. Détection de l'appel AJAX
