@@ -7,10 +7,15 @@
 	{{ parent() }}
 	<!-- Lien vers ton fichier CSS -->
 	<link
-	rel="stylesheet" href="{{ asset('css/Styles.css') }}">
+	rel="stylesheet" href="{{ asset('CSS/Styles.css') }}">
 	<!-- Import des icônes Google Material Symbols (arrondies) -->
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"/>
 {% endblock %}
+
+{% block javascripts %}
+	{{ encore_entry_script_tags('app') }}
+{% endblock %}
+
 
 {% block body %}
 	<div class="app-layout">

@@ -9,6 +9,10 @@
                 "enabled": false,
                 "fetch": "eager"
             }
+        },
+        "./controllers/infinite_scroll_controller": {
+            "enabled": true,
+            "fetch": "eager"
         }
     },
     "entrypoints": []
