@@ -33,13 +33,14 @@ class AvisRepository extends ServiceEntityRepository
     public function findFeed(int $page = 1, int $limit = 5): Paginator
     {
         $query = $this->createQueryBuilder('a')
-            ->addSelect('u', 'd', 'ar') // On charge User, Discographie et Artiste en même temps
+            ->addSelect('u', 'd', 'ar')
             ->leftJoin('a.user', 'u')
             ->leftJoin('a.discographie', 'd')
             ->leftJoin('d.artiste', 'ar')
             ->orderBy('a.dateCreation', 'DESC')
-            ->setFirstResult(($page - 1) * $limit) // Offset
-            ->setMaxResults($limit); // Limit
+            ->addOrderBy('a.id', 'DESC') // <--- AJOUTEZ CETTE LIGNE
+            ->setFirstResult(($page - 1) * $limit)
+            ->setMaxResults($limit);
 
         return new Paginator($query);
     }

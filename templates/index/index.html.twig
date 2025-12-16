@@ -1,42 +1,39 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}K-World | Dashboard{% endblock %}
+{% block title %}K-World | Dashboard
+{% endblock %}
 
 {% block stylesheets %}
-    {{ parent() }}
-    <!-- Lien vers ton fichier CSS -->
-    <link rel="stylesheet" href="{{ asset('css/Styles.css') }}">
-    <!-- Import des icônes Google Material Symbols (arrondies) -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+	{{ parent() }}
+	<!-- Lien vers ton fichier CSS -->
+	<link
+	rel="stylesheet" href="{{ asset('css/Styles.css') }}">
+	<!-- Import des icônes Google Material Symbols (arrondies) -->
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"/>
 {% endblock %}
 
 {% block body %}
-<div class="app-layout">
-    {% include 'header.html.twig' %}
-    {% include 'sidebar.html.twig' %}
+	<div class="app-layout">
+		{% include 'header.html.twig' %}
+		{% include 'sidebar.html.twig' %}
 
+		<main class="main-content">
+			<div class="hero-card"></div>
 
-    <!-- 3. MAIN CONTENT (Le cœur du site) -->
-    <main class="main-content">
-    <div class="hero-card">
-    </div>
+			<div class="feed-container" data-controller="infinite-scroll" data-infinite-scroll-page-value="{{ current_page }}" data-infinite-scroll-total-value="{{ pages_total }}" data-infinite-scroll-url-value="{{ path('app_home') }}">
 
-    <div class="feed-container"
-             data-controller="infinite-scroll"
-             data-infinite-scroll-page-value="{{ current_page }}"
-             data-infinite-scroll-total-value="{{ pages_total }}"
-             data-infinite-scroll-url-value="{{ path('app_home') }}">
+				<div data-infinite-scroll-target="container">
+					{% include 'index/_feed_items.html.twig' %}
+				</div>
 
-            <div data-infinite-scroll-target="container">
-                {% include 'index/_feed_items.html.twig' %}
-            </div>
-        </div>
-    </main>
+				<div data-infinite-scroll-target="loading" class="loading-spinner">
+					<span class="material-symbols-rounded fa-spin">refresh</span>
+					Chargement...
+				</div>
+			</div>
+		</main>
 
-    <!-- 4. RIGHT PANEL  -->
-    <aside class="right-panel">
+		<aside class="right-panel"></aside>
 
-    </aside>
-
-</div>
+	</div>
 {% endblock %}
