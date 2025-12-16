@@ -1,47 +1,66 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Nouveau Post{% endblock %}
+{% block title %}Nouveau Post | K-Swap{% endblock %}
 
 {% block body %}
 <div class="app-layout">
-    {{ include('partials/_sidebar.html.twig', ignore_missing = true) }}
+    {% include 'sidebar.html.twig' %}
+    <main class="main-content flex justify-center items-start">
+        
+        <div class="post-creation-card">
+            <h1 class="card-header-title">
+                <span class="material-symbols-rounded">edit_square</span>
+                Créer un post
+            </h1>
 
-    <main class="main-content flex justify-center">
-        <div class="w-full max-w-2xl mt-10">
-            
-            <div class="bg-slate-800 border border-slate-700 rounded-2xl p-6 shadow-xl">
-                <h1 class="text-2xl font-bold mb-6 text-white">Créer une publication</h1>
+            {{ form_start(form) }}
+                
+                <div class="mb-4">
+                    {{ form_widget(form.commentaire, {
+                        'attr': {
+                            'class': 'custom-textarea', 
+                            'placeholder': 'Partage quelque chose avec la communauté...'
+                        }
+                    }) }}
+                    <div class="text-red-400 text-sm mt-2">
+                        {{ form_errors(form.commentaire) }}
+                    </div>
+                </div>
 
-                {{ form_start(form) }}
+                <div class="file-upload-container">
+                    <label for="{{ form.imageFile.vars.id }}" class="file-upload-label">
+                        <span class="material-symbols-rounded text-2xl">add_photo_alternate</span>
+                        <span class="font-medium">Ajouter une photo (Optionnel)</span>
+                    </label>
                     
-                    <div class="mb-4">
-                        {{ form_label(form.discographie, null, {'label_attr': {'class': 'block text-sm font-medium text-slate-300 mb-2'}}) }}
-                        {{ form_widget(form.discographie, {'attr': {'class': 'w-full bg-slate-900 border border-slate-700 rounded-lg p-3 text-white focus:ring-2 focus:ring-violet-500'}}) }}
-                    </div>
-
-                    <div class="mb-4">
-                        {{ form_label(form.note, null, {'label_attr': {'class': 'block text-sm font-medium text-slate-300 mb-2'}}) }}
-                        {{ form_widget(form.note, {'attr': {'class': 'w-full bg-slate-900 border border-slate-700 rounded-lg p-3 text-white'}}) }}
-                    </div>
-
-                    <div class="mb-4">
-                        {{ form_label(form.commentaire, null, {'label_attr': {'class': 'block text-sm font-medium text-slate-300 mb-2'}}) }}
-                        {{ form_widget(form.commentaire, {'attr': {'class': 'w-full bg-slate-900 border border-slate-700 rounded-lg p-3 text-white min-h-[150px]'}}) }}
-                    </div>
-
-                    <div class="mb-6">
-                        {{ form_label(form.imageFile, null, {'label_attr': {'class': 'block text-sm font-medium text-slate-300 mb-2'}}) }}
-                        {{ form_widget(form.imageFile, {'attr': {'class': 'w-full text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-violet-50 file:text-violet-700 hover:file:bg-violet-100'}}) }}
+                    {{ form_widget(form.imageFile, {'attr': {'class': 'file-upload-input'}}) }}
+                    
+                    <div class="text-red-400 text-sm mt-2">
                         {{ form_errors(form.imageFile) }}
                     </div>
+                </div>
 
-                    <button type="submit" class="w-full bg-violet-600 hover:bg-violet-700 text-white font-bold py-3 px-6 rounded-xl transition duration-200">
-                        Publier
-                    </button>
+                <button type="submit" class="btn-submit-post">
+                    Publier maintenant
+                </button>
 
-                {{ form_end(form) }}
-            </div>
+            {{ form_end(form) }}
         </div>
+
     </main>
+
+    <div class="right-panel"></div>
 </div>
+
+<script>
+    // Petit script pour changer le texte quand une image est sélectionnée
+    document.querySelector('.file-upload-input').addEventListener('change', function(e) {
+        const fileName = e.target.files[0]?.name;
+        const label = document.querySelector('.file-upload-label span:last-child');
+        if (fileName) {
+            label.textContent = fileName;
+            label.style.color = 'var(--primary)';
+        }
+    });
+</script>
 {% endblock %}

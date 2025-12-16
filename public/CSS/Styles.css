@@ -166,6 +166,140 @@ button {
     color: var(--text-muted);
 }
 
+.header-actions {
+    margin-left: 1rem; /* Espace avec la barre de recherche */
+}
+
+.btn-add-post {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    /* Dégradé aux couleurs de K-Swap */
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    color: white;
+    box-shadow: 0 4px 15px rgba(236, 72, 153, 0.4);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Effet rebond */
+    text-decoration: none;
+}
+
+.btn-add-post:hover {
+    transform: scale(1.1) rotate(90deg); /* Petite rotation fun au survol */
+    box-shadow: 0 6px 20px rgba(236, 72, 153, 0.6);
+}
+
+.btn-add-post span {
+    font-size: 24px;
+    font-weight: 600;
+}
+
+/* --- CARTE DE CRÉATION DE POST --- */
+.post-creation-card {
+    background: rgba(30, 41, 59, 0.7); /* Fond semi-transparent */
+    backdrop-filter: blur(20px);      /* Flou d'arrière-plan */
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+    border-radius: 24px;
+    padding: 2.5rem;
+    width: 100%;
+    max-width: 600px; /* Largeur idéale pour un post */
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    margin-top: 2rem;
+    animation: slideUp 0.4s ease-out;
+}
+
+.card-header-title {
+    font-size: 1.8rem;
+    font-weight: 800;
+    margin-bottom: 1.5rem;
+    background: linear-gradient(to right, #fff, #a5b4fc);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Zone de texte stylisée */
+.custom-textarea {
+    width: 100%;
+    background: rgba(15, 23, 42, 0.6);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    padding: 1.2rem;
+    color: white;
+    font-size: 1rem;
+    font-family: inherit;
+    min-height: 180px;
+    resize: vertical;
+    transition: all 0.3s ease;
+    outline: none;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.custom-textarea:focus {
+    border-color: var(--primary);
+    background: rgba(15, 23, 42, 0.8);
+    box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.1);
+}
+
+/* Upload d'image stylisé */
+.file-upload-container {
+    margin-top: 1.5rem;
+    position: relative;
+}
+
+.file-upload-label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.03);
+    border: 2px dashed var(--glass-border);
+    border-radius: 16px;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.file-upload-label:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+    background: rgba(139, 92, 246, 0.05);
+}
+
+.file-upload-input {
+    display: none; /* On cache le vrai input moche */
+}
+
+/* Bouton Publier */
+.btn-submit-post {
+    width: 100%;
+    margin-top: 2rem;
+    padding: 14px;
+    border-radius: 16px;
+    font-weight: 700;
+    font-size: 1.1rem;
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    color: white;
+    box-shadow: 0 4px 15px rgba(236, 72, 153, 0.3);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.btn-submit-post:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(236, 72, 153, 0.5);
+}
+
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
 /* --- 3. MAIN CONTENT (Centre) --- */
 .main-content {
     grid-column: 2 / 3;
@@ -216,6 +350,7 @@ button {
     line-height: 1;
     margin-bottom: 0.5rem;
     background: linear-gradient(to right, #fff, #a5b4fc);
+    background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
@@ -352,56 +487,6 @@ button {
     border-radius: 20px;
     padding: 1.5rem;
 }
-
-/* RESPONSIVE */
-@media (max-width: 1200px) {
-    .app-layout {
-        grid-template-columns: 80px 1fr 0;
-    }
-    .right-panel {
-        display: none;
-    }
-    .sidebar {
-        width: 80px;
-        padding: 2rem 0.5rem;
-        align-items: center;
-    }
-    .nav-text,
-    .nav-section-title,
-    .logo-text {
-        display: none;
-    }
-    .nav-section-title {
-        padding-left: 0;
-        text-align: center;
-    }
-
-    /* Smaller logo on narrow screens */
-    .logo-img {
-        width: 50px;
-        height: 50px;
-    }
-
-    .feed-container {
-        max-width: 700px;
-        margin: 0 auto;
-        display: flex;
-        flex-direction: column;
-        gap: 2rem;
-    }
-
-    .feed-card {
-        background: var(--bg-secondary);
-        border: 1px solid var(--glass-border);
-        border-radius: 20px;
-        padding: 1.5rem;
-        box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.3);
-        transition: transform 0.2s;
-    }
-    .feed-card:hover {
-        border-color: var(--primary);
-    }
-
     .feed-header {
         display: flex;
         justify-content: space-between;
@@ -571,6 +656,7 @@ button {
         margin-bottom: 0.5rem;
         color: white;
         background: linear-gradient(to right, #fff, #a5b4fc);
+        background-clip: text;
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
     }
@@ -631,5 +717,57 @@ button {
     @keyframes fadeInUp {
         from { opacity: 0; transform: translateY(20px); }
         to { opacity: 1; transform: translateY(0); }
+    }
+    .fade-in-up {
+        animation: fadeInUp 0.5s ease forwards;
+    }
+
+    /* RESPONSIVE */
+@media (max-width: 1200px) {
+    .app-layout {
+        grid-template-columns: 80px 1fr 0;
+    }
+    .right-panel {
+        display: none;
+    }
+    .sidebar {
+        width: 80px;
+        padding: 2rem 0.5rem;
+        align-items: center;
+    }
+    .nav-text,
+    .nav-section-title,
+    .logo-text {
+        display: none;
+    }
+    .nav-section-title {
+        padding-left: 0;
+        text-align: center;
+    }
+
+    /* Smaller logo on narrow screens */
+    .logo-img {
+        width: 50px;
+        height: 50px;
+    }
+
+    .feed-container {
+        max-width: 700px;
+        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+    }
+
+    .feed-card {
+        background: var(--bg-secondary);
+        border: 1px solid var(--glass-border);
+        border-radius: 20px;
+        padding: 1.5rem;
+        box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.3);
+        transition: transform 0.2s;
+    }
+    .feed-card:hover {
+        border-color: var(--primary);
     }
 }
