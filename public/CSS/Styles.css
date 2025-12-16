@@ -113,6 +113,13 @@ button {
     font-size: 22px;
 }
 
+/* Logo image sizing */
+.logo-img {
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
+}
+
 /* --- 2. HEADER (Haut) --- */
 .top-header {
     grid-column: 2 / -1;
@@ -367,5 +374,11 @@ button {
     .nav-section-title {
         padding-left: 0;
         text-align: center;
+    }
+
+    /* Smaller logo on narrow screens */
+    .logo-img {
+        width: 50px;
+        height: 50px;
     }
 }
