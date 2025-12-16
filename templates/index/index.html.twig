@@ -1,0 +1,274 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}K-World | Dashboard{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <!-- Lien vers ton fichier CSS -->
+    <link rel="stylesheet" href="{{ asset('css/Styles.css') }}">
+    <!-- Import des icônes Google Material Symbols (arrondies) -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+{% endblock %}
+
+{% block body %}
+<div class="app-layout">
+
+    <!-- 1. SIDEBAR (Navigation Gauche) -->
+    <aside class="sidebar">
+        <!-- Logo -->
+        <a href="{{ asset('img/logo_kpop.png') }}" class="flex items-center gap-3 px-2 mb-6">
+            <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-primary to-accent flex items-center justify-center text-white shadow-lg shadow-primary/30 shrink-0">
+                <span class="material-symbols-rounded">equalizer</span>
+            </div>
+            <span class="logo-font text-xl font-bold tracking-tight logo-text">K-Swap</span>
+        </a>
+
+        <!-- Menu Principal -->
+        <nav class="flex flex-col gap-1 w-full">
+            <div class="nav-section-title">Menu</div>
+            
+            <a href="#" class="nav-item active">
+                <span class="material-symbols-rounded nav-icon">home</span>
+                <span class="nav-text">Accueil</span>
+            </a>
+            <a href="#" class="nav-item">
+                <span class="material-symbols-rounded nav-icon">explore</span>
+                <span class="nav-text">Découvrir</span>
+            </a>
+            <a href="#" class="nav-item">
+                <span class="material-symbols-rounded nav-icon">album</span>
+                <span class="nav-text">Discographies</span>
+            </a>
+            <a href="#" class="nav-item">
+                <span class="material-symbols-rounded nav-icon">groups</span>
+                <span class="nav-text">Artistes</span>
+            </a>
+        </nav>
+
+        <!-- Menu Bibliothèque -->
+        <nav class="flex flex-col gap-1 w-full mt-4">
+            <div class="nav-section-title">Ma Bibliothèque</div>
+            
+            <a href="#" class="nav-item">
+                <span class="material-symbols-rounded nav-icon">favorite</span>
+                <span class="nav-text">Mes Bias</span>
+            </a>
+            <a href="#" class="nav-item">
+                <span class="material-symbols-rounded nav-icon">history</span>
+                <span class="nav-text">Récents</span>
+            </a>
+            <a href="#" class="nav-item">
+                <span class="material-symbols-rounded nav-icon">playlist_play</span>
+                <span class="nav-text">Playlists</span>
+            </a>
+        </nav>
+        
+
+    </aside>
+
+    <!-- 2. HEADER (Recherche & Notifs) -->
+    <header class="top-header">
+        <!-- Barre de recherche -->
+        <div class="search-bar">
+            <span class="material-symbols-rounded search-icon">search</span>
+            <input type="text" class="search-input" placeholder="Rechercher 'NewJeans', 'Album'...">
+        </div>
+
+        <!-- Actions -->
+        <div class="flex items-center gap-4">
+            <button class="w-10 h-10 rounded-full flex items-center justify-center text-white/70 hover:bg-white/10 hover:text-white transition-colors relative">
+                <span class="material-symbols-rounded">notifications</span>
+                <!-- Pastille de notification -->
+                <span class="absolute top-2 right-2 w-2 h-2 bg-accent rounded-full animate-pulse"></span>
+            </button>
+            <a href="#" class="bg-primary hover:bg-primary/90 text-white px-5 py-2.5 rounded-full font-bold text-sm shadow-lg shadow-primary/20 transition-all flex items-center gap-2">
+                <span class="material-symbols-rounded text-lg">edit</span>
+                <span>Poster un avis</span>
+            </a>
+        </div>
+    </header>
+
+    <!-- 3. MAIN CONTENT (Le cœur du site) -->
+    <main class="main-content">
+        
+        <!-- HERO BANNER (Gros focus Comeback) -->
+        <div class="hero-card">
+            <div class="hero-content">
+                <span class="hero-tag">Comeback Spotlight</span>
+                <h1 class="hero-title">Armageddon</h1>
+                <p class="hero-desc">L'album phénomène d'aespa est disponible. Plongez dans l'univers cyberpunk de Supernova maintenant.</p>
+                
+                <div class="flex gap-4">
+                    <button class="btn btn-primary">
+                        <span class="material-symbols-rounded">play_circle</span>
+                        Écouter
+                    </button>
+                    <button class="btn btn-glass">
+                        <span class="material-symbols-rounded">list</span>
+                        Voir la tracklist
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION: Sorties Récentes -->
+        <div class="section-header">
+            <h2 class="section-title">Nouveaux Albums</h2>
+            <a href="#" class="see-all">Voir tout</a>
+        </div>
+
+        <div class="album-grid mb-12">
+            <!-- Album 1 -->
+            <div class="album-card group cursor-pointer">
+                <div class="album-img-wrapper">
+                    <img src="https://images.unsplash.com/photo-1621360841013-c768371e93cf?w=400" alt="Cover">
+                    <div class="play-overlay">
+                        <span class="material-symbols-rounded text-white text-5xl drop-shadow-lg">play_circle</span>
+                    </div>
+                </div>
+                <h3 class="font-bold text-white truncate">Golden Hour</h3>
+                <p class="text-sm text-white/50 truncate">ATEEZ</p>
+                <div class="flex items-center gap-1 mt-2 text-yellow-400">
+                    <span class="material-symbols-rounded text-sm">star</span>
+                    <span class="text-xs font-bold text-white">4.8</span>
+                </div>
+            </div>
+
+            <!-- Album 2 -->
+            <div class="album-card group cursor-pointer">
+                <div class="album-img-wrapper">
+                    <img src="https://images.unsplash.com/photo-1493225255756-d9584f8606e9?w=400" alt="Cover">
+                    <div class="play-overlay">
+                        <span class="material-symbols-rounded text-white text-5xl">play_circle</span>
+                    </div>
+                </div>
+                <h3 class="font-bold text-white truncate">Midnight Fiction</h3>
+                <p class="text-sm text-white/50 truncate">ILLIT</p>
+                <div class="flex items-center gap-1 mt-2 text-yellow-400">
+                    <span class="material-symbols-rounded text-sm">star</span>
+                    <span class="text-xs font-bold text-white">4.2</span>
+                </div>
+            </div>
+
+            <!-- Album 3 -->
+            <div class="album-card group cursor-pointer">
+                <div class="album-img-wrapper">
+                    <img src="https://images.unsplash.com/photo-1619983081563-430f63602796?w=400" alt="Cover">
+                    <div class="play-overlay">
+                        <span class="material-symbols-rounded text-white text-5xl">play_circle</span>
+                    </div>
+                </div>
+                <h3 class="font-bold text-white truncate">Cosmic</h3>
+                <p class="text-sm text-white/50 truncate">Red Velvet</p>
+                <div class="flex items-center gap-1 mt-2 text-yellow-400">
+                    <span class="material-symbols-rounded text-sm">star</span>
+                    <span class="text-xs font-bold text-white">4.9</span>
+                </div>
+            </div>
+            
+            <!-- Album 4 -->
+            <div class="album-card group cursor-pointer">
+                <div class="album-img-wrapper">
+                    <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400" alt="Cover">
+                    <div class="play-overlay">
+                        <span class="material-symbols-rounded text-white text-5xl">play_circle</span>
+                    </div>
+                </div>
+                <h3 class="font-bold text-white truncate">Muse</h3>
+                <p class="text-sm text-white/50 truncate">Jimin</p>
+                <div class="flex items-center gap-1 mt-2 text-yellow-400">
+                    <span class="material-symbols-rounded text-sm">star</span>
+                    <span class="text-xs font-bold text-white">4.7</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION: Avis Récents -->
+        <div class="section-header">
+            <h2 class="section-title">Avis Populaires</h2>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- Review 1 -->
+            <div class="bg-white/5 border border-white/5 rounded-2xl p-4 flex gap-4 hover:bg-white/10 transition-colors cursor-pointer">
+                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Nana" class="w-12 h-12 rounded-full border border-white/10">
+                <div>
+                    <div class="flex items-center gap-2 mb-1">
+                        <h4 class="font-bold text-sm">Nana_21</h4>
+                        <span class="text-xs text-white/40">• 2h</span>
+                    </div>
+                    <p class="text-sm text-white/80 line-clamp-2 mb-2">"L'esthétique visuelle de cet album est incroyable, mais musicalement je reste sur ma faim..."</p>
+                    <div class="flex items-center gap-2 text-xs font-bold text-white/50">
+                        <span class="text-primary">Supernova (EP)</span> • <span class="text-yellow-400">★★★★☆</span>
+                    </div>
+                </div>
+            </div>
+             <!-- Review 2 -->
+             <div class="bg-white/5 border border-white/5 rounded-2xl p-4 flex gap-4 hover:bg-white/10 transition-colors cursor-pointer">
+                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Ken" class="w-12 h-12 rounded-full border border-white/10">
+                <div>
+                    <div class="flex items-center gap-2 mb-1">
+                        <h4 class="font-bold text-sm">Ken_JPop</h4>
+                        <span class="text-xs text-white/40">• 5h</span>
+                    </div>
+                    <p class="text-sm text-white/80 line-clamp-2 mb-2">"YOASOBI ne déçoit jamais. Idole est un chef d'œuvre absolu !"</p>
+                    <div class="flex items-center gap-2 text-xs font-bold text-white/50">
+                        <span class="text-primary">The Book 3</span> • <span class="text-yellow-400">★★★★★</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- 4. RIGHT PANEL (Widgets Droite) -->
+    <aside class="right-panel">
+        <h3 class="font-bold text-lg mb-6">Top Artistes</h3>
+        
+        <div class="flex flex-col gap-1">
+            <div class="trend-item group cursor-pointer">
+                <span class="rank">1</span>
+                <img src="https://api.dicebear.com/7.x/initials/svg?seed=NJ&backgroundColor=ec4899" class="w-10 h-10 rounded-lg">
+                <div class="flex-1">
+                    <p class="font-bold text-sm group-hover:text-primary transition-colors">NewJeans</p>
+                    <p class="text-xs text-white/50">HYBE / ADOR</p>
+                </div>
+                <span class="material-symbols-rounded text-green-400 text-lg">trending_up</span>
+            </div>
+
+            <div class="trend-item group cursor-pointer">
+                <span class="rank">2</span>
+                <img src="https://api.dicebear.com/7.x/initials/svg?seed=IV&backgroundColor=8b5cf6" class="w-10 h-10 rounded-lg">
+                <div class="flex-1">
+                    <p class="font-bold text-sm group-hover:text-primary transition-colors">IVE</p>
+                    <p class="text-xs text-white/50">Starship</p>
+                </div>
+                <span class="material-symbols-rounded text-green-400 text-lg">trending_up</span>
+            </div>
+
+            <div class="trend-item group cursor-pointer">
+                <span class="rank">3</span>
+                <img src="https://api.dicebear.com/7.x/initials/svg?seed=SK&backgroundColor=fbbf24" class="w-10 h-10 rounded-lg">
+                <div class="flex-1">
+                    <p class="font-bold text-sm group-hover:text-primary transition-colors">Stray Kids</p>
+                    <p class="text-xs text-white/50">JYP Ent.</p>
+                </div>
+                <span class="material-symbols-rounded text-white/20 text-lg">remove</span>
+            </div>
+        </div>
+
+        <!-- Concert Widget -->
+        <div class="concert-widget">
+            <div class="flex items-center gap-2 mb-3 text-primary">
+                <span class="material-symbols-rounded">event</span>
+                <span class="text-xs font-bold uppercase tracking-wider">Concert</span>
+            </div>
+            <h4 class="font-bold text-lg mb-1 leading-tight">BLACKPINK World Tour</h4>
+            <p class="text-sm text-white/70 mb-4">Paris, Stade de France</p>
+            <button class="w-full bg-white text-bg-main font-bold py-2.5 rounded-xl text-sm hover:bg-gray-100 transition-colors">
+                Billets disponibles
+            </button>
+        </div>
+    </aside>
+
+</div>
+{% endblock %}
