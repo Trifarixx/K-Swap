@@ -1,56 +1,48 @@
-{% for avis in avis_list %}
-    <article class="feed-card fade-in">
-        
-        <div class="feed-header">
-            <div class="user-info">
-                {% if avis.user.avatar %}
-                    <img src="{{ asset(avis.user.avatar) }}" alt="{{ avis.user.pseudonyme }}" class="user-avatar">
-                {% else %}
-                    <div class="user-avatar-placeholder">{{ avis.user.pseudonyme|first|upper }}</div>
-                {% endif %}
-                <div>
-                    <h4 class="user-name">{{ avis.user.pseudonyme }}</h4>
-                    <span class="post-date">{{ avis.dateCreation|date('d M Y à H:i') }}</span>
-                </div>
-            </div>
+{# On enveloppe cette page dans un cadre avec un ID unique (ex: feed-page-1) #}
+<turbo-frame
+	id="feed-page-{{ current_page }}">
 
-            {% if avis.note %}
-                <div class="rating-badge">
-                    <span class="material-symbols-rounded">star</span>
-                    <span>{{ avis.note }}/5</span>
-                </div>
-            {% endif %}
-        </div>
+	{# 1. Les articles de la page actuelle #}
+	{% for avis in avis_list %}
+		<article class="feed-card fade-in mb-6">
+			<div class="feed-header">
+				<div class="user-info">
+					<h4 class="user-name">{{ avis.user.pseudonyme }}</h4>
+					<span class="post-date">{{ avis.dateCreation|date('d/m/Y') }}</span>
+				</div>
+				{% if avis.note %}
+					<div class="rating-badge">{{ avis.note }}/5</div>
+				{% endif %}
+			</div>
 
-        <div class="feed-content">
-            <p>{{ avis.commentaire }}</p>
-        </div>
+			<div class="feed-content">
+				<p>{{ avis.commentaire }}</p>
+				{% if avis.image %}
+					<div class="post-image mt-3">
+						<img src="{{ asset('uploads/posts/' ~ avis.image) }}" alt="Post">
+					</div>
+				{% endif %}
+			</div>
+		</article>
+	{% endfor %}
 
-        {% if avis.image %}
-            <div class="post-image mb-4 rounded-xl overflow-hidden mt-3">
-                <img src="{{ asset('uploads/posts/' ~ avis.image) }}" alt="Post image" class="w-full h-auto object-cover">
-            </div>
-        {% endif %}
+	{# 2. Le cadre "Lazy" pour la page SUIVANTE #}
+	{% if current_page < pages_total %}
+		<div
+			class="loading-trigger py-4 text-center">
+			{# 
+			               C'est ICI l'astuce : loading="lazy".
+			               Turbo ne chargera cette URL que lorsque cet élément sera visible à l'écran.
+			            #}
+			<turbo-frame id="feed-page-{{ current_page + 1 }}" src="{{ path('app_home', {'page': current_page + 1}) }}" loading="lazy" target="_top">
 
-        {% if avis.discographie %}
-            <div class="feed-album">
-                <div class="album-mini">
-                    {% if avis.discographie.pochette %}
-                        <img src="{{ asset(avis.discographie.pochette) }}" alt="Cover">
-                    {% else %}
-                        <div class="album-placeholder">CD</div>
-                    {% endif %}
-                    <div class="album-details">
-                        <span class="album-title">{{ avis.discographie.titre }}</span>
-                        <span class="album-artist">{{ avis.discographie.artiste.nomScene }}</span>
-                    </div>
-                </div>
-                
-                <button class="btn-icon">
-                    <span class="material-symbols-rounded">favorite</span>
-                </button>
-            </div>
-        {% endif %}
+				<div class="loading-spinner" style="color: var(--primary);">
+					<span class="material-symbols-rounded fa-spin">refresh</span>
+					Chargement de la suite...
+				</div>
 
-        </article>
-{% endfor %}
+			</turbo-frame>
+		</div>
+	{% endif %}
+
+</turbo-frame>

@@ -13,23 +13,25 @@ final class IndexController extends AbstractController
     #[Route('/', name: 'app_home')]
     public function index(AvisRepository $avisRepository, Request $request): Response
     {
-        // 1. Récupération des paramètres via ->query (GET)
         $page = $request->query->getInt('page', 1);
         $limit = 5;
 
-        // 2. On récupère les données
-        $avisList = $avisRepository->findFeed($page, $limit);
-        $totalAvis = $avisRepository->count([]); 
+        // On utilise count([]) pour avoir le vrai total global
+        $totalAvis = $avisRepository->count([]);
         $pagesTotal = ceil($totalAvis / $limit);
 
-        // 3. Détection de l'appel AJAX
-        if ($request->query->has('ajax')) {
+        $avisList = $avisRepository->findFeed($page, $limit);
+
+        // Si c'est une requête Turbo-Frame (le scroll automatique)
+        if ($request->headers->get('Turbo-Frame')) {
             return $this->render('index/_feed_items.html.twig', [
                 'avis_list' => $avisList,
+                'current_page' => $page,
+                'pages_total' => $pagesTotal,
             ]);
         }
 
-        // 4. Affichage standard
+        // Affichage normal de la page complète
         return $this->render('index/index.html.twig', [
             'avis_list' => $avisList,
             'current_page' => $page,

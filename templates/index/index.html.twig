@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}K-World | Dashboard
+{% block title %}K-World
 {% endblock %}
 
 {% block stylesheets %}
@@ -25,16 +25,8 @@
 		<main class="main-content">
 			<div class="hero-card"></div>
 
-			<div class="feed-container" data-controller="infinite-scroll" data-infinite-scroll-page-value="{{ current_page }}" data-infinite-scroll-total-value="{{ pages_total }}" data-infinite-scroll-url-value="{{ path('app_home') }}">
-
-				<div data-infinite-scroll-target="container">
-					{% include 'index/_feed_items.html.twig' %}
-				</div>
-
-				<div data-infinite-scroll-target="loading" class="loading-spinner">
-					<span class="material-symbols-rounded fa-spin">refresh</span>
-					Chargement...
-				</div>
+			<div class="feed-container">
+				{% include 'index/_feed_items.html.twig' with {'current_page': 1} %}
 			</div>
 		</main>
 
