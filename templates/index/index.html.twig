@@ -12,71 +12,31 @@
 
 {% block body %}
 <div class="app-layout">
+    {% include 'header.html.twig' %}
+    {% include 'sidebar.html.twig' %}
 
-    <!-- 1. SIDEBAR (Navigation Gauche) -->
-    <aside class="sidebar">
-        <!-- Logo -->
-        <a href="{{ path('app_home') }}" class="flex items-center gap-3 px-2 mb-6">
-            <img src="{{ asset('img/logo_kpop.png') }}" alt="K-Swap Logo" class="logo-img rounded-full">
-            <span class="logo-font text-xl font-bold tracking-tight logo-text">K-Swap</span>
-        </a>
-
-        <!-- Menu Principal -->
-        <nav class="flex flex-col gap-1 w-full">
-            <div class="nav-section-title">Menu</div>
-            
-            <a href="#" class="nav-item active">
-                <span class="material-symbols-rounded nav-icon">home</span>
-                <span class="nav-text">Accueil</span>
-            </a>
-            <a href="#" class="nav-item">
-                <span class="material-symbols-rounded nav-icon">explore</span>
-                <span class="nav-text">Découvrir</span>
-            </a>
-            <a href="#" class="nav-item">
-                <span class="material-symbols-rounded nav-icon">album</span>
-                <span class="nav-text">Discographies</span>
-            </a>
-            <a href="#" class="nav-item">
-                <span class="material-symbols-rounded nav-icon">groups</span>
-                <span class="nav-text">Artistes</span>
-            </a>
-        </nav>
-
-        <!-- Menu Bibliothèque -->
-        <nav class="flex flex-col gap-1 w-full mt-4">
-            <div class="nav-section-title">Ma Bibliothèque</div>
-            
-            <a href="#" class="nav-item">
-                <span class="material-symbols-rounded nav-icon">favorite</span>
-                <span class="nav-text">Mes Bias</span>
-            </a>
-            <a href="#" class="nav-item">
-                <span class="material-symbols-rounded nav-icon">history</span>
-                <span class="nav-text">Récents</span>
-            </a>
-            <a href="#" class="nav-item">
-                <span class="material-symbols-rounded nav-icon">playlist_play</span>
-                <span class="nav-text">Playlists</span>
-            </a>
-        </nav>
-        
-
-    </aside>
-
-    <!-- 2. HEADER (Recherche & Notifs) -->
-    <header class="top-header">
-        <!-- Barre de recherche -->
-        <div class="search-bar">
-            <span class="material-symbols-rounded search-icon">search</span>
-            <input type="text" class="search-input" placeholder="Rechercher">
-        </div>
-
-    </header>
 
     <!-- 3. MAIN CONTENT (Le cœur du site) -->
     <main class="main-content">
+    <div class="hero-card">
+        <h2 class="hero-title">Derniers Avis</h2>
+    </div>
 
+    <div class="feed-container"
+             data-controller="infinite-scroll"
+             data-infinite-scroll-page-value="{{ current_page }}"
+             data-infinite-scroll-total-value="{{ pages_total }}"
+             data-infinite-scroll-url-value="{{ path('app_home') }}">
+
+            <div data-infinite-scroll-target="container">
+                {% include 'index/_feed_items.html.twig' %}
+            </div>
+
+            <div data-infinite-scroll-target="loading" class="loading-spinner">
+                <span class="material-symbols-rounded fa-spin">refresh</span> Chargement...
+            </div>
+
+        </div>
     </main>
 
     <!-- 4. RIGHT PANEL  -->

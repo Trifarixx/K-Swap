@@ -381,4 +381,255 @@ button {
         width: 50px;
         height: 50px;
     }
+
+    .feed-container {
+        max-width: 700px;
+        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+    }
+
+    .feed-card {
+        background: var(--bg-secondary);
+        border: 1px solid var(--glass-border);
+        border-radius: 20px;
+        padding: 1.5rem;
+        box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.3);
+        transition: transform 0.2s;
+    }
+    .feed-card:hover {
+        border-color: var(--primary);
+    }
+
+    .feed-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+    }
+    .user-info {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+    .user-avatar {
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid var(--primary);
+    }
+    .user-avatar-placeholder {
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        background: var(--primary);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+    }
+    .user-name {
+        font-size: 1rem;
+        font-weight: 700;
+        color: white;
+        margin: 0;
+    }
+    .post-date {
+        font-size: 0.8rem;
+        color: var(--text-muted);
+    }
+
+    .rating-badge {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        background: rgba(255, 255, 255, 0.1);
+        padding: 4px 10px;
+        border-radius: 20px;
+        color: #fbbf24;
+        font-weight: bold;
+    }
+
+    .feed-content p {
+        color: #e2e8f0;
+        line-height: 1.6;
+        font-size: 0.95rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .feed-album {
+        background: rgba(15, 23, 42, 0.5);
+        padding: 10px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    .album-mini {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+    .album-mini img,
+    .album-placeholder {
+        width: 50px;
+        height: 50px;
+        border-radius: 8px;
+        object-fit: cover;
+    }
+    .album-placeholder {
+        background: #334155;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #94a3b8;
+    }
+    .album-details {
+        display: flex;
+        flex-direction: column;
+    }
+    .album-title {
+        font-weight: 700;
+        font-size: 0.9rem;
+        color: white;
+    }
+    .album-artist {
+        font-size: 0.8rem;
+        color: var(--text-muted);
+    }
+
+    .btn-icon {
+        background: none;
+        color: var(--text-muted);
+        padding: 8px;
+        border-radius: 50%;
+        transition: 0.2s;
+    }
+    .btn-icon:hover {
+        color: var(--accent);
+        background: rgba(236, 72, 153, 0.1);
+    }
+
+    /* Animation d'apparition */
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    .fade-in {
+        animation: fadeIn 0.5s ease forwards;
+    }
+
+    /* Loader */
+    .loading-spinner {
+        text-align: center;
+        padding: 2rem;
+        color: var(--primary);
+    }
+
+    /* --- AUTHENTIFICATION (Login / Register) --- */
+    .auth-container {
+        min-height: 100vh;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        /* On utilise une position absolue pour passer par dessus le layout grid existant */
+        position: fixed; 
+        top: 0;
+        left: 0;
+        z-index: 1000;
+        background: radial-gradient(circle at top right, #312e81 0%, var(--bg-main) 60%);
+        padding: 1rem;
+    }
+
+    .auth-card {
+        background: rgba(30, 41, 59, 0.7);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border: 1px solid var(--glass-border);
+        border-radius: 24px;
+        padding: 2.5rem;
+        width: 100%;
+        max-width: 420px;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        animation: fadeInUp 0.5s ease-out;
+    }
+
+    .auth-title {
+        font-family: 'Outfit', sans-serif;
+        font-size: 2rem;
+        font-weight: 700;
+        text-align: center;
+        margin-bottom: 0.5rem;
+        color: white;
+        background: linear-gradient(to right, #fff, #a5b4fc);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .auth-subtitle {
+        text-align: center;
+        color: var(--text-muted);
+        margin-bottom: 2rem;
+        font-size: 0.95rem;
+    }
+
+    /* Styles des champs de formulaire */
+    .form-group { margin-bottom: 1.25rem; }
+
+    .form-label {
+        display: block;
+        color: #cbd5e1;
+        margin-bottom: 0.5rem;
+        font-size: 0.9rem;
+        font-weight: 500;
+    }
+
+    .form-input {
+        width: 100%;
+        background: var(--bg-secondary);
+        border: 1px solid var(--glass-border);
+        border-radius: 12px;
+        padding: 0.75rem 1rem;
+        color: white;
+        font-size: 1rem;
+        transition: all 0.2s;
+        outline: none;
+        box-sizing: border-box; /* Important pour ne pas dépasser */
+    }
+
+    .form-input:focus {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2);
+    }
+
+    .auth-footer {
+        text-align: center;
+        margin-top: 1.5rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid var(--glass-border);
+        color: var(--text-muted);
+        font-size: 0.9rem;
+    }
+
+    .auth-link {
+        color: var(--primary);
+        font-weight: 600;
+        text-decoration: none;
+    }
+    .auth-link:hover { color: var(--accent); }
+
+    /* Animation d'apparition */
+    @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
 }
