@@ -22,7 +22,7 @@ final class IndexController extends AbstractController
 
         $avisList = $avisRepository->findFeed($page, $limit);
 
-        // Si la requête vient du scroll automatique (Turbo), on renvoie juste les articles
+        // Si la requête vient de Turbo, on renvoie seulement la liste des articles
         if ($request->headers->get('Turbo-Frame')) {
             return $this->render('index/_feed_items.html.twig', [
                 'avis_list' => $avisList,
@@ -31,7 +31,7 @@ final class IndexController extends AbstractController
             ]);
         }
 
-        // Sinon, on renvoie la page complète
+        // Sinon (premier chargement), on renvoie la page complète
         return $this->render('index/index.html.twig', [
             'avis_list' => $avisList,
             'current_page' => $page,

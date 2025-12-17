@@ -19,7 +19,9 @@
 		<main class="main-content">
 			<div class="hero-card"></div>
 
-			<div class="feed-container">
+			<div
+				class="feed-container">
+				{# On affiche la page 1. Elle contient le lien lazy vers la page 2, etc. #}
 				{% include 'index/_feed_items.html.twig' with {'current_page': 1} %}
 			</div>
 		</main>
