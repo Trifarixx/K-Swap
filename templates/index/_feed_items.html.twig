@@ -1,75 +1,48 @@
-{# On enveloppe les articles de la page courante dans un cadre #}
-<turbo-frame id="feed-page-{{ current_page }}">
+{% for avis in avis_list %}
+	<article class="feed-card fade-in mb-6">
+		<div class="feed-header">
+			<div class="user-info">
+				{% if avis.user.avatar %}
+					<img src="{{ asset(avis.user.avatar) }}" alt="{{ avis.user.pseudonyme }}" class="user-avatar">
+				{% else %}
+					<div class="user-avatar-placeholder">{{ avis.user.pseudonyme|first|upper }}</div>
+				{% endif %}
+				<div>
+					<h4 class="user-name">{{ avis.user.pseudonyme }}</h4>
+					<span class="post-date">{{ avis.dateCreation|date('d M Y à H:i') }}</span>
+				</div>
+			</div>
+			{% if avis.note %}
+				<div class="rating-badge">
+					<span class="material-symbols-rounded">star</span>
+					<span>{{ avis.note }}/5</span>
+				</div>
+			{% endif %}
+		</div>
 
-    {# Liste des articles #}
-    {% for avis in avis_list %}
-        <article class="feed-card fade-in mb-6">
-            <div class="feed-header">
-                <div class="user-info">
-                    {% if avis.user.avatar %}
-                        <img src="{{ asset(avis.user.avatar) }}" alt="{{ avis.user.pseudonyme }}" class="user-avatar">
-                    {% else %}
-                        <div class="user-avatar-placeholder">{{ avis.user.pseudonyme|first|upper }}</div>
-                    {% endif %}
-                    <div>
-                        <h4 class="user-name">{{ avis.user.pseudonyme }}</h4>
-                        <span class="post-date">{{ avis.dateCreation|date('d M Y à H:i') }}</span>
-                    </div>
-                </div>
-                {% if avis.note %}
-                    <div class="rating-badge">
-                        <span class="material-symbols-rounded">star</span>
-                        <span>{{ avis.note }}/5</span>
-                    </div>
-                {% endif %}
-            </div>
+		<div class="feed-content">
+			<p>{{ avis.commentaire }}</p>
+			{% if avis.image %}
+				<div class="post-image mb-4 rounded-xl overflow-hidden mt-3">
+					<img src="{{ asset('uploads/posts/' ~ avis.image) }}" alt="Post image" class="w-full h-auto object-cover">
+				</div>
+			{% endif %}
+		</div>
 
-            <div class="feed-content">
-                <p>{{ avis.commentaire }}</p>
-                {% if avis.image %}
-                    <div class="post-image mb-4 rounded-xl overflow-hidden mt-3">
-                        <img src="{{ asset('uploads/posts/' ~ avis.image) }}" alt="Post image" class="w-full h-auto object-cover">
-                    </div>
-                {% endif %}
-            </div>
-
-            {% if avis.discographie %}
-                <div class="feed-album">
-                    <div class="album-mini">
-                        {% if avis.discographie.pochette %}
-                            <img src="{{ asset(avis.discographie.pochette) }}" alt="Cover">
-                        {% else %}
-                            <div class="album-placeholder">CD</div>
-                        {% endif %}
-                        <div class="album-details">
-                            <span class="album-title">{{ avis.discographie.titre }}</span>
-                            <span class="album-artist">{{ avis.discographie.artiste.nomScene }}</span>
-                        </div>
-                    </div>
-                </div>
-            {% endif %}
-        </article>
-    {% endfor %}
-
-    {% if current_page < pages_total %}
-        <div class="py-4 text-center">
-            {# 
-               C'est ce bloc qui charge la suite.
-               src = Page suivante
-               loading="lazy" = Charge seulement quand visible à l'écran
-            #}
-            <turbo-frame id="feed-page-{{ current_page + 1 }}" 
-                         src="{{ path('app_home', {'page': current_page + 1}) }}" 
-                         loading="lazy" 
-                         target="_top">
-                
-                <div class="loading-spinner">
-                    <span class="material-symbols-rounded fa-spin">refresh</span>
-                    Chargement de la suite...
-                </div>
-
-            </turbo-frame>
-        </div>
-    {% endif %}
-
-</turbo-frame>
+		{% if avis.discographie %}
+			<div class="feed-album">
+				<div class="album-mini">
+					{% if avis.discographie.pochette %}
+						<img src="{{ asset(avis.discographie.pochette) }}" alt="Cover">
+					{% else %}
+						<div class="album-placeholder">CD</div>
+					{% endif %}
+					<div class="album-details">
+						<span class="album-title">{{ avis.discographie.titre }}</span>
+						<span class="album-artist">{{ avis.discographie.artiste.nomScene }}</span>
+					</div>
+				</div>
+			</div>
+		{% endif %}
+	</article>
+{% endfor %}

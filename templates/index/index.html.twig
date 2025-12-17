@@ -19,12 +19,22 @@
 		<main class="main-content">
 			<div class="hero-card"></div>
 
-			<div
-				class="feed-container">
-				{# On affiche la page 1. Elle contient le lien lazy vers la page 2, etc. #}
-				{% include 'index/_feed_items.html.twig' with {'current_page': 1} %}
+			<div id="feed-container" data-next-page="2" data-total-pages="{{ pages_total }}">
+
+				{% include 'index/_feed_items.html.twig' %}
+
 			</div>
+
+			<div id="loading-trigger" class="py-4 text-center" style="display: none;">
+				<div class="loading-spinner">
+					<span class="material-symbols-rounded fa-spin">refresh</span>
+					Chargement de la suite...
+				</div>
+			</div>
+
 		</main>
+
+		<script src="{{ asset('js/infinite-scroll.js') }}"></script>
 
 		<aside class="right-panel"></aside>
 	</div>

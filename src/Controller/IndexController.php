@@ -16,22 +16,20 @@ final class IndexController extends AbstractController
         $page = $request->query->getInt('page', 1);
         $limit = 5;
 
-        // On compte le total pour savoir quand s'arrêter
+        // Calcul du nombre total de pages
         $totalAvis = $avisRepository->count([]);
         $pagesTotal = ceil($totalAvis / $limit);
 
         $avisList = $avisRepository->findFeed($page, $limit);
 
-        // Si la requête vient de Turbo, on renvoie seulement la liste des articles
-        if ($request->headers->get('Turbo-Frame')) {
+        // Si c'est une requête AJAX (notre script JS), on renvoie juste les articles
+        if ($request->query->get('ajax')) {
             return $this->render('index/_feed_items.html.twig', [
-                'avis_list' => $avisList,
-                'current_page' => $page,
-                'pages_total' => $pagesTotal,
+                'avis_list' => $avisList
             ]);
         }
 
-        // Sinon (premier chargement), on renvoie la page complète
+        // Sinon, on affiche la page complète
         return $this->render('index/index.html.twig', [
             'avis_list' => $avisList,
             'current_page' => $page,
