@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}K-World | Discographie
+{% endblock %}
+
+{% block body %}
+	<div class="app-layout">
+		{% include 'header.html.twig' %}
+		{% include 'sidebar.html.twig' %}
+
+		<main class="main-content">
+			<div class="hero-card fade-in">
+				<h1 class="hero-title">La Discographie K-Pop</h1>
+				<p class="text-gray-400 mt-2">Découvrez tous les groupes et artistes du moment.</p>
+			</div>
+
+			<div class="disco-grid mt-6">
+				{% for groupe in groupes %}
+					<div class="disco-card fade-in">
+						<div
+							class="disco-image-wrapper">
+							{# Si l'image est une URL externe (scraping) #}
+							{% if 'http' in groupe.image %}
+								<img src="{{ groupe.image }}" alt="{{ groupe.nom }}" loading="lazy">
+							{% else %}
+								{# Si c'est une image locale #}
+								<img src="{{ asset('uploads/groupes/' ~ groupe.image) }}" alt="{{ groupe.nom }}" loading="lazy">
+							{% endif %}
+							<div class="disco-overlay">
+								<button class="btn-play">
+									<span class="material-symbols-rounded">play_arrow</span>
+								</button>
+							</div>
+						</div>
+						<div class="disco-info">
+							<h3 class="disco-title">{{ groupe.nom }}</h3>
+							<span class="disco-subtitle">{{ groupe.description|u.truncate(30, '...') }}</span>
+						</div>
+					</div>
+				{% else %}
+					<p class="col-span-full text-center text-gray-500">Aucun groupe trouvé. Lancez le scraper !</p>
+				{% endfor %}
+			</div>
+		</main>
+
+		<aside class="right-panel"></aside>
+	</div>
+{% endblock %}

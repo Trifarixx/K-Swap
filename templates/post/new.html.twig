@@ -1,61 +1,63 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Nouveau Post | K-Swap{% endblock %}
+{% block title %}KSwipe - Nouveau Post
+{% endblock %}
 
 {% block body %}
-<div class="app-layout">
+	<div
+		class="app-layout">
 
-     <!-- 3. MAIN CONTENT (Le cœur du site) -->
-    <main class="main-content flex-center-page" style="grid-column: 0 / 0;">        
-        <div class="post-creation-card">
-            <h1 class="card-header-title">
-                <span class="material-symbols-rounded">edit_square</span>
-                Créer un post
-            </h1>
+		<!-- 3. MAIN CONTENT (Le cœur du site) -->
+		<main class="main-content flex-center-page" style="grid-column: 0 / 0;">
+			<div class="post-creation-card">
+				<h1 class="card-header-title">
+					<span class="material-symbols-rounded">edit_square</span>
+					Créer un post
+				</h1>
 
-            {{ form_start(form) }}
-                <div class="mb-4">
-                    {{ form_widget(form.commentaire, {
+				{{ form_start(form) }}
+				<div class="mb-4">
+					{{ form_widget(form.commentaire, {
                         'attr': {
                             'class': 'custom-textarea', 
                             'placeholder': 'Partage quelque chose avec la communauté...'
                         }
                     }) }}
-                    <div class="text-red-400 text-sm mt-2">
-                        {{ form_errors(form.commentaire) }}
-                    </div>
-                </div>
+					<div class="text-red-400 text-sm mt-2">
+						{{ form_errors(form.commentaire) }}
+					</div>
+				</div>
 
-                <div class="file-upload-container">
-                    <label for="{{ form.imageFile.vars.id }}" class="file-upload-label">
-                        <span class="material-symbols-rounded text-2xl">add_photo_alternate</span>
-                        <span class="font-medium">Ajouter une photo (Optionnel)</span>
-                    </label>
-                    
-                    {{ form_widget(form.imageFile, {'attr': {'class': 'file-upload-input'}}) }}
-                    
-                    <div class="text-red-400 text-sm mt-2">
-                        {{ form_errors(form.imageFile) }}
-                    </div>
-                </div>
+				<div class="file-upload-container">
+					<label for="{{ form.imageFile.vars.id }}" class="file-upload-label">
+						<span class="material-symbols-rounded text-2xl">add_photo_alternate</span>
+						<span class="font-medium">Ajouter une photo (Optionnel)</span>
+					</label>
 
-                <button type="submit" class="btn-submit-post">
-                    Publier maintenant
-                </button>
+					{{ form_widget(form.imageFile, {'attr': {'class': 'file-upload-input'}}) }}
 
-            {{ form_end(form) }}
-        </div>
-    </main>
-</div>
+					<div class="text-red-400 text-sm mt-2">
+						{{ form_errors(form.imageFile) }}
+					</div>
+				</div>
 
-<script>
-    document.querySelector('.file-upload-input').addEventListener('change', function(e) {
-        const fileName = e.target.files[0]?.name;
-        const label = document.querySelector('.file-upload-label span:last-child');
-        if (fileName) {
-            label.textContent = fileName;
-            label.style.color = 'var(--primary)';
-        }
-    });
-</script>
+				<button type="submit" class="btn-submit-post">
+					Publier maintenant
+				</button>
+
+				{{ form_end(form) }}
+			</div>
+		</main>
+	</div>
+
+	<script>
+		document.querySelector('.file-upload-input').addEventListener('change', function (e) {
+const fileName = e.target.files[0] ?. name;
+const label = document.querySelector('.file-upload-label span:last-child');
+if (fileName) {
+label.textContent = fileName;
+label.style.color = 'var(--primary)';
+}
+});
+	</script>
 {% endblock %}

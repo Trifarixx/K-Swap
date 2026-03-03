@@ -308,60 +308,6 @@ button {
     overflow-y: auto;
 }
 
-/* Hero Banner */
-.hero-card {
-    background: linear-gradient(
-            90deg,
-            rgba(15, 23, 42, 0.9) 0%,
-            rgba(15, 23, 42, 0.4) 100%
-        ),
-        url("https://cdn-images.dzcdn.net/images/cover/c028acc15f911c6ca3ff821abbb64aa3/0x1900-000000-80-0-0.jpg");
-    background-size: cover;
-    background-position: center;
-    border-radius: 24px;
-    padding: 3rem;
-    margin-bottom: 2.5rem;
-    position: relative;
-    overflow: hidden;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.5);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    min-height: 300px;
-}
-
-.hero-tag {
-    background: rgba(236, 72, 153, 0.2);
-    border: 1px solid rgba(236, 72, 153, 0.5);
-    color: var(--accent);
-    font-size: 0.75rem;
-    font-weight: 700;
-    padding: 6px 12px;
-    border-radius: 20px;
-    text-transform: uppercase;
-    align-self: flex-start;
-    margin-bottom: 1rem;
-}
-
-.hero-title {
-    font-size: 3.5rem;
-    font-weight: 800;
-    line-height: 1;
-    margin-bottom: 0.5rem;
-    background: linear-gradient(to right, #fff, #a5b4fc);
-    background-clip: text;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
-
-.hero-desc {
-    font-size: 1.1rem;
-    color: #cbd5e1;
-    max-width: 500px;
-    margin-bottom: 2rem;
-}
-
 .btn {
     padding: 12px 28px;
     border-radius: 50px;
@@ -618,6 +564,102 @@ button {
         padding: 2rem;
         color: var(--primary);
     }
+
+    /* --- DISCOGRAPHIE GRID --- */
+.disco-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 24px;
+    padding-bottom: 40px;
+}
+
+.disco-card {
+    background: var(--bg-card);
+    padding: 16px;
+    border-radius: 12px;
+    transition: background 0.3s ease;
+    cursor: pointer;
+}
+
+.disco-card:hover {
+    background: #282828; /* Un gris un peu plus clair */
+}
+
+.disco-image-wrapper {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1/1; /* Carré parfait */
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 16px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+}
+
+.disco-image-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.disco-card:hover .disco-image-wrapper img {
+    transform: scale(1.05);
+}
+
+/* Bouton Play au survol */
+.disco-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.2);
+    opacity: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.3s ease;
+}
+
+.disco-card:hover .disco-overlay {
+    opacity: 1;
+}
+
+.btn-play {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: var(--primary);
+    color: white;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform: translateY(10px);
+    transition: transform 0.3s ease, background 0.2s;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+}
+
+.disco-card:hover .btn-play {
+    transform: translateY(0);
+}
+
+.btn-play:hover {
+    background: #ff5e85; /* Un rose un peu plus clair */
+    transform: scale(1.1) !important;
+}
+
+.disco-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text-main);
+    margin-bottom: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.disco-subtitle {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
 
     /* --- AUTHENTIFICATION (Login / Register) --- */
     .auth-container {

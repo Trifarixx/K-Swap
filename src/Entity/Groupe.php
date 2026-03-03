@@ -13,11 +13,14 @@ class Groupe extends Artiste
 {
     // Pas d'ID ici car il hérite de Artiste
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $nomGroupe = null;
+
     #[ORM\Column(length: 50, nullable: true)]
     private ?string $nomFanclub = null;
 
-    #[ORM\Column(length: 50, nullable: true)]
-    private ?string $couleurOfficielle = null;
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $imageGrp = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $dateDebut = null;
@@ -31,6 +34,17 @@ class Groupe extends Artiste
         $this->membres = new ArrayCollection();
     }
 
+    public function getNomGroupe(): ?string
+    {
+        return $this->nomGroupe;
+    }
+
+    public function setNomGroupe(?string $nomGroupe): static
+    {
+        $this->nomGroupe = $nomGroupe;
+        return $this;
+    }
+
     public function getNomFanclub(): ?string
     {
         return $this->nomFanclub;
@@ -42,14 +56,14 @@ class Groupe extends Artiste
         return $this;
     }
 
-    public function getCouleurOfficielle(): ?string
+    public function getImageGrp(): ?string
     {
-        return $this->couleurOfficielle;
+        return $this->imageGrp;
     }
 
-    public function setCouleurOfficielle(?string $couleurOfficielle): static
+    public function setImageGrp(?string $imageGrp): static
     {
-        $this->couleurOfficielle = $couleurOfficielle;
+        $this->imageGrp = $imageGrp;
         return $this;
     }
 

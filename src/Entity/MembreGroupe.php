@@ -22,7 +22,7 @@ class MembreGroupe
     #[ORM\JoinColumn(nullable: false)]
     private ?Groupe $groupe = null;
 
-    #[ORM\Column(length: 50, nullable: true)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $position = null; // Leader, Rapper, Vocal...
 
     public function getId(): ?int

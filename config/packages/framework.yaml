@@ -8,6 +8,12 @@ framework:
     #esi: true
     #fragments: true
 
+    # Ajoute http_client ici, aligné avec 'secret' et 'session'
+    http_client:
+        default_options:
+            verify_peer: true
+            verify_host: true
+
 when@test:
     framework:
         test: true

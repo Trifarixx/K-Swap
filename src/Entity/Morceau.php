@@ -13,7 +13,7 @@ class Morceau
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 100)]
+    #[ORM\Column(length: 255)]
     private ?string $titre = null;
 
     #[ORM\Column(nullable: true)]

@@ -23,15 +23,6 @@ class Artiste
     #[ORM\Column(length: 50)]
     private ?string $nomScene = null;
 
-    #[ORM\Column(type: Types::TEXT, nullable: true)]
-    private ?string $description = null;
-
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $image = null;
-
-    // Type d'artiste (Groupe ou Solo) géré par le DiscriminatorMap, 
-    // mais on peut ajouter une méthode helper si besoin.
-
     #[ORM\OneToMany(mappedBy: 'artiste', targetEntity: Discographie::class)]
     private Collection $discographies;
 
@@ -57,28 +48,6 @@ class Artiste
     public function setNomScene(string $nomScene): static
     {
         $this->nomScene = $nomScene;
-        return $this;
-    }
-
-    public function getDescription(): ?string
-    {
-        return $this->description;
-    }
-
-    public function setDescription(?string $description): static
-    {
-        $this->description = $description;
-        return $this;
-    }
-
-    public function getImage(): ?string
-    {
-        return $this->image;
-    }
-
-    public function setImage(?string $image): static
-    {
-        $this->image = $image;
         return $this;
     }
 
