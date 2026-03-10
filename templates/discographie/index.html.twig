@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}K-World | Discographie
+{% block title %}K-Swipe | Discographie
 {% endblock %}
 
 {% block body %}
@@ -10,35 +10,53 @@
 
 		<main class="main-content">
 			<div class="hero-card fade-in">
-				<h1 class="hero-title">La Discographie K-Pop</h1>
-				<p class="text-gray-400 mt-2">Découvrez tous les groupes et artistes du moment.</p>
+				<h1 class="hero-title">Le Meilleur de la Pop Asiatique
+				</h1>
 			</div>
 
 			<div class="disco-grid mt-6">
 				{% for groupe in groupes %}
-					<div class="disco-card fade-in">
-						<div
-							class="disco-image-wrapper">
-							{# Si l'image est une URL externe (scraping) #}
-							{% if 'http' in groupe.image %}
-								<img src="{{ groupe.image }}" alt="{{ groupe.nom }}" loading="lazy">
+					<a href="{{ path('app_groupe_show', {'id': groupe.id}) }}" class="disco-card fade-in" style="text-decoration: none; color: inherit; display: block;">
+
+						<div class="disco-image-wrapper">
+							{% if groupe.imageGrp %}
+								{% set cleanUrl = groupe.imageGrp|trim %}
+								{% if cleanUrl starts with 'http' or cleanUrl starts with '//' or cleanUrl starts with 'data:image' %}
+									<img src="{{ cleanUrl }}" alt="{{ groupe.nomGroupe ?: groupe.nomScene }}" loading="lazy" referrerpolicy="no-referrer">
+								{% else %}
+									<img src="{{ asset('uploads/groupes/' ~ cleanUrl) }}" alt="{{ groupe.nomGroupe ?: groupe.nomScene }}" loading="lazy">
+								{% endif %}
 							{% else %}
-								{# Si c'est une image locale #}
-								<img src="{{ asset('uploads/groupes/' ~ groupe.image) }}" alt="{{ groupe.nom }}" loading="lazy">
+								<img src="{{ asset('img/logo_kpop.png') }}" alt="{{ groupe.nomGroupe ?: groupe.nomScene }}" loading="lazy" style="object-fit: contain;">
 							{% endif %}
-							<div class="disco-overlay">
-								<button class="btn-play">
+
+							<div
+								class="disco-overlay">
+								{# Le bouton devient juste décoratif puisqu'on clique sur toute la carte #}
+								<div class="btn-play">
 									<span class="material-symbols-rounded">play_arrow</span>
-								</button>
+								</div>
 							</div>
 						</div>
+
 						<div class="disco-info">
-							<h3 class="disco-title">{{ groupe.nom }}</h3>
-							<span class="disco-subtitle">{{ groupe.description|u.truncate(30, '...') }}</span>
+							<h3 class="disco-title">{{ groupe.nomGroupe ?: groupe.nomScene }}
+							</h3>
+
+							<span class="disco-subtitle">
+								{% if groupe.nomFanclub %}
+									Fandom :
+									{{ groupe.nomFanclub }}
+								{% else %}
+									Groupe K-Pop
+								{% endif %}
+							</span>
 						</div>
-					</div>
+					</a>
 				{% else %}
-					<p class="col-span-full text-center text-gray-500">Aucun groupe trouvé. Lancez le scraper !</p>
+					<div class="col-12">
+						<p class="text-gray-400">Aucun groupe n'est disponible en base de données.</p>
+					</div>
 				{% endfor %}
 			</div>
 		</main>

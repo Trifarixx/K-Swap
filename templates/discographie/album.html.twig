@@ -1,0 +1,95 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}K-Swap |
+	{{ album.titre }}
+{% endblock %}
+
+{% block body %}
+	<div class="app-layout">
+		{% include 'header.html.twig' %}
+		{% include 'sidebar.html.twig' %}
+
+		<main
+			class="main-content spotify-page">
+
+			{# 1. L'EN-TÊTE GÉANT #}
+			<div class="sp-header">
+				<div class="sp-cover-wrapper">
+					{% if album.pochette %}
+						{% set cleanUrl = album.pochette|trim %}
+						<img src="{{ cleanUrl starts with 'http' ? cleanUrl : asset('images/albums/' ~ cleanUrl) }}" alt="{{ album.titre }}" class="sp-cover" referrerpolicy="no-referrer">
+					{% else %}
+						<img src="{{ asset('img/logo_kpop.png') }}" alt="{{ album.titre }}" class="sp-cover">
+					{% endif %}
+				</div>
+
+				<div class="sp-info">
+					<span class="sp-type">{{ album.type|default('Album') | upper }}</span>
+					<h1 class="sp-title">{{ album.titre }}</h1>
+					<div class="sp-meta">
+						<span class="sp-artist">{{ album.artiste.nomScene | default('Artiste Inconnu') }}</span>
+						<span class="sp-dot">•</span>
+						<span>{{ album.dateSortie ? album.dateSortie|date('Y') : '----' }}</span>
+						<span class="sp-dot">•</span>
+						<span>{{ album.morceaux|length }}
+							titres</span>
+					</div>
+				</div>
+			</div>
+
+			{# 2. LA BARRE D'ACTION ET DE NOTATION #}
+			<div class="sp-actions">
+				<button class="sp-btn-play">
+					<span class="material-symbols-rounded">play_arrow</span>
+				</button>
+
+				{# Le système de notation pur, beau et simple #}
+				<div class="sp-rating-container">
+					<span class="rating-text">Noter :</span>
+					<div class="sp-stars">
+						{% for i in 1..5 %}
+							<a href="{{ path('app_avis_add', {'id': album.id, 'note': i}) }}" class="material-symbols-rounded star-btn" title="Donner {{ i }} étoile(s)">
+								star
+							</a>
+						{% endfor %}
+					</div>
+				</div>
+			</div>
+
+			{# 3. LA TRACKLIST #}
+			<div class="sp-tracklist">
+				<div class="sp-track-header">
+					<div class="col-num">#</div>
+					<div class="col-title">Titre</div>
+					<div class="col-duration">
+						<span class="material-symbols-rounded">schedule</span>
+					</div>
+				</div>
+
+				{% for morceau in album.morceaux %}
+					<div class="sp-track-row">
+						<div class="col-num">{{ loop.index }}</div>
+						<div class="col-title">
+							<span class="track-name">{{ morceau.titre }}</span>
+							<span class="track-artist">{{ album.artiste.nomScene | default('') }}</span>
+						</div>
+						<div
+							class="col-duration">
+							{# Formatage de la durée (ex: 186s -> 3:06) #}
+							{% if morceau.duree %}
+								{{ (morceau.duree / 60)|round(0, 'floor') }}:{{ (morceau.duree % 60)|number_format(0, '', '') }}
+							{% else %}
+								--:--
+							{% endif %}
+						</div>
+					</div>
+				{% else %}
+					<p style="padding: 20px; color: #aaa;">Aucune piste disponible.</p>
+				{% endfor %}
+			</div>
+
+		</main>
+
+		<aside class="right-panel"></aside>
+	</div>
+{% endblock %}

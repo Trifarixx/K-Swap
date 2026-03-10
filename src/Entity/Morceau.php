@@ -19,9 +19,6 @@ class Morceau
     #[ORM\Column(nullable: true)]
     private ?int $duree = null; // en secondes
 
-    #[ORM\Column(type: 'boolean', options: ['default' => false])]
-    private ?bool $isTitleTrack = false;
-
     #[ORM\ManyToOne(inversedBy: 'morceaux')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Discographie $discographie = null;
@@ -50,17 +47,6 @@ class Morceau
     public function setDuree(?int $duree): static
     {
         $this->duree = $duree;
-        return $this;
-    }
-
-    public function isTitleTrack(): ?bool
-    {
-        return $this->isTitleTrack;
-    }
-
-    public function setIsTitleTrack(bool $isTitleTrack): static
-    {
-        $this->isTitleTrack = $isTitleTrack;
         return $this;
     }
 

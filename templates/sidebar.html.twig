@@ -1,50 +1,51 @@
-    <!-- 1. SIDEBAR (Navigation Gauche) -->
-    <aside class="sidebar">
-        <!-- Logo -->
-        <a href="{{ path('app_home') }}" class="flex items-center gap-3 px-2 mb-6">
-            <img src="{{ asset('img/logo_kpop.png') }}" alt="K-Swap Logo" class="logo-img rounded-full">
-            <span class="logo-font text-xl font-bold tracking-tight logo-text">K-Swap</span>
-        </a>
+<!-- 1. SIDEBAR (Navigation Gauche) -->
+<aside
+	class="sidebar">
+	<!-- Logo -->
+	<a href="{{ path('app_home') }}" class="flex items-center gap-3 px-2 mb-6">
+		<img src="{{ asset('img/logo_kpop.png') }}" alt="K-Swap Logo" class="logo-img rounded-full">
+		<span class="logo-font text-xl font-bold tracking-tight logo-text">K-Swap</span>
+	</a>
 
-        <!-- Menu Principal -->
-        <nav class="flex flex-col gap-1 w-full">
-            <div class="nav-section-title">Menu</div>
-            
-            <a href="#" class="nav-item active">
-                <span class="material-symbols-rounded nav-icon">home</span>
-                <span class="nav-text">Accueil</span>
-            </a>
-            <a href="#" class="nav-item">
-                <span class="material-symbols-rounded nav-icon">explore</span>
-                <span class="nav-text">Découvrir</span>
-            </a>
-            <a href="#" class="nav-item">
-                <span class="material-symbols-rounded nav-icon">album</span>
-                <span class="nav-text">Discographies</span>
-            </a>
-            <a href="#" class="nav-item">
-                <span class="material-symbols-rounded nav-icon">groups</span>
-                <span class="nav-text">Artistes</span>
-            </a>
-        </nav>
+	<!-- Menu Principal -->
+	<nav class="flex flex-col gap-1 w-full">
+		<div class="nav-section-title">Menu</div>
 
-        <!-- Menu Bibliothèque -->
-        <nav class="flex flex-col gap-1 w-full mt-4">
-            <div class="nav-section-title">Ma Bibliothèque</div>
-            
-            <a href="#" class="nav-item">
-                <span class="material-symbols-rounded nav-icon">favorite</span>
-                <span class="nav-text">Mes Bias</span>
-            </a>
-            <a href="#" class="nav-item">
-                <span class="material-symbols-rounded nav-icon">history</span>
-                <span class="nav-text">Récents</span>
-            </a>
-            <a href="#" class="nav-item">
-                <span class="material-symbols-rounded nav-icon">playlist_play</span>
-                <span class="nav-text">Playlists</span>
-            </a>
-        </nav>
-        
+		<a href="/" class="nav-item active">
+			<span class="material-symbols-rounded nav-icon">home</span>
+			<span class="nav-text">Accueil</span>
+		</a>
+		<a href="#" class="nav-item">
+			<span class="material-symbols-rounded nav-icon">explore</span>
+			<span class="nav-text">Découvrir</span>
+		</a>
+		<a href="{{ path('app_discographie') }}" class="nav-item">
+			<span class="material-symbols-rounded nav-icon">album</span>
+			<span class="nav-text">Discographies</span>
+		</a>
+		<a href="#" class="nav-item">
+			<span class="material-symbols-rounded nav-icon">groups</span>
+			<span class="nav-text">Artistes</span>
+		</a>
+	</nav>
 
-    </aside>
+	<!-- Menu Bibliothèque -->
+	<nav class="flex flex-col gap-1 w-full mt-4">
+		<div class="nav-section-title">Ma Bibliothèque</div>
+
+		<a href="#" class="nav-item">
+			<span class="material-symbols-rounded nav-icon">favorite</span>
+			<span class="nav-text">Mes Bias</span>
+		</a>
+		<a href="#" class="nav-item">
+			<span class="material-symbols-rounded nav-icon">history</span>
+			<span class="nav-text">Récents</span>
+		</a>
+		<a href="#" class="nav-item">
+			<span class="material-symbols-rounded nav-icon">playlist_play</span>
+			<span class="nav-text">Playlists</span>
+		</a>
+	</nav>
+
+
+</aside>

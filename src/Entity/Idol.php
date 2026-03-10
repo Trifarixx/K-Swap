@@ -28,11 +28,6 @@ class Idol
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $dateNaissance = null;
 
-    // Si l'Idol a une carrière solo, elle est liée à une fiche Artiste
-    #[ORM\OneToOne(targetEntity: Artiste::class, cascade: ['persist', 'remove'])]
-    #[ORM\JoinColumn(name: 'id_artiste_solo', referencedColumnName: 'id', nullable: true)]
-    private ?Artiste $artisteSolo = null;
-
     #[ORM\OneToMany(mappedBy: 'idol', targetEntity: MembreGroupe::class)]
     private Collection $groupes;
 
@@ -87,17 +82,6 @@ class Idol
     public function setDateNaissance(?\DateTimeInterface $dateNaissance): static
     {
         $this->dateNaissance = $dateNaissance;
-        return $this;
-    }
-
-    public function getArtisteSolo(): ?Artiste
-    {
-        return $this->artisteSolo;
-    }
-
-    public function setArtisteSolo(?Artiste $artisteSolo): static
-    {
-        $this->artisteSolo = $artisteSolo;
         return $this;
     }
     

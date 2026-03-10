@@ -22,6 +22,9 @@ class Groupe extends Artiste
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $imageGrp = null;
 
+    #[ORM\Column(type: Types::JSON, nullable: true)]
+    private ?array $genres = [];
+
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $dateDebut = null;
 
@@ -64,6 +67,27 @@ class Groupe extends Artiste
     public function setImageGrp(?string $imageGrp): static
     {
         $this->imageGrp = $imageGrp;
+        return $this;
+    }
+
+        public function getGenres(): array
+    {
+        return $this->genres ?? [];
+    }
+
+    public function setGenres(?array $genres): static
+    {
+        $this->genres = $genres;
+        return $this;
+    }
+
+    public function addGenre(string $genre): static
+    {
+        $currentGenres = $this->getGenres();
+        if (!in_array($genre, $currentGenres, true)) {
+            $currentGenres[] = $genre;
+            $this->setGenres($currentGenres);
+        }
         return $this;
     }
 

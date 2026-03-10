@@ -393,6 +393,27 @@ button {
     opacity: 1;
 }
 
+#feed-container {
+    max-width: 1000px; /* Largeur maximale fixe */
+    margin: 0 auto;   /* Centre le flux au milieu de la zone principale */
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.feed-card {
+    background: var(--bg-secondary);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s, border-color 0.2s;
+}
+
+.feed-card:hover {
+    border-color: var(--primary);
+}
+
 /* --- 4. RIGHT PANEL (Droite) --- */
 .right-panel {
     grid-column: 3 / -1;
@@ -433,139 +454,140 @@ button {
     border-radius: 20px;
     padding: 1.5rem;
 }
-    .feed-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 1rem;
-    }
-    .user-info {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-    }
-    .user-avatar {
-        width: 45px;
-        height: 45px;
-        border-radius: 50%;
-        object-fit: cover;
-        border: 2px solid var(--primary);
-    }
-    .user-avatar-placeholder {
-        width: 45px;
-        height: 45px;
-        border-radius: 50%;
-        background: var(--primary);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-weight: bold;
-    }
-    .user-name {
-        font-size: 1rem;
-        font-weight: 700;
-        color: white;
-        margin: 0;
-    }
-    .post-date {
-        font-size: 0.8rem;
-        color: var(--text-muted);
-    }
 
-    .rating-badge {
-        display: flex;
-        align-items: center;
-        gap: 4px;
-        background: rgba(255, 255, 255, 0.1);
-        padding: 4px 10px;
-        border-radius: 20px;
-        color: #fbbf24;
-        font-weight: bold;
-    }
+.feed-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+.user-avatar {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--primary);
+}
+.user-avatar-placeholder {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    background: var(--primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}
+.user-name {
+    font-size: 1rem;
+    font-weight: 700;
+    color: white;
+    margin: 0;
+}
+.post-date {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
 
-    .feed-content p {
-        color: #e2e8f0;
-        line-height: 1.6;
-        font-size: 0.95rem;
-        margin-bottom: 1.5rem;
-    }
+.rating-badge {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 4px 10px;
+    border-radius: 20px;
+    color: #fbbf24;
+    font-weight: bold;
+}
 
-    .feed-album {
-        background: rgba(15, 23, 42, 0.5);
-        padding: 10px;
-        border-radius: 12px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-    }
-    .album-mini {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-    }
-    .album-mini img,
-    .album-placeholder {
-        width: 50px;
-        height: 50px;
-        border-radius: 8px;
-        object-fit: cover;
-    }
-    .album-placeholder {
-        background: #334155;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: #94a3b8;
-    }
-    .album-details {
-        display: flex;
-        flex-direction: column;
-    }
-    .album-title {
-        font-weight: 700;
-        font-size: 0.9rem;
-        color: white;
-    }
-    .album-artist {
-        font-size: 0.8rem;
-        color: var(--text-muted);
-    }
+.feed-content p {
+    color: #e2e8f0;
+    line-height: 1.6;
+    font-size: 0.95rem;
+    margin-bottom: 1.5rem;
+}
 
-    .btn-icon {
-        background: none;
-        color: var(--text-muted);
-        padding: 8px;
-        border-radius: 50%;
-        transition: 0.2s;
-    }
-    .btn-icon:hover {
-        color: var(--accent);
-        background: rgba(236, 72, 153, 0.1);
-    }
+.feed-album {
+    background: rgba(15, 23, 42, 0.5);
+    padding: 10px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.album-mini {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+.album-mini img,
+.album-placeholder {
+    width: 50px;
+    height: 50px;
+    border-radius: 8px;
+    object-fit: cover;
+}
+.album-placeholder {
+    background: #334155;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #94a3b8;
+}
+.album-details {
+    display: flex;
+    flex-direction: column;
+}
+.album-title {
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: white;
+}
+.album-artist {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
 
-    /* Animation d'apparition */
-    @keyframes fadeIn {
-        from {
-            opacity: 0;
-            transform: translateY(20px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-    .fade-in {
-        animation: fadeIn 0.5s ease forwards;
-    }
+.btn-icon {
+    background: none;
+    color: var(--text-muted);
+    padding: 8px;
+    border-radius: 50%;
+    transition: 0.2s;
+}
+.btn-icon:hover {
+    color: var(--accent);
+    background: rgba(236, 72, 153, 0.1);
+}
 
-    /* Loader */
-    .loading-spinner {
-        text-align: center;
-        padding: 2rem;
-        color: var(--primary);
+/* Animation d'apparition */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
     }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+.fade-in {
+    animation: fadeIn 0.5s ease forwards;
+}
 
-    /* --- DISCOGRAPHIE GRID --- */
+/* Loader */
+.loading-spinner {
+    text-align: center;
+    padding: 2rem;
+    color: var(--primary);
+}
+
+/* --- DISCOGRAPHIE GRID --- */
 .disco-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
@@ -661,110 +683,110 @@ button {
     color: var(--text-muted);
 }
 
-    /* --- AUTHENTIFICATION (Login / Register) --- */
-    .auth-container {
-        min-height: 100vh;
-        width: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        /* On utilise une position absolue pour passer par dessus le layout grid existant */
-        position: fixed; 
-        top: 0;
-        left: 0;
-        z-index: 1000;
-        background: radial-gradient(circle at top right, #312e81 0%, var(--bg-main) 60%);
-        padding: 1rem;
-    }
+/* --- AUTHENTIFICATION (Login / Register) --- */
+.auth-container {
+    min-height: 100vh;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* On utilise une position absolue pour passer par dessus le layout grid existant */
+    position: fixed; 
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    background: radial-gradient(circle at top right, #312e81 0%, var(--bg-main) 60%);
+    padding: 1rem;
+}
 
-    .auth-card {
-        background: rgba(30, 41, 59, 0.7);
-        backdrop-filter: blur(16px);
-        -webkit-backdrop-filter: blur(16px);
-        border: 1px solid var(--glass-border);
-        border-radius: 24px;
-        padding: 2.5rem;
-        width: 100%;
-        max-width: 420px;
-        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-        animation: fadeInUp 0.5s ease-out;
-    }
+.auth-card {
+    background: rgba(30, 41, 59, 0.7);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--glass-border);
+    border-radius: 24px;
+    padding: 2.5rem;
+    width: 100%;
+    max-width: 420px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    animation: fadeInUp 0.5s ease-out;
+}
 
-    .auth-title {
-        font-family: 'Outfit', sans-serif;
-        font-size: 2rem;
-        font-weight: 700;
-        text-align: center;
-        margin-bottom: 0.5rem;
-        color: white;
-        background: linear-gradient(to right, #fff, #a5b4fc);
-        background-clip: text;
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-    }
+.auth-title {
+    font-family: 'Outfit', sans-serif;
+    font-size: 2rem;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 0.5rem;
+    color: white;
+    background: linear-gradient(to right, #fff, #a5b4fc);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
 
-    .auth-subtitle {
-        text-align: center;
-        color: var(--text-muted);
-        margin-bottom: 2rem;
-        font-size: 0.95rem;
-    }
+.auth-subtitle {
+    text-align: center;
+    color: var(--text-muted);
+    margin-bottom: 2rem;
+    font-size: 0.95rem;
+}
 
-    /* Styles des champs de formulaire */
-    .form-group { margin-bottom: 1.25rem; }
+/* Styles des champs de formulaire */
+.form-group { margin-bottom: 1.25rem; }
 
-    .form-label {
-        display: block;
-        color: #cbd5e1;
-        margin-bottom: 0.5rem;
-        font-size: 0.9rem;
-        font-weight: 500;
-    }
+.form-label {
+    display: block;
+    color: #cbd5e1;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
 
-    .form-input {
-        width: 100%;
-        background: var(--bg-secondary);
-        border: 1px solid var(--glass-border);
-        border-radius: 12px;
-        padding: 0.75rem 1rem;
-        color: white;
-        font-size: 1rem;
-        transition: all 0.2s;
-        outline: none;
-        box-sizing: border-box; /* Important pour ne pas dépasser */
-    }
+.form-input {
+    width: 100%;
+    background: var(--bg-secondary);
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+    padding: 0.75rem 1rem;
+    color: white;
+    font-size: 1rem;
+    transition: all 0.2s;
+    outline: none;
+    box-sizing: border-box;
+}
 
-    .form-input:focus {
-        border-color: var(--primary);
-        box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2);
-    }
+.form-input:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2);
+}
 
-    .auth-footer {
-        text-align: center;
-        margin-top: 1.5rem;
-        padding-top: 1.5rem;
-        border-top: 1px solid var(--glass-border);
-        color: var(--text-muted);
-        font-size: 0.9rem;
-    }
+.auth-footer {
+    text-align: center;
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--glass-border);
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
 
-    .auth-link {
-        color: var(--primary);
-        font-weight: 600;
-        text-decoration: none;
-    }
-    .auth-link:hover { color: var(--accent); }
+.auth-link {
+    color: var(--primary);
+    font-weight: 600;
+    text-decoration: none;
+}
+.auth-link:hover { color: var(--accent); }
 
-    /* Animation d'apparition */
-    @keyframes fadeInUp {
-        from { opacity: 0; transform: translateY(20px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
-    .fade-in-up {
-        animation: fadeInUp 0.5s ease forwards;
-    }
+/* Animation d'apparition */
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+.fade-in-up {
+    animation: fadeInUp 0.5s ease forwards;
+}
 
-    /* RESPONSIVE */
+/* RESPONSIVE */
 @media (max-width: 1200px) {
     .app-layout {
         grid-template-columns: 80px 1fr 0;
@@ -787,30 +809,9 @@ button {
         text-align: center;
     }
 
-    /* Smaller logo on narrow screens */
     .logo-img {
         width: 50px;
         height: 50px;
-    }
-
-    .feed-container {
-        max-width: 700px;
-        margin: 0 auto;
-        display: flex;
-        flex-direction: column;
-        gap: 2rem;
-    }
-
-    .feed-card {
-        background: var(--bg-secondary);
-        border: 1px solid var(--glass-border);
-        border-radius: 20px;
-        padding: 1.5rem;
-        box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.3);
-        transition: transform 0.2s;
-    }
-    .feed-card:hover {
-        border-color: var(--primary);
     }
 }
 
@@ -833,7 +834,378 @@ button {
 
 .post-image img {
     width: 100%;
+    max-height: 450px;
     height: auto;
     display: block;
     object-fit: cover;
+    object-position: center;
+}
+
+/* =========================================
+   GRILLE DES ALBUMS
+========================================= */
+.album-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    justify-content: center;
+    padding: 40px 20px;
+}
+
+/* =========================================
+   LA CARTE POLAROÏD 3D
+========================================= */
+.polaroid-card {
+    background-color: transparent;
+    width: 320px;
+    height: 450px;
+    /* La perspective est OBLIGATOIRE pour l'effet 3D */
+    perspective: 1000px; 
+}
+
+.polaroid-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    transition: transform 0.8s cubic-bezier(0.4, 0.2, 0.2, 1); /* Animation plus fluide */
+    transform-style: preserve-3d;
+}
+
+/* Le déclencheur de l'animation au survol */
+.polaroid-card:hover .polaroid-inner {
+    transform: rotateY(180deg);
+}
+
+/* =========================================
+   FACES RECTO ET VERSO
+========================================= */
+.polaroid-front, .polaroid-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    /* Cache le dos de la face quand elle est retournée */
+    backface-visibility: hidden; 
+    border-radius: 12px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+/* --- LE RECTO (FRONT) --- */
+.polaroid-front {
+    background-color: #fff;
+    border: 1px solid #eee;
+}
+
+.album-cover {
+    width: 100%;
+    height: 280px;
+    object-fit: cover;
+    border-radius: 6px;
+    margin-bottom: 15px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.album-title {
+    margin: 0;
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: #333;
+}
+
+.album-year {
+    margin: 5px 0 0 0;
+    color: #777;
+    font-size: 0.9rem;
+}
+
+.flip-hint {
+    margin-top: auto;
+    font-size: 0.8rem;
+    color: #aaa;
+    font-style: italic;
+}
+
+/* --- LE VERSO (BACK) --- */
+.polaroid-back {
+    background-color: #1a1a2e; /* Fond sombre K-Swap */
+    color: white;
+    /* Le verso est déjà retourné à l'envers par défaut */
+    transform: rotateY(180deg);
+    overflow-y: auto; /* Permet de scroller si l'album a beaucoup de titres */
+}
+
+/* =========================================
+   CONTENU DU VERSO (Tracklist & Notes)
+========================================= */
+.back-title {
+    margin-top: 0;
+    margin-bottom: 15px;
+    border-bottom: 2px solid rgba(255,255,255,0.2);
+    padding-bottom: 10px;
+    font-size: 1.2rem;
+}
+
+/* --- SECTION NOTATION GLOBALE --- */
+.album-rating-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: rgba(255, 255, 255, 0.05);
+    padding: 10px;
+    border-radius: 6px;
+    margin-bottom: 15px;
+}
+
+.rating-label {
+    font-size: 0.9rem;
+    color: #ccc;
+    font-weight: 600;
+}
+
+.tier-rating {
+    display: flex;
+    gap: 6px;
+}
+
+/* Les boutons de Tier List (qui sont maintenant des liens <a>) */
+.tier-btn {
+    text-decoration: none; /* Enlève le soulignement du lien */
+    border: none;
+    border-radius: 4px;
+    width: 28px;
+    height: 28px;
+    font-weight: 900;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: transform 0.2s, filter 0.2s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.tier-btn:hover {
+    transform: scale(1.15);
+    filter: brightness(1.2);
+}
+
+/* Couleurs des Tiers */
+.tier-s { background-color: #FFD700; color: #000; } /* Or */
+.tier-a { background-color: #FF4500; color: #FFF; } /* Rouge/Orange */
+.tier-b { background-color: #1E90FF; color: #FFF; } /* Bleu */
+.tier-c { background-color: #32CD32; color: #000; } /* Vert */
+
+/* --- LA TRACKLIST --- */
+.tracklist {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    text-align: left;
+}
+
+.track-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    font-size: 0.9rem;
+}
+
+.track-name {
+    font-weight: 500;
+    max-width: 75%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.track-duration {
+    color: #888;
+    font-size: 0.8rem;
+}
+
+/* =========================================
+   PAGE ALBUM (STYLE SPOTIFY)
+========================================= */
+.spotify-page {
+    /* Le fameux dégradé de fond Spotify */
+    background: linear-gradient(180deg, rgba(30,215,96,0.3) 0%, rgba(18,18,18,1) 40%);
+    padding: 0;
+    color: white;
+}
+
+/* L'EN-TÊTE */
+.sp-header {
+    display: flex;
+    align-items: flex-end;
+    gap: 24px;
+    padding: 40px 30px 24px 30px;
+}
+
+.sp-cover {
+    width: 232px;
+    height: 232px;
+    object-fit: cover;
+    box-shadow: 0 4px 60px rgba(0,0,0,0.5);
+    border-radius: 4px;
+}
+
+.sp-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.sp-type {
+    font-size: 0.85rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.sp-title {
+    font-size: 4.5rem; /* Titre géant */
+    font-weight: 900;
+    margin: 0 0 16px 0;
+    line-height: 1.1;
+    letter-spacing: -0.04em;
+}
+
+.sp-meta {
+    font-size: 0.9rem;
+    color: rgba(255,255,255,0.7);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.sp-artist {
+    font-weight: 700;
+    color: white;
+}
+
+.sp-dot {
+    font-size: 0.5rem;
+}
+
+/* LA BARRE D'ACTIONS */
+.sp-actions {
+    padding: 24px 30px;
+    display: flex;
+    align-items: center;
+    gap: 32px;
+    background: rgba(0,0,0,0.1);
+}
+
+.sp-btn-play {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background-color: #1ed760;
+    color: black;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: transform 0.2s, background-color 0.2s;
+}
+
+.sp-btn-play:hover {
+    transform: scale(1.05);
+    background-color: #1fdf64;
+}
+
+.sp-btn-play span {
+    font-size: 32px;
+}
+
+/* LE SYSTÈME DE NOTATION (ÉTOILES) */
+.sp-rating-container {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.rating-text {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #aaa;
+}
+
+.sp-stars {
+    display: flex;
+    flex-direction: row;
+}
+
+.star-btn {
+    text-decoration: none;
+    color: rgba(255, 255, 255, 0.2);
+    font-size: 36px;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+/* Magie CSS : allume l'étoile survolée ET toutes celles à sa gauche */
+.sp-stars:hover .star-btn {
+    color: #1ed760; /* Vert Spotify, ou mets la couleur K-Swap de ton choix */
+}
+.sp-stars .star-btn:hover ~ .star-btn {
+    color: rgba(255, 255, 255, 0.2);
+}
+
+/* LA TRACKLIST */
+.sp-tracklist {
+    padding: 0 30px 40px 30px;
+}
+
+.sp-track-header {
+    display: grid;
+    grid-template-columns: 40px 1fr 60px;
+    padding: 8px 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    color: #b3b3b3;
+    font-size: 0.85rem;
+    margin-bottom: 16px;
+}
+
+.sp-track-row {
+    display: grid;
+    grid-template-columns: 40px 1fr 60px;
+    padding: 10px 16px;
+    border-radius: 4px;
+    align-items: center;
+    transition: background-color 0.2s;
+}
+
+.sp-track-row:hover {
+    background-color: rgba(255,255,255,0.1);
+}
+
+.col-num {
+    color: #b3b3b3;
+    font-size: 1rem;
+}
+
+.col-title {
+    display: flex;
+    flex-direction: column;
+}
+
+.track-name {
+    font-size: 1rem;
+    color: white;
+    margin-bottom: 4px;
+}
+
+.track-artist {
+    font-size: 0.85rem;
+    color: #b3b3b3;
+}
+
+.col-duration {
+    color: #b3b3b3;
+    font-size: 0.9rem;
+    text-align: right;
 }
