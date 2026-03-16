@@ -28,11 +28,16 @@ Encore
     .cleanupOutputBeforeBuild()
     .enableBuildNotifications()
     .enableSourceMaps(!Encore.isProduction())
-    .enableVersioning(Encore.isProduction())
+    .enableVersioning(Encore.isProduction());
 
-    .configureBabelPresetEnv((config) => {
-        config.useBuiltIns = "usage";
-        config.corejs = 3;
-    });
+const config = Encore.getWebpackConfig();
 
-module.exports = Encore.getWebpackConfig();
+// Ensure babel-loader handles .js files properly for ES modules
+config.module.rules.forEach((rule) => {
+    if (rule.loader === "babel-loader") {
+        rule.options = rule.options || {};
+        rule.options.sourceType = "module";
+    }
+});
+
+module.exports = config;

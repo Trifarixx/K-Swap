@@ -1209,3 +1209,332 @@ button {
     font-size: 0.9rem;
     text-align: right;
 }
+
+/* =========================================
+   PAGE ALBUM (FOND DYNAMIQUE)
+========================================= */
+.neon-page {
+    position: relative;
+    /* On enlève la couleur de fond stricte, le dégradé fera le travail */
+    background-color: #0b0c10; 
+    color: white;
+    overflow: hidden; 
+    padding: 0; /* On enlève le padding global pour que le fond touche les bords */
+    z-index: 1;
+}
+
+/* 1. L'image de l'album agrandie et très floutée */
+.album-blurred-bg {
+    position: absolute;
+    top: -10%; 
+    left: -10%; 
+    width: 120%; 
+    height: 120%;
+    background-size: cover;
+    background-position: center;
+    /* C'est ici que la magie opère : gros flou et on assombrit l'image */
+    filter: blur(60px) brightness(0.4) saturate(1.5); 
+    z-index: 0;
+    pointer-events: none;
+}
+
+/* 2. Le dégradé qui fond l'image dans le noir vers le bas de la page */
+.bg-overlay {
+    position: absolute;
+    top: 0; 
+    left: 0; 
+    width: 100%; 
+    height: 100%;
+    /* Un dégradé qui part de transparent en haut, vers la couleur de fond de ton site en bas */
+    background: linear-gradient(to bottom, rgba(11, 12, 16, 0.2) 0%, rgba(11, 12, 16, 1) 85%);
+    z-index: 1;
+    pointer-events: none;
+}
+
+/* 3. Le conteneur qui protège le contenu pour qu'il reste au-dessus du fond */
+.neon-content {
+    position: relative;
+    z-index: 2;
+    padding: 40px; /* On remet le padding ici */
+}
+
+/* --- L'EN-TÊTE --- */
+.neon-header {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    margin-bottom: 50px;
+    position: relative;
+    z-index: 2;
+}
+
+.neon-cover {
+    width: 260px;
+    height: 260px;
+    object-fit: cover;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+}
+
+.neon-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.neon-title {
+    font-size: 4rem;
+    font-weight: 900;
+    margin: 0 0 10px 0;
+    letter-spacing: -1px;
+    text-shadow: 0 4px 15px rgba(0,0,0,0.5);
+}
+
+.neon-meta {
+    font-size: 1rem;
+    color: #cbd5e1;
+    margin-bottom: 30px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.neon-artist {
+    font-weight: 700;
+    color: white;
+}
+
+/* --- BOUTON PLAY & NOTATION --- */
+.neon-actions {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+}
+
+.neon-btn-play {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    /* Le dégradé violet/rose de ton design */
+    background: linear-gradient(135deg, #a855f7 0%, #ec4899 100%);
+    color: white;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    /* Le halo lumineux autour du bouton */
+    box-shadow: 0 0 25px rgba(236, 72, 153, 0.5);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.neon-btn-play:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 35px rgba(236, 72, 153, 0.8);
+}
+
+.neon-btn-play span {
+    font-size: 36px;
+    margin-left: 4px; /* Centre visuellement l'icône "play" */
+}
+
+/* Notation étoiles façon néon */
+.neon-rating {
+    display: flex;
+    gap: 5px;
+}
+
+.neon-star {
+    text-decoration: none;
+    color: rgba(255, 255, 255, 0.15);
+    font-size: 32px;
+    cursor: pointer;
+    transition: color 0.2s, text-shadow 0.2s;
+}
+
+.neon-rating:hover .neon-star {
+    color: #ec4899;
+    text-shadow: 0 0 15px rgba(236, 72, 153, 0.8);
+}
+.neon-rating .neon-star:hover ~ .neon-star {
+    color: rgba(255, 255, 255, 0.15);
+    text-shadow: none;
+}
+
+/* --- LA TRACKLIST --- */
+.neon-tracklist {
+    display: flex;
+    flex-direction: column;
+    gap: 16px; /* Espace entre les blocs */
+    max-width: 900px;
+}
+
+.neon-track-row {
+    display: grid;
+    grid-template-columns: 50px 1fr 80px;
+    align-items: center;
+    background-color: rgba(255, 255, 255, 0.03); /* Fond très légèrement transparent */
+    border: 1px solid rgba(236, 72, 153, 0.4); /* Bordure rose */
+    box-shadow: 0 0 10px rgba(236, 72, 153, 0.1); /* Halo rose léger */
+    border-radius: 12px;
+    padding: 16px 20px;
+    transition: background-color 0.2s, box-shadow 0.2s, transform 0.2s;
+}
+
+.neon-track-row:hover {
+    background-color: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 0 20px rgba(236, 72, 153, 0.3);
+    transform: translateX(5px); /* Petit effet de glissement au survol */
+}
+
+.col-num {
+    color: #cbd5e1;
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.col-title {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.track-name {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: white;
+}
+
+.track-artist {
+    font-size: 0.85rem;
+    color: #94a3b8;
+}
+
+.col-duration {
+    color: #cbd5e1;
+    font-size: 1rem;
+    text-align: right;
+}
+
+/* =========================================
+   PANNEAU LATÉRAL DES MORCEAUX
+========================================= */
+.clickable-track {
+    cursor: pointer;
+}
+
+.track-side-panel {
+    position: fixed;
+    top: 0;
+    right: -450px; /* Caché par défaut en dehors de l'écran */
+    width: 400px;
+    height: 100vh;
+    background-color: #0f111a;
+    border-left: 1px solid rgba(236, 72, 153, 0.3);
+    box-shadow: -10px 0 30px rgba(0, 0, 0, 0.8);
+    z-index: 9999;
+    transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    flex-direction: column;
+}
+
+/* La classe ajoutée par le JS pour le faire apparaître */
+.track-side-panel.active {
+    right: 0;
+}
+
+.panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.panel-header h2 {
+    font-size: 1.5rem;
+    color: white;
+    margin: 0;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    color: #cbd5e1;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.close-btn:hover {
+    color: #ec4899;
+}
+
+.panel-content {
+    padding: 20px;
+    overflow-y: auto;
+    flex-grow: 1;
+}
+
+.youtube-container {
+    margin-bottom: 30px;
+    background: rgba(0,0,0,0.5);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.no-video {
+    padding: 30px;
+    text-align: center;
+    color: #94a3b8;
+    font-style: italic;
+}
+
+/* --- LE FORMULAIRE --- */
+.review-section h3 {
+    margin-bottom: 15px;
+    font-size: 1.2rem;
+    color: #ec4899;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: #cbd5e1;
+    font-size: 0.9rem;
+}
+
+.neon-input {
+    width: 100%;
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 6px;
+    color: white;
+    padding: 10px;
+    font-family: inherit;
+}
+
+.neon-input:focus {
+    outline: none;
+    border-color: #ec4899;
+    box-shadow: 0 0 10px rgba(236, 72, 153, 0.3);
+}
+
+.neon-btn-submit {
+    width: 100%;
+    padding: 12px;
+    background: linear-gradient(135deg, #a855f7 0%, #ec4899 100%);
+    border: none;
+    border-radius: 6px;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.neon-btn-submit:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(236, 72, 153, 0.5);
+}

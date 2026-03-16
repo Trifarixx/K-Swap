@@ -34,6 +34,9 @@ class Avis
     #[ORM\JoinColumn(nullable: true)]
     private ?Discographie $discographie = null;
 
+    #[ORM\ManyToOne(inversedBy: 'avis')]
+    private ?Morceau $morceau = null;
+
     public function __construct()
     {
         $this->dateCreation = new \DateTime();
@@ -107,6 +110,18 @@ class Avis
     public function setDiscographie(?Discographie $discographie): static
     {
         $this->discographie = $discographie;
+        return $this;
+    }
+
+    public function getMorceau(): ?Morceau
+    {
+        return $this->morceau;
+    }
+
+    public function setMorceau(?Morceau $morceau): static
+    {
+        $this->morceau = $morceau;
+
         return $this;
     }
 }
