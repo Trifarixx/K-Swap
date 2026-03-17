@@ -24,11 +24,14 @@ WORKDIR /var/www/html
 # 6. Copie de tout votre code source dans le serveur
 COPY . .
 
-# 7. IMPORTANT : On installe les paquets PHP MAIS on bloque les scripts (cache) pendant le build
+# 7. NOUVEAU : Autoriser Composer à utiliser ses plugins (comme Symfony Flex) en tant que root
+ENV COMPOSER_ALLOW_SUPERUSER=1
+
+# 8. On installe les paquets PHP MAIS on bloque les scripts (cache) pendant le build
 RUN composer install --no-interaction --optimize-autoloader --no-scripts
 
-# 8. On donne les droits d'écriture à Apache pour le dossier var/ (cache et logs)
+# 9. On donne les droits d'écriture à Apache pour le dossier var/ (cache et logs)
 RUN chown -R www-data:www-data var/
 
-# 9. Au démarrage du serveur (et non pendant le build), on vide le cache puis on lance Apache
+# 10. Au démarrage du serveur (et non pendant le build), on vide le cache puis on lance Apache
 CMD php bin/console cache:clear && apache2-foreground
