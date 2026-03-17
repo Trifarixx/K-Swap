@@ -1,7 +1,9 @@
-FROM php:8.3.10-fpm
+FROM php:8.2-fpm
 
-RUN docker-php-ext-install pdo pdo_mysql
+# Au lieu de : RUN composer install
+RUN composer install --no-scripts --no-interaction
 
+# Installation des dépendances système et des extensions PHP
 RUN apt-get update && apt-get install -y \
     libicu-dev \
     && docker-php-ext-configure intl \
