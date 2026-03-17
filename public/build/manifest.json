@@ -1,6 +1,6 @@
 {
-  "build/app.js": "/build/app.75a17819.js",
-  "build/runtime.js": "/build/runtime.78447727.js",
-  "build/436.420865e3.js": "/build/436.420865e3.js",
-  "build/914.17d4469e.js": "/build/914.17d4469e.js"
+  "build/app.js": "/build/app.js",
+  "build/runtime.js": "/build/runtime.js",
+  "build/assets_controllers_csrf_protection_controller_js.js": "/build/assets_controllers_csrf_protection_controller_js.js",
+  "build/vendors-node_modules_hotwired_turbo_dist_turbo_es2017-esm_js-node_modules_symfony_stimulus-br-640207.js": "/build/vendors-node_modules_hotwired_turbo_dist_turbo_es2017-esm_js-node_modules_symfony_stimulus-br-640207.js"
 }
