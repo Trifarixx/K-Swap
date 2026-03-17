@@ -13,32 +13,34 @@ class YoutubeController extends AbstractController
     #[Route('/api/youtube/{id}', name: 'api_youtube_search', methods: ['GET'])]
     public function search(Morceau $morceau, EntityManagerInterface $em): JsonResponse
     {
-        // 1. Si le lien existe déjà dans la BDD, on le renvoie direct (0 seconde d'attente !)
-        if ($morceau->getLienYoutube() !== null) {
-            return $this->json(['url' => $morceau->getLienYoutube()]);
+        if ($morceau->getLienYoutube()) {
+            return new JsonResponse(['url' => $morceau->getLienYoutube()]);
         }
 
-        // 2. Sinon, on prépare la recherche
         $artiste = $morceau->getDiscographie()->getArtiste()->getNomScene();
         $titre = $morceau->getTitre();
+        $searchTerm = $artiste . ' ' . $titre . ' official audio OR lyrics';
 
-        // On sécurise le texte pour la ligne de commande
-        $query = escapeshellarg($artiste . ' ' . $titre . ' Topic');
-        $scriptPath = escapeshellarg($this->getParameter('kernel.project_dir') . '/search_yt.js');
+        $query = urlencode($searchTerm);
+        $youtubeSearchUrl = 'https://www.youtube.com/results?search_query=' . $query;
 
-        // 3. PHP réveille Node.js en arrière-plan et attend sa réponse
-        $command = "node $scriptPath $query";
-        $output = trim(shell_exec($command));
+        $options = [
+            'http' => [
+                'method' => 'GET',
+                'header' => "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36\r\n" .
+                    "Accept-Language: fr-FR,fr;q=0.9,en-US;q=0.8,en;q=0.7\r\n"
+            ]
+        ];
+        $context = stream_context_create($options);
+        $html = @file_get_contents($youtubeSearchUrl, false, $context);
 
-        // 4. Si Node.js a trouvé un lien http
-        if (str_starts_with($output, 'http')) {
-            $morceau->setLienYoutube($output);
+        if ($html && preg_match('/"videoId":"([a-zA-Z0-9_-]{11})"/', $html, $matches)) {
+            $finalUrl = 'https://www.youtube.com/watch?v=' . $matches[1];
+            $morceau->setLienYoutube($finalUrl);
             $em->flush();
-
-            return $this->json(['url' => $output]);
+            return new JsonResponse(['url' => $finalUrl]);
         }
 
-        // 5. Échec
-        return $this->json(['error' => 'Vidéo introuvable'], 404);
+        return new JsonResponse(['error' => 'Vidéo introuvable'], 404);
     }
 }

@@ -6,26 +6,26 @@ if (!query) {
     process.exit(1);
 }
 
-ytSearch(query)
+// On ajoute les mots-clés magiques à ta recherche initiale
+const safeQuery = query + " official audio OR lyrics";
+
+ytSearch(safeQuery)
     .then((r) => {
         if (r && r.videos && r.videos.length > 0) {
-            // 1. On cherche UNIQUEMENT une vidéo officielle YouTube Music ("Topic" ou "Thème")
-            const topicVideo = r.videos.find(
+            // On filtre pour être sûr de choper une version audio ou lyrics
+            let selectedVideo = r.videos.find(
                 (v) =>
-                    v.author &&
-                    (v.author.name.includes("Topic") ||
-                        v.author.name.includes("Thème")),
+                    v.title.toLowerCase().includes("audio") ||
+                    v.title.toLowerCase().includes("lyrics") ||
+                    (v.author && v.author.name.includes("Topic")),
             );
 
-            if (topicVideo) {
-                console.log(topicVideo.url);
-            } else {
-                // 2. S'il n'y a pas de Topic, on cherche une vidéo de fan "Lyrics" pour esquiver le blocage
-                const lyricsVideo = r.videos.find((v) =>
-                    v.title.toLowerCase().includes("lyrics"),
-                );
-                console.log(lyricsVideo ? lyricsVideo.url : r.videos[0].url);
+            // Sécurité : si vraiment on trouve rien de précis, on prend le 1er résultat
+            if (!selectedVideo) {
+                selectedVideo = r.videos[0];
             }
+
+            console.log(selectedVideo.url);
         } else {
             console.log("NOT_FOUND");
         }

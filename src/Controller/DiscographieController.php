@@ -29,7 +29,7 @@ class DiscographieController extends AbstractController
         ]);
     }
 
-    // 3. LA NOUVELLE PAGE : L'album style "Spotify" avec les étoiles !
+    // 3. 
     #[Route('/discographie/album/{id}', name: 'app_album_show')]
     public function showAlbum(Discographie $album): Response
     {
