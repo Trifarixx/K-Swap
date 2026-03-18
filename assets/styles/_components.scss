@@ -24,6 +24,26 @@
     }
 }
 
+/* --- BOUTON NEON (Formulaires et Posts) --- */
+.neon-btn-submit {
+    padding: 14px 24px;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+    border: none;
+    border-radius: 12px;
+    color: white;
+    font-weight: bold;
+    font-size: 1rem;
+    cursor: pointer;
+    transition:
+        transform 0.2s,
+        box-shadow 0.2s;
+
+    &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(236, 72, 153, 0.4); /* Halo rose K-Swap */
+    }
+}
+
 .btn-icon {
     background: none;
     color: var(--text-muted);
@@ -103,6 +123,14 @@
     }
 }
 
+/* --- LE CONTENEUR DU FEED --- */
+#feed-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
 /* --- CARTES FEED (AVIS) --- */
 .feed-card {
     background: var(--bg-secondary);
@@ -372,6 +400,394 @@
                 .track-duration {
                     color: #888;
                     font-size: 0.8rem;
+                }
+            }
+        }
+    }
+}
+
+/* --- FEED & ALBUMS LIÉS --- */
+.feed-album-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
+.feed-album {
+    position: relative;
+    overflow: hidden;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    margin-top: 16px;
+    padding: 16px;
+    transition: transform 0.2s;
+    cursor: pointer;
+
+    /* Remplace le onmouseover inline */
+    &:hover {
+        transform: translateY(-2px);
+    }
+
+    .album-blur-bg {
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background-size: cover;
+        background-position: center;
+        filter: blur(40px) brightness(0.3) saturate(1.5);
+        z-index: 0;
+        pointer-events: none;
+    }
+
+    .album-mini {
+        position: relative;
+        z-index: 1;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+
+        img {
+            width: 60px;
+            height: 60px;
+            border-radius: 6px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+            object-fit: cover;
+        }
+    }
+
+    .album-details {
+        display: flex;
+        flex-direction: column;
+
+        .track-title {
+            font-weight: bold;
+            color: #ff6db3;
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
+
+        .album-title {
+            font-weight: 600;
+            color: white;
+            font-size: 16px;
+            margin-bottom: 2px;
+        }
+
+        .album-artist {
+            color: #ccc;
+            font-size: 13px;
+        }
+    }
+}
+
+/* --- MESSAGES ET ALERTES --- */
+.empty-msg {
+    padding: 20px;
+    color: #aaa;
+    text-align: center;
+}
+
+.auth-error-msg {
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid #ef4444;
+    color: #ef4444;
+    padding: 0.75rem;
+    border-radius: 12px;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    font-size: 0.9rem;
+}
+
+.form-error {
+    color: #ef4444;
+    font-size: 0.85rem;
+    margin-top: 0.25rem;
+}
+
+/* --- AUTHENTIFICATION --- */
+.auth-icon-wrapper {
+    text-align: center;
+    margin-bottom: 1rem;
+
+    .material-symbols-rounded {
+        font-size: 48px;
+        &.icon-accent {
+            color: var(--accent);
+        }
+        &.icon-primary {
+            color: var(--primary);
+        }
+    }
+}
+
+.auth-submit-btn {
+    width: 100%;
+    margin-top: 1rem;
+}
+
+/* --- DIVERS (Pages par défaut Symfony) --- */
+.example-wrapper {
+    margin: 1em auto;
+    max-width: 800px;
+    width: 95%;
+    font: 18px/1.5 sans-serif;
+
+    code {
+        background: #f5f5f5;
+        padding: 2px 6px;
+        color: #333;
+    }
+}
+
+.img-contain {
+    object-fit: contain !important;
+}
+
+/* =========================================
+   CARTES DISCOGRAPHIE (Groupes & Albums)
+========================================= */
+.disco-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 24px;
+    padding-bottom: 40px;
+}
+
+.disco-card {
+    background: rgba(255, 255, 255, 0.03);
+    padding: 16px;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    border: 1px solid transparent;
+
+    /* Les animations au survol de la carte globale */
+    &:hover {
+        background: rgba(255, 255, 255, 0.08);
+        border-color: rgba(255, 255, 255, 0.1);
+        transform: translateY(-5px);
+
+        .disco-image-wrapper img {
+            transform: scale(1.05);
+        }
+
+        .disco-overlay {
+            opacity: 1;
+        }
+
+        .btn-play {
+            transform: translateY(0);
+        }
+    }
+
+    /* Le conteneur de l'image (Carré parfait) */
+    .disco-image-wrapper {
+        position: relative;
+        width: 100%;
+        aspect-ratio: 1/1;
+        border-radius: 8px;
+        overflow: hidden;
+        margin-bottom: 16px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        /* L'ombre qui apparaît au survol */
+        .disco-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.2);
+            opacity: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.3s ease;
+        }
+
+        /* Le bouton Play rose/violet */
+        .btn-play {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transform: translateY(10px);
+            transition:
+                transform 0.3s ease,
+                background 0.2s;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+
+            &:hover {
+                background: var(--accent);
+                transform: scale(1.1) !important;
+            }
+        }
+    }
+
+    /* Les textes sous l'image */
+    .disco-info {
+        .disco-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--text-white);
+            margin: 0 0 4px 0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .disco-subtitle {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            display: block;
+        }
+    }
+}
+
+/* =========================================
+   PANNEAU LATÉRAL (Lecteur YouTube & Avis)
+========================================= */
+.clickable-track {
+    cursor: pointer;
+}
+
+.track-side-panel {
+    position: fixed;
+    top: 0;
+    right: -450px; /* Caché par défaut en dehors de l'écran */
+    width: 400px;
+    height: 100vh;
+    background-color: #0f111a;
+    border-left: 1px solid rgba(236, 72, 153, 0.3); /* Bordure rose subtile */
+    box-shadow: -10px 0 30px rgba(0, 0, 0, 0.8);
+    z-index: 9999;
+    transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    flex-direction: column;
+
+    /* Classe ajoutée par JS pour faire glisser le panneau */
+    &.active {
+        right: 0;
+    }
+
+    .panel-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+
+        h2 {
+            font-size: 1.5rem;
+            color: white;
+            margin: 0;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: #cbd5e1;
+            cursor: pointer;
+            transition: color 0.2s;
+
+            &:hover {
+                color: var(--accent);
+            }
+        }
+    }
+
+    .panel-content {
+        padding: 20px;
+        overflow-y: auto;
+        flex-grow: 1;
+
+        .youtube-container {
+            margin-bottom: 30px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .no-video {
+            padding: 30px;
+            text-align: center;
+            color: #94a3b8;
+            font-style: italic;
+        }
+
+        /* --- FORMULAIRE D'AVIS --- */
+        .review-section {
+            margin-top: 20px;
+
+            h3 {
+                margin-bottom: 15px;
+                font-size: 1.2rem;
+                color: var(--accent);
+            }
+
+            .form-group {
+                margin-bottom: 20px;
+
+                label {
+                    display: block;
+                    margin-bottom: 8px;
+                    color: #cbd5e1;
+                    font-size: 0.9rem;
+                }
+
+                .neon-input {
+                    width: 100%;
+                    background-color: rgba(255, 255, 255, 0.05);
+                    border: 1px solid rgba(255, 255, 255, 0.2);
+                    border-radius: 8px;
+                    color: white;
+                    padding: 10px;
+                    font-family: inherit;
+                    transition: all 0.2s;
+
+                    &:focus {
+                        outline: none;
+                        border-color: var(--accent);
+                        box-shadow: 0 0 10px rgba(236, 72, 153, 0.3);
+                    }
+                }
+
+                /* MAGIE SCSS : Le système d'étoiles (Radio buttons cachés) */
+                .star-rating {
+                    display: flex;
+                    flex-direction: row-reverse;
+                    justify-content: flex-end;
+                    gap: 5px;
+
+                    input[type="radio"] {
+                        display: none;
+                    }
+
+                    label {
+                        font-size: 30px;
+                        color: #444;
+                        cursor: pointer;
+                        transition: all 0.2s ease-in-out;
+                    }
+
+                    /* Allume l'étoile survolée ou cliquée ET celles à sa gauche */
+                    input[type="radio"]:checked ~ label,
+                    label:hover,
+                    label:hover ~ label {
+                        color: #ff6db3;
+                        text-shadow: 0 0 10px rgba(255, 109, 179, 0.5);
+                    }
                 }
             }
         }

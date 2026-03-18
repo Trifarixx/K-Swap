@@ -1,175 +1,198 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}K-Swap | Créer une publication{% endblock %}
+{% block title %}K-Swap | Créer une publication
+{% endblock %}
 
 {% block body %}
-    <div class="app-layout">
-        {% include 'header.html.twig' %}
-        {% include 'sidebar.html.twig' %}
+	<div class="app-layout">
+		{% include 'header.html.twig' %}
+		{% include 'sidebar.html.twig' %}
 
-        <main class="main-content neon-page">
-            
-            <div style="max-width: 1200px; margin: 0 auto; padding-bottom: 20px;">
-                <h1 style="color: white; font-size: 28px; margin-bottom: 5px;">Nouvelle Publication</h1>
-                <p style="color: #aaa; margin-top: 0;">Partage ton avis sur une musique ou un album avec la communauté.</p>
-            </div>
+		<main class="main-content neon-page">
 
-            <form action="{{ path('app_post_new') }}" method="POST" id="post-form">
-                
-                <div class="post-creation-container">
-                    
-                    {# COLONNE GAUCHE : L'ÉDITEUR #}
-                    <div class="panel-box left-panel">
-                        <h3 style="color: #FF6DB3; margin-top: 0; margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
-                            <span class="material-symbols-rounded">edit_square</span> Ton message
-                        </h3>
-                        
-                        <div class="rich-text-area" contenteditable="true" id="editor-content" placeholder="Que veux-tu dire sur ce son ? Écris ton avis détaillé ici..."></div>
+			<div class="page-header">
+				<h1 class="page-title">Nouvelle Publication</h1>
+				<p class="page-subtitle">Partage ton avis sur une musique ou un album avec la communauté.</p>
+			</div>
 
-                        <textarea name="commentaire" id="hidden-commentaire" style="display:none;"></textarea>
+			<form action="{{ path('app_post_new') }}" method="POST" id="post-form">
 
-                        <button type="submit" class="neon-btn-submit" style="width: 100%; margin-top: 25px; padding: 15px; font-size: 16px; border-radius: 12px;">Publier la review</button>
-                    </div>
+				<div
+					class="post-creation-container">
 
-                    {# COLONNE DROITE : LA RECHERCHE API (Totalement vidée de la boucle Twig !) #}
-                    <div class="panel-box right-panel">
-                        <h3 style="color: #FF6DB3; margin-top: 0; margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
-                            <span class="material-symbols-rounded">library_music</span> Lier une musique
-                        </h3>
-                        
-                        <input type="text" id="music-search-input" class="search-input-lg" placeholder="🔍 Chercher un artiste, morceau, album...">
-                        
-                        <div class="search-results" id="search-results-container">
-                            <div style="text-align: center; padding: 40px 20px; color: #666;">
-                                <span class="material-symbols-rounded" style="font-size: 48px; opacity: 0.5; margin-bottom: 10px; display: block;">search</span>
-                                Tape pour chercher une musique...
-                            </div>
-                        </div>
+					{# COLONNE GAUCHE : L'ÉDITEUR #}
+					<div class="panel-box left-panel">
+						<h3 class="panel-title">
+							<span class="material-symbols-rounded">edit_square</span>
+							Ton message
+						</h3>
 
-                        <input type="hidden" name="morceau_id" id="selected-morceau-id" required>
+						<div class="editor-toolbar">
+							<button type="button" class="editor-btn" onclick="formatText('bold')" title="Gras">
+								<b>B</b>
+							</button>
+							<button type="button" class="editor-btn" onclick="formatText('italic')" title="Italique">
+								<i>I</i>
+							</button>
+							<button type="button" class="editor-btn" onclick="formatText('underline')" title="Souligné">
+								<u>U</u>
+							</button>
+							<div style="width: 1px; background: rgba(255,255,255,0.1); margin: 0 5px;"></div>
+							<button type="button" class="editor-btn" onclick="formatText('insertOrderedList')" title="Liste numérotée">1.</button>
+							<button type="button" class="editor-btn" onclick="formatText('insertUnorderedList')" title="Liste à puces">•</button>
+						</div>
 
-                        {# APERÇU DE LA SÉLECTION #}
-                        <div id="selection-preview" style="display: none; margin-top: 10px; padding: 15px; background: rgba(255, 109, 179, 0.1); border: 2px dashed #FF6DB3; border-radius: 12px; text-align: center; transition: all 0.3s;">
-                            <p style="color: white; margin: 0 0 10px 0; font-size: 14px;">Musique sélectionnée :</p>
-                            
-                            <div style="display: inline-flex; align-items: center; gap: 15px; background: rgba(0,0,0,0.4); padding: 10px 20px; border-radius: 50px; max-width: 100%; box-sizing: border-box;">
-                                <img id="selection-image" src="" style="width: 30px; height: 30px; border-radius: 50%; object-fit: cover; flex-shrink: 0;">
-                                <strong id="selection-title" style="color: #FF6DB3; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"></strong>
-                            </div>
+						<div class="rich-text-area" contenteditable="true" id="editor-content" placeholder="Que veux-tu dire sur ce son ? Écris ton avis détaillé ici..."></div>
 
-                            <button type="button" onclick="cancelSelection()" style="display: block; margin: 10px auto 0; background: rgba(255, 71, 87, 0.2); color: #ff4757; border: 1px solid rgba(255, 71, 87, 0.5); padding: 5px 12px; border-radius: 8px; cursor: pointer; transition: background 0.2s; font-size: 12px;">
-                                Choisir une autre
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </form>
-        </main>
-    </div>
+						<textarea name="commentaire" id="hidden-commentaire" style="display:none;"></textarea>
 
-    <script>
-        // --- ÉDITEUR DE TEXTE ---
-        function formatText(command) {
-            document.execCommand(command, false, null);
-            document.getElementById('editor-content').focus();
-        }
+						<button type="submit" class="neon-btn-submit auth-submit-btn">Publier la review</button>
+					</div>
 
-        document.getElementById('post-form').addEventListener('submit', function(e) {
-            const editorHTML = document.getElementById('editor-content').innerHTML;
-            document.getElementById('hidden-commentaire').value = editorHTML;
-            
-            if (!document.getElementById('selected-morceau-id').value) {
-                e.preventDefault();
-                alert("Tu dois absolument lier une musique avant de publier !");
-            }
-        });
+					{# COLONNE DROITE : LA RECHERCHE #}
+					<div class="panel-box right-panel">
+						<h3 class="panel-title">
+							<span class="material-symbols-rounded">library_music</span>
+							Lier une musique
+						</h3>
 
-        // --- RECHERCHE DE MUSIQUE VIA FETCH (L'API) ---
-        const searchInput = document.getElementById('music-search-input');
-        const resultsContainer = document.getElementById('search-results-container');
-        const defaultImage = "{{ asset('img/logo_kpop.png') }}";
-        
-        let typingTimer;
-        const doneTypingInterval = 400;
+						<input type="text" id="music-search-input" class="search-input-lg" placeholder="🔍 Chercher un artiste, morceau, album...">
 
-        searchInput.addEventListener('keyup', function() {
-            clearTimeout(typingTimer);
-            let query = this.value.trim();
-            
-            if (query.length > 2) {
-                resultsContainer.innerHTML = `<p style="color: #FF6DB3; text-align: center; margin-top: 20px;">Recherche en cours...</p>`;
-                
-                typingTimer = setTimeout(() => {
-                    fetch('/api/search/morceaux?q=' + encodeURIComponent(query))
-                        .then(response => {
-                            if (!response.ok) throw new Error("Erreur serveur");
-                            return response.json();
-                        })
-                        .then(data => {
-                            resultsContainer.innerHTML = ''; 
-                            
-                            if (data.length === 0) {
-                                resultsContainer.innerHTML = `<p style="color: #aaa; text-align: center; margin-top: 20px;">Aucun morceau trouvé pour "${query}".</p>`;
-                                return;
-                            }
+						<div class="search-results" id="search-results-container">
+							<div class="empty-search-msg">
+								<span class="material-symbols-rounded empty-search-icon">search</span>
+								Tape pour chercher une musique...
+							</div>
+						</div>
 
-                            data.forEach(item => {
-                                let imageUrl = item.pochette 
-                                    ? (item.pochette.startsWith('http') ? item.pochette : '/images/albums/' + item.pochette) 
-                                    : defaultImage;
-                                
-                                let titrePropre = item.titre ? item.titre.replace(/'/g, "\\'") : 'Inconnu';
-                                let artistePropre = item.artiste ? item.artiste.replace(/'/g, "\\'") : 'Inconnu';
+						<input
+						type="hidden" name="morceau_id" id="selected-morceau-id" required>
 
-                                resultsContainer.innerHTML += `
-                                    <div class="result-item" onclick="selectMusic(${item.id}, '${titrePropre} - ${artistePropre}', '${imageUrl}')">
+						{# APERÇU DE LA SÉLECTION #}
+						<div id="selection-preview" style="display: none;">
+							<p>Musique sélectionnée :</p>
+
+							<div class="selection-box">
+								<img id="selection-image" src="" alt="Cover">
+								<strong id="selection-title"></strong>
+							</div>
+
+							<button type="button" onclick="cancelSelection()" class="btn-cancel-selection">
+								Choisir une autre
+							</button>
+						</div>
+					</div>
+				</div>
+			</form>
+		</main>
+	</div>
+
+	<script>
+		function formatText(command) {
+document.execCommand(command, false, null);
+document.getElementById('editor-content').focus();
+}
+
+document.getElementById('post-form').addEventListener('submit', function (e) {
+const editorHTML = document.getElementById('editor-content').innerHTML;
+document.getElementById('hidden-commentaire').value = editorHTML;
+
+if (!document.getElementById('selected-morceau-id').value) {
+e.preventDefault();
+alert("Tu dois absolument lier une musique avant de publier !");
+}
+});
+
+const searchInput = document.getElementById('music-search-input');
+const resultsContainer = document.getElementById('search-results-container');
+const defaultImage = "{{ asset('img/logo_kpop.png') }}";
+
+let typingTimer;
+const doneTypingInterval = 400;
+
+searchInput.addEventListener('keyup', function () {
+clearTimeout(typingTimer);
+let query = this.value.trim();
+
+if (query.length > 2) {
+resultsContainer.innerHTML = `<p class="status-msg-loading">Recherche en cours...</p>`;
+
+typingTimer = setTimeout(() => {
+fetch('/api/search/morceaux?q=' + encodeURIComponent(query)).then(response => {
+if (!response.ok) 
+throw new Error("Erreur serveur");
+
+return response.json();
+}).then(data => {
+resultsContainer.innerHTML = '';
+
+if (data.length === 0) {
+resultsContainer.innerHTML = `<p class="empty-msg">Aucun morceau trouvé pour "${query}".</p>`;
+return;
+}
+
+data.forEach(item => {
+let imageUrl = item.pochette ? (item.pochette.startsWith('http') ? item.pochette : '/images/albums/' + item.pochette) : defaultImage;
+
+let titrePropre = item.titre ? item.titre.replace(/'/g, "\\'") : 'Inconnu';
+let artistePropre = item.artiste ? item.artiste.replace(/'/g, "\\'") : 'Inconnu';
+
+resultsContainer.innerHTML += `
+                                    <div class="result-item" onclick="selectMusic(${
+item.id
+}, '${titrePropre} - ${artistePropre}', '${imageUrl}')">
                                         <img src="${imageUrl}" alt="Cover" class="result-cover" referrerpolicy="no-referrer">
-                                        <div style="min-width: 0; flex-grow: 1;">
-                                            <div style="font-weight: bold; color: white; font-size: 15px; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${item.titre}</div>
-                                            <div style="font-size: 12px; color: #FF6DB3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${item.artiste} • ${item.album}</div>
+                                        <div class="result-item-content">
+                                            <div class="result-item-title">${
+item.titre
+}</div>
+                                            <div class="result-item-artist">${
+item.artiste
+} • ${
+item.album
+}</div>
                                         </div>
                                     </div>
                                 `;
-                            });
-                        })
-                        .catch(err => {
-                            console.error(err);
-                            resultsContainer.innerHTML = `<p style="color: #ff4757; text-align: center;">Erreur lors de la recherche.</p>`;
-                        });
-                        
-                }, doneTypingInterval);
+});
+}).catch(err => {
+console.error(err);
+resultsContainer.innerHTML = `<p class="status-msg-error">Erreur lors de la recherche.</p>`;
+});
 
-            } else {
-                resultsContainer.innerHTML = `
-                    <div style="text-align: center; padding: 40px 20px; color: #666;">
-                        <span class="material-symbols-rounded" style="font-size: 48px; opacity: 0.5; margin-bottom: 10px; display: block;">search</span>
+}, doneTypingInterval);
+
+} else {
+resultsContainer.innerHTML = `
+                    <div class="empty-search-msg">
+                        <span class="material-symbols-rounded empty-search-icon">search</span>
                         Tape au moins 3 lettres pour chercher.
                     </div>
                 `;
-            }
-        });
+}
+});
 
-        function selectMusic(id, title, imageUrl) {
-            document.getElementById('selected-morceau-id').value = id;
-            document.getElementById('selection-title').innerText = title;
-            document.getElementById('selection-image').src = imageUrl;
-            
-            document.getElementById('selection-preview').style.display = 'block';
-            resultsContainer.style.display = 'none';
-            searchInput.value = '';
-        }
+function selectMusic(id, title, imageUrl) {
+document.getElementById('selected-morceau-id').value = id;
+document.getElementById('selection-title').innerText = title;
+document.getElementById('selection-image').src = imageUrl;
 
-        function cancelSelection() {
-            document.getElementById('selected-morceau-id').value = '';
-            document.getElementById('selection-preview').style.display = 'none';
-            resultsContainer.style.display = 'flex';
-            
-            resultsContainer.innerHTML = `
-                <div style="text-align: center; padding: 40px 20px; color: #666;">
-                    <span class="material-symbols-rounded" style="font-size: 48px; opacity: 0.5; margin-bottom: 10px; display: block;">search</span>
+document.getElementById('selection-preview').style.display = 'block';
+resultsContainer.style.display = 'none';
+searchInput.value = '';
+}
+
+function cancelSelection() {
+document.getElementById('selected-morceau-id').value = '';
+document.getElementById('selection-preview').style.display = 'none';
+resultsContainer.style.display = 'flex';
+
+resultsContainer.innerHTML = `
+                <div class="empty-search-msg">
+                    <span class="material-symbols-rounded empty-search-icon">search</span>
                     Recherche une nouvelle musique ci-dessus.
                 </div>
             `;
-        }
-    </script>
+}
+	</script>
 {% endblock %}

@@ -22,7 +22,7 @@
 			{% endif %}
 		</div>
 
-		{# 2. contenu du post(Commentaire + Image uploadée) #}
+		{# 2. contenu du post (Commentaire + Image uploadée) #}
 		<div class="feed-content">
 			<p>{{ avis.commentaire }}</p>
 
@@ -34,37 +34,35 @@
 			{% endif %}
 		</div>
 
-		{# Album et Morceau #}
+		{# 3. Album et Morceau liés #}
 		{% if avis.discographie %}
 			<a
-				href="{{ path('app_album_show', {'id': avis.discographie.id}) }}" style="text-decoration: none; color: inherit; display: block;">
+				href="{{ path('app_album_show', {'id': avis.discographie.id}) }}" class="feed-album-link">
 
 				{# Conteneur principal #}
 				<div
-					class="feed-album" style="position: relative; overflow: hidden; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); margin-top: 16px; padding: 16px; transition: transform 0.2s; cursor: pointer;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
+					class="feed-album">
 
-					{# lien image #}
+					{# préparation de l'image #}
 					{% set cleanPochette = avis.discographie.pochette ? avis.discographie.pochette|trim : '' %}
 					{% set pochetteUrl = cleanPochette ? (cleanPochette starts with 'http' or cleanPochette starts with '//' ? cleanPochette : asset('images/albums/' ~ cleanPochette)) : asset('img/logo_kpop.png') %}
 
-					<div style="position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background-image: url('{{ pochetteUrl }}'); background-size: cover; background-position: center; filter: blur(40px) brightness(0.3) saturate(1.5); z-index: 0; pointer-events: none;"></div>
+					{# Image floutée en fond (seul style conservé car l'URL est dynamique) #}
+					<div class="album-blur-bg" style="background-image: url('{{ pochetteUrl }}');"></div>
 
-					<div class="album-mini" style="position: relative; z-index: 1; display: flex; align-items: center; gap: 15px;">
+					<div class="album-mini">
+						<img src="{{ pochetteUrl }}" alt="Cover" referrerpolicy="no-referrer">
 
-						<img src="{{ pochetteUrl }}" alt="Cover" referrerpolicy="no-referrer" style="width: 60px; height: 60px; border-radius: 6px; box-shadow: 0 4px 10px rgba(0,0,0,0.5); object-fit: cover;">
-
-						<div class="album-details" style="display: flex; flex-direction: column;">
+						<div class="album-details">
 							{% if avis.morceau %}
-								<span class="track-title" style="font-weight: bold; color: #FF6DB3; font-size: 14px; margin-bottom: 4px;">{{ avis.morceau.titre }}</span>
+								<span class="track-title">{{ avis.morceau.titre }}</span>
 							{% endif %}
-
-							<span class="album-title" style="font-weight: 600; color: white; font-size: 16px; margin-bottom: 2px;">{{ avis.discographie.titre }}</span>
-							<span class="album-artist" style="color: #ccc; font-size: 13px;">{{ avis.discographie.artiste.nomScene }}</span>
+							<span class="album-title">{{ avis.discographie.titre }}</span>
+							<span class="album-artist">{{ avis.discographie.artiste.nomScene }}</span>
 						</div>
 					</div>
 				</div>
 			</a>
 		{% endif %}
-
 	</article>
 {% endfor %}
