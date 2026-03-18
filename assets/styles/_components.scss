@@ -1,0 +1,379 @@
+/* --- BOUTONS --- */
+.btn {
+    padding: 12px 28px;
+    border-radius: 50px;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: transform 0.2s;
+
+    &:hover {
+        transform: translateY(-2px);
+    }
+
+    &-primary {
+        background: white;
+        color: var(--bg-main);
+    }
+    &-glass {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: white;
+    }
+}
+
+.btn-icon {
+    background: none;
+    color: var(--text-muted);
+    padding: 8px;
+    border-radius: 50%;
+    transition: 0.2s;
+    &:hover {
+        color: var(--accent);
+        background: rgba(236, 72, 153, 0.1);
+    }
+}
+
+/* --- TITRES DE SECTIONS --- */
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    margin-bottom: 1.5rem;
+
+    .section-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+    }
+    .see-all {
+        color: var(--primary);
+        font-weight: 600;
+        font-size: 0.9rem;
+    }
+}
+
+/* --- CARTES ALBUMS CLASSIQUES --- */
+.album-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 1.5rem;
+    padding: 40px 20px; // Combiné avec ta 2ème déclaration
+}
+
+.album-card {
+    background: var(--bg-secondary);
+    border-radius: 16px;
+    padding: 16px;
+    transition: all 0.3s;
+    border: 1px solid var(--glass-border);
+
+    &:hover {
+        transform: translateY(-5px);
+        background: rgba(30, 41, 59, 0.8);
+        border-color: var(--primary);
+        .play-overlay {
+            opacity: 1;
+        }
+    }
+
+    .album-img-wrapper {
+        position: relative;
+        border-radius: 12px;
+        overflow: hidden;
+        aspect-ratio: 1/1;
+        margin-bottom: 12px;
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .play-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+    }
+}
+
+/* --- CARTES FEED (AVIS) --- */
+.feed-card {
+    background: var(--bg-secondary);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    transition:
+        transform 0.2s,
+        border-color 0.2s;
+
+    &:hover {
+        border-color: var(--primary);
+    }
+
+    .feed-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            .user-avatar {
+                width: 45px;
+                height: 45px;
+                border-radius: 50%;
+                object-fit: cover;
+                border: 2px solid var(--primary);
+            }
+            .user-avatar-placeholder {
+                width: 45px;
+                height: 45px;
+                border-radius: 50%;
+                background: var(--primary);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-weight: bold;
+            }
+            .user-name {
+                font-size: 1rem;
+                font-weight: 700;
+                color: white;
+                margin: 0;
+            }
+            .post-date {
+                font-size: 0.8rem;
+                color: var(--text-muted);
+            }
+        }
+        .rating-badge {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 4px 10px;
+            border-radius: 20px;
+            color: #fbbf24;
+            font-weight: bold;
+        }
+    }
+
+    .feed-content p {
+        color: #e2e8f0;
+        line-height: 1.6;
+        font-size: 0.95rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .feed-album {
+        background: rgba(15, 23, 42, 0.5);
+        padding: 10px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        .album-mini {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            img,
+            .album-placeholder {
+                width: 50px;
+                height: 50px;
+                border-radius: 8px;
+                object-fit: cover;
+            }
+            .album-placeholder {
+                background: #334155;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: #94a3b8;
+            }
+            .album-details {
+                display: flex;
+                flex-direction: column;
+                .album-title {
+                    font-weight: 700;
+                    font-size: 0.9rem;
+                    color: white;
+                }
+                .album-artist {
+                    font-size: 0.8rem;
+                    color: var(--text-muted);
+                }
+            }
+        }
+    }
+}
+
+/* --- CARTE POLAROID --- */
+.polaroid-card {
+    background-color: transparent;
+    width: 320px;
+    height: 450px;
+    perspective: 1000px;
+
+    &:hover .polaroid-inner {
+        transform: rotateY(180deg);
+    }
+
+    .polaroid-inner {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        text-align: center;
+        transition: transform 0.8s cubic-bezier(0.4, 0.2, 0.2, 1);
+        transform-style: preserve-3d;
+    }
+
+    .polaroid-front,
+    .polaroid-back {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        backface-visibility: hidden;
+        border-radius: 12px;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .polaroid-front {
+        background-color: #fff;
+        border: 1px solid #eee;
+        .album-cover {
+            width: 100%;
+            height: 280px;
+            object-fit: cover;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .album-title {
+            margin: 0;
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: #ff6db3;
+        }
+        .album-year {
+            margin: 5px 0 0 0;
+            color: #777;
+            font-size: 0.9rem;
+        }
+        .flip-hint {
+            margin-top: auto;
+            font-size: 0.8rem;
+            color: #aaa;
+            font-style: italic;
+        }
+    }
+
+    .polaroid-back {
+        background-color: #1a1a2e;
+        color: white;
+        transform: rotateY(180deg);
+        overflow-y: auto;
+        .back-title {
+            margin-top: 0;
+            margin-bottom: 15px;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+            padding-bottom: 10px;
+            font-size: 1.2rem;
+        }
+
+        .album-rating-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: rgba(255, 255, 255, 0.05);
+            padding: 10px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            .rating-label {
+                font-size: 0.9rem;
+                color: #ccc;
+                font-weight: 600;
+            }
+            .tier-rating {
+                display: flex;
+                gap: 6px;
+            }
+        }
+
+        .tier-btn {
+            text-decoration: none;
+            border: none;
+            border-radius: 4px;
+            width: 28px;
+            height: 28px;
+            font-weight: 900;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition:
+                transform 0.2s,
+                filter 0.2s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            &:hover {
+                transform: scale(1.15);
+                filter: brightness(1.2);
+            }
+        }
+        .tier-s {
+            background-color: #ffd700;
+            color: #000;
+        }
+        .tier-a {
+            background-color: #ff4500;
+            color: #fff;
+        }
+        .tier-b {
+            background-color: #1e90ff;
+            color: #fff;
+        }
+        .tier-c {
+            background-color: #32cd32;
+            color: #000;
+        }
+
+        .tracklist {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            text-align: left;
+            .track-item {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 8px 0;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+                font-size: 0.9rem;
+                .track-name {
+                    font-weight: 500;
+                    max-width: 75%;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
+                .track-duration {
+                    color: #888;
+                    font-size: 0.8rem;
+                }
+            }
+        }
+    }
+}

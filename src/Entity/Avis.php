@@ -15,7 +15,7 @@ class Avis
     private ?int $id = null;
 
     #[ORM\Column(nullable: true)]
-    private ?int $note = null; // Ex: 4 sur 5
+    private ?int $note = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $commentaire = null;

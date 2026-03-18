@@ -29,7 +29,7 @@ class DiscographieController extends AbstractController
         ]);
     }
 
-    // 3. 
+    // 3. Page d'un album (Tous les morceaux de l'album)
     #[Route('/discographie/album/{id}', name: 'app_album_show')]
     public function showAlbum(Discographie $album): Response
     {

@@ -21,11 +21,12 @@ Encore
     // Split files into smaller chunks
     .splitEntryChunks()
 
-    // --- LA LIGNE MANQUANTE EST ICI ---
     .enableSingleRuntimeChunk()
-    // ----------------------------------
+
+    .enableSassLoader()
 
     .cleanupOutputBeforeBuild()
+
     .enableBuildNotifications()
     .enableSourceMaps(!Encore.isProduction())
     .enableVersioning(Encore.isProduction());

@@ -1,33 +1,36 @@
-<!-- 1. SIDEBAR (Navigation Gauche) -->
-<aside
-	class="sidebar">
-	<!-- Logo -->
-	<a href="{{ path('app_home') }}" class="flex items-center gap-3 px-2 mb-6">
-		<img src="{{ asset('img/logo_kpop.png') }}" alt="K-Swap Logo" class="logo-img rounded-full">
-		<span class="logo-font text-xl font-bold tracking-tight logo-text">K-Swap</span>
-	</a>
+{% set current_route = app.request.attributes.get('_route') %}
 
-	<!-- Menu Principal -->
-	<nav class="flex flex-col gap-1 w-full">
-		<div class="nav-section-title">Menu</div>
+<aside class="sidebar">
+    
+    <nav class="flex flex-col gap-1 w-full">
+        <div class="nav-section-title">Menu</div>
 
-		<a href="/" class="nav-item active">
-			<span class="material-symbols-rounded nav-icon">home</span>
-			<span class="nav-text">Accueil</span>
-		</a>
-		<a href="#" class="nav-item">
-			<span class="material-symbols-rounded nav-icon">explore</span>
-			<span class="nav-text">Découvrir</span>
-		</a>
-		<a href="{{ path('app_discographie') }}" class="nav-item">
-			<span class="material-symbols-rounded nav-icon">album</span>
-			<span class="nav-text">Discographies</span>
-		</a>
-		<a href="#" class="nav-item">
-			<span class="material-symbols-rounded nav-icon">groups</span>
-			<span class="nav-text">Artistes</span>
-		</a>
-	</nav>
+        {# ACCUEIL #}
+        {# Remplace 'app_home' par le vrai nom de ta route d'accueil si c'est différent #}
+        <a href="{{ path('app_home') }}" class="nav-item {% if current_route == 'app_home' %}active{% endif %}">
+            <span class="material-symbols-rounded nav-icon">home</span>
+            <span class="nav-text">Accueil</span>
+        </a>
+
+        {# DÉCOUVRIR (Lien mort pour l'instant) #}
+        <a href="#" class="nav-item {% if current_route == 'app_decouvrir' %}active{% endif %}">
+            <span class="material-symbols-rounded nav-icon">explore</span>
+            <span class="nav-text">Découvrir</span>
+        </a>
+
+        {# DISCOGRAPHIES #}
+        {# J'utilise un tableau (array) pour que le bouton reste allumé si tu es sur la liste, sur la page d'un groupe, ou sur un album précis ! #}
+        <a href="{{ path('app_discographie') }}" class="nav-item {% if current_route in ['app_discographie', 'app_groupe_show', 'app_album_show'] %}active{% endif %}">
+            <span class="material-symbols-rounded nav-icon">album</span>
+            <span class="nav-text">Discographies</span>
+        </a>
+
+        {# ARTISTES (Lien mort pour l'instant) #}
+        <a href="#" class="nav-item {% if current_route == 'app_artistes' %}active{% endif %}">
+            <span class="material-symbols-rounded nav-icon">groups</span>
+            <span class="nav-text">Artistes</span>
+        </a>
+    </nav>
 
 	<!-- Menu Bibliothèque -->
 	<nav class="flex flex-col gap-1 w-full mt-4">

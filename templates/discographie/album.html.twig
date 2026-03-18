@@ -6,140 +6,174 @@
 
 {% block body %}
 	<div class="app-layout">
-		{% include 'header.html.twig' %}
-		{% include 'sidebar.html.twig' %}
+        {% include 'header.html.twig' %}
+        {% include 'sidebar.html.twig' %}
 
-		<main
-			class="main-content neon-page">
-			{# PREPARATION DE L'IMAGE POUR LE FOND DYNAMIQUE #}
-			{% set cleanUrl = album.pochette ? album.pochette|trim : '' %}
-			{% set coverUrl = '' %}
-			{% if cleanUrl %}
-				{% set coverUrl = cleanUrl starts with 'http' or cleanUrl starts with '//' ? cleanUrl : asset('images/albums/' ~ cleanUrl) %}
-			{% else %}
-				{% set coverUrl = asset('img/logo_kpop.png') %}
-			{% endif %}
+        <main class="main-content neon-page">
+            {# PREPARATION DE L'IMAGE POUR LE FOND DYNAMIQUE #}
+            {% set cleanUrl = album.pochette ? album.pochette|trim : '' %}
+            {% set coverUrl = '' %}
+            {% if cleanUrl %}
+                {% set coverUrl = cleanUrl starts with 'http' or cleanUrl starts with '//' ? cleanUrl : asset('images/albums/' ~ cleanUrl) %}
+            {% else %}
+                {% set coverUrl = asset('img/logo_kpop.png') %}
+            {% endif %}
 
-			<div class="album-blurred-bg" style="background-image: url('{{ coverUrl }}');"></div>
-			<div class="bg-overlay"></div>
+            <div class="album-blurred-bg" style="background-image: url('{{ coverUrl }}');"></div>
+            <div class="bg-overlay"></div>
+            
+            <div class="neon-content">
+                <div class="neon-header">
+                    <div class="neon-cover-wrapper">
+                        <img src="{{ coverUrl }}" alt="{{ album.titre }}" class="neon-cover">
+                    </div>
+                    
+                    <div class="neon-info">
+                        <h1 class="neon-title">{{ album.titre | upper }}</h1>
+                        <div class="neon-meta">
+                            <span class="neon-artist">{{ album.artiste.nomScene | default('Artiste Inconnu') }}</span>
+                            <span class="neon-dot">•</span>
+                            <span>{{ album.morceaux|length }} titres</span>
+                        </div>
+                    </div>
+                </div>
 
-			<div class="neon-content">
-				<div class="neon-header">
-					<div class="neon-cover-wrapper">
-						<img src="{{ coverUrl }}" alt="{{ album.titre }}" class="neon-cover" referrerpolicy="no-referrer">
-					</div>
+                <div class="neon-tracklist">
+                    {% for morceau in album.morceaux %}
+                        <div class="neon-track-row clickable-track" 
+                             data-id="{{ morceau.id }}" 
+                             data-title="{{ morceau.titre }}" 
+                             data-youtube="{{ morceau.lienYoutube | default('') }}">
+                            <div class="col-num">{{ loop.index }}</div>
+                            <div class="col-title">
+                                <span class="track-name">{{ morceau.titre }}</span>
+                                <span class="track-artist">{{ album.artiste.nomScene | default('') }}</span>
+                            </div>
+                            <div class="col-duration">
+                                {% if morceau.duree %}
+                                    {{ (morceau.duree / 60)|round(0, 'floor') }}:{{ (morceau.duree % 60)|format('%02d') }}
+                                {% else %}
+                                    --:--
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% else %}
+                        <p style="padding: 20px; color: #aaa;">Aucune piste disponible.</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </main>
 
-					<div class="neon-info">
-						<h1 class="neon-title">{{ album.titre | upper }}</h1>
-						<div class="neon-meta">
-							<span class="neon-artist">{{ album.artiste.nomScene | default('Artiste Inconnu') }}</span>
-							<span class="neon-dot">•</span>
-							<span>{{ album.morceaux|length }}
-								titres</span>
-						</div>
-					</div>
-				</div>
+        {# LE PANNEAU LATERAL AVEC LECTEUR ET FORMULAIRE D'AVIS #}
+        <aside id="track-side-panel" class="track-side-panel">
+            <div class="panel-header">
+                <h2 id="panel-track-title">Titre du morceau</h2>
+                <button id="close-panel" class="close-btn">
+                    <span class="material-symbols-rounded">close</span>
+                </button>
+            </div>
+            <div class="panel-content">
+                {# Conteneur du lecteur vidéo #}
+                <div id="panel-youtube-container" class="youtube-container"></div>
+                
+                {# Section Avis avec le système d'étoiles #}
+                <div class="review-section" style="margin-top: 20px;">
+                    <h3>Ton avis sur ce morceau</h3>
+                    <form id="track-review-form" action="#" method="POST">
+                        
+                        <div class="form-group">
+                            <label style="display:block; margin-bottom: 5px;">Ta note :</label>
+                            <div class="star-rating">
+                                <input type="radio" id="star5" name="note" value="5" required />
+                                <label for="star5" title="5 étoiles">★</label>
+                                
+                                <input type="radio" id="star4" name="note" value="4" />
+                                <label for="star4" title="4 étoiles">★</label>
+                                
+                                <input type="radio" id="star3" name="note" value="3" />
+                                <label for="star3" title="3 étoiles">★</label>
+                                
+                                <input type="radio" id="star2" name="note" value="2" />
+                                <label for="star2" title="2 étoiles">★</label>
+                                
+                                <input type="radio" id="star1" name="note" value="1" />
+                                <label for="star1" title="1 étoile">★</label>
+                            </div>
+                        </div>
 
-				<div class="neon-tracklist">
-					{% for morceau in album.morceaux %}
-						<div class="neon-track-row clickable-track" data-id="{{ morceau.id }}" data-title="{{ morceau.titre }}" data-youtube="{{ morceau.lienYoutube | default('') }}">
-							<div class="col-num">{{ loop.index }}</div>
-							<div class="col-title">
-								<span class="track-name">{{ morceau.titre }}</span>
-								<span class="track-artist">{{ album.artiste.nomScene | default('') }}</span>
-							</div>
-							<div class="col-duration">
-								{% if morceau.duree %}
-									{{ (morceau.duree / 60)|round(0, 'floor') }}:{{ (morceau.duree % 60)|format('%02d') }}
-								{% else %}
-									--:--
-								{% endif %}
-							</div>
-						</div>
-					{% else %}
-						<p style="padding: 20px; color: #aaa;">Aucune piste disponible.</p>
-					{% endfor %}
-				</div>
-			</div>
-		</main>
+                        <div class="form-group" style="margin-bottom: 15px;">
+                            <label style="display:block; margin-bottom: 5px;">Commentaire :</label>
+                            <textarea name="commentaire" rows="4" placeholder="Ce refrain est incroyable..." required class="neon-input" style="width: 100%; border-radius: 8px; padding: 10px;"></textarea>
+                        </div>
 
-		<aside id="track-side-panel" class="track-side-panel">
-			<div class="panel-header">
-				<h2 id="panel-track-title">Titre du morceau</h2>
-				<button id="close-panel" class="close-btn">
-					<span class="material-symbols-rounded">close</span>
-				</button>
-			</div>
-			<div class="panel-content">
-				<div id="panel-youtube-container" class="youtube-container"></div>
+                        <button type="submit" class="neon-btn-submit" style="width: 100%; padding: 10px; border-radius: 8px; cursor: pointer;">Poster mon avis</button>
+                    </form>
+                </div>
+            </div>
+        </aside>
+    </div>
 
-				<div class="review-section">
-					<h3>Ton avis sur ce morceau</h3>
-					<form id="track-review-form" action="#" method="POST">
-						<div class="form-group">
-							<label>Note sur 5 :</label>
-							<input type="number" name="note" min="1" max="5" required class="neon-input">
-						</div>
-						<div class="form-group">
-							<label>Commentaire :</label>
-							<textarea name="commentaire" rows="4" placeholder="Ce refrain est incroyable..." required class="neon-input"></textarea>
-						</div>
-						<button type="submit" class="neon-btn-submit">Poster mon avis</button>
-					</form>
-				</div>
-			</div>
-		</aside>
-	</div>
+    {# LE JAVASCRIPT POUR GERER LE LECTEUR YOUTUBE #}
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const panel = document.getElementById('track-side-panel');
+            const ytContainer = document.getElementById('panel-youtube-container');
+            const titleEl = document.getElementById('panel-track-title');
+            const closeBtn = document.getElementById('close-panel');
+            const form = document.getElementById('track-review-form');
 
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-    const panel = document.getElementById('track-side-panel');
-    const ytContainer = document.getElementById('panel-youtube-container');
-    const titleEl = document.getElementById('panel-track-title');
-    const closeBtn = document.getElementById('close-panel');
-    const form = document.getElementById('track-review-form');
-
-    if (closeBtn && panel) {
-        closeBtn.addEventListener('click', () => {
-            panel.classList.remove('active');
-            if (ytContainer) ytContainer.innerHTML = '';
-        });
-    }
-
-    document.querySelectorAll('.clickable-track').forEach(row => {
-        row.addEventListener('click', () => {
-            if (!panel || !ytContainer || !titleEl) return;
-
-            const trackId = row.dataset.id;
-            const trackTitle = row.dataset.title;
-            const ytLink = row.dataset.youtube;
-
-            titleEl.textContent = trackTitle;
-            if (form) form.action = "/avis/ajouter/morceau/" + trackId;
-            panel.classList.add('active');
-
-            const playVideo = (url) => {
-                const videoId = url.includes('v=') ? url.split('v=')[1].split('&')[0] : url.split('/').pop();
-                ytContainer.innerHTML = '<iframe width="100%" height="250" src="https://www.youtube.com/embed/' + videoId + '" frameborder="0" allowfullscreen></iframe>';
-            };
-
-            if (ytLink && ytLink !== '') {
-                playVideo(ytLink);
-            } else {
-                ytContainer.innerHTML = '<p style="text-align:center; padding:20px;">Recherche en cours...</p>';
-                fetch('/api/youtube/' + trackId)
-                    .then(res => res.json())
-                    .then(data => {
-                        if (data.url) {
-                            row.dataset.youtube = data.url;
-                            playVideo(data.url);
-                        } else {
-                            ytContainer.innerHTML = '<p style="color:red; text-align:center;">Vidéo introuvable</p>';
-                        }
-                    });
+            if (closeBtn && panel) {
+                closeBtn.addEventListener('click', () => {
+                    panel.classList.remove('active');
+                    if(ytContainer) ytContainer.innerHTML = '';
+                });
             }
+
+            document.querySelectorAll('.clickable-track').forEach(row => {
+                row.addEventListener('click', () => {
+                    if (!panel || !ytContainer || !titleEl) return;
+
+                    const trackId = row.dataset.id;
+                    const trackTitle = row.dataset.title;
+                    const ytLink = row.dataset.youtube;
+
+                    titleEl.textContent = trackTitle;
+                    
+                    // Met à jour l'URL du formulaire pour cibler la bonne musique
+                    if(form) form.action = "/avis/ajouter/morceau/" + trackId;
+                    
+                    panel.classList.add('active');
+
+                    const playVideo = (url) => {
+                        const videoId = url.includes('v=') ? url.split('v=')[1].split('&')[0] : url.split('/').pop();
+                        ytContainer.innerHTML = '<iframe width="100%" height="250" src="https://www.youtube.com/embed/' + videoId + '" frameborder="0" allowfullscreen></iframe>';
+                    };
+
+                    if (ytLink && ytLink !== '') {
+                        playVideo(ytLink);
+                    } else {
+                        ytContainer.innerHTML = '<p style="text-align:center; padding:20px;">Recherche en cours...</p>';
+                        
+                        fetch('/api/youtube/' + trackId)
+                            .then(res => {
+                                if (!res.ok) throw new Error("Erreur serveur");
+                                return res.json();
+                            })
+                            .then(data => {
+                                if (data.url) {
+                                    row.dataset.youtube = data.url;
+                                    playVideo(data.url);
+                                } else {
+                                    ytContainer.innerHTML = '<p style="color:red; text-align:center; padding:20px;">Vidéo introuvable sur YouTube</p>';
+                                }
+                            })
+                            .catch(err => {
+                                ytContainer.innerHTML = '<p style="color:red; text-align:center; padding:20px;">Erreur de connexion</p>';
+                                console.error(err);
+                            });
+                    }
+                });
+            });
         });
-    });
-});
-</script>
-{%endblock%}
+    </script>
+{% endblock %}
