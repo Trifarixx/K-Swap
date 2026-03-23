@@ -22,6 +22,7 @@ class Artiste
 
     #[ORM\Column(length: 50)]
     private ?string $nomScene = null;
+ 
 
     #[ORM\OneToMany(mappedBy: 'artiste', targetEntity: Discographie::class)]
     private Collection $discographies;
@@ -60,4 +61,6 @@ class Artiste
     {
         return $this->evenements;
     }
+
+
 }

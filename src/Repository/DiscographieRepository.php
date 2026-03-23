@@ -27,4 +27,14 @@ class DiscographieRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+     public function search(string $query): array
+    {
+        return $this->createQueryBuilder('d')
+            ->where('d.titre LIKE :q')
+            ->orWhere('d.artiste LIKE :q')
+            ->setParameter('q', '%' . $query . '%')
+            ->orderBy('d.titre', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
 }

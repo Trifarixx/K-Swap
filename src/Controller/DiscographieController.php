@@ -17,6 +17,7 @@ class DiscographieController extends AbstractController
     {
         return $this->render('discographie/index.html.twig', [
             'groupes' => $groupeRepository->findAll(),
+
         ]);
     }
 

@@ -26,4 +26,19 @@ class ArtisteRepository extends ServiceEntityRepository
     //        ->getQuery()
     //        ->getResult();
     // }
+public function findAllArtistes(): array
+{
+    return $this->createQueryBuilder('a')
+        ->leftJoin('a.discographies', 'd')->addSelect('d')
+        ->leftJoin('a.evenements', 'e')->addSelect('e')
+        ->orderBy('a.nomScene', 'ASC')
+        ->getQuery()
+        ->getResult();
+        
+}
+
+
+
+
+
 }
