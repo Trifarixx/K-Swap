@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Avis;
-use App\Entity\Discographie;
+use App\Entity\Morceau;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -12,36 +12,48 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class AvisController extends AbstractController
 {
-    #[Route('/avis/add/{id}', name: 'app_avis_add')]
-    public function addAvis(Discographie $discographie, Request $request, EntityManagerInterface $em): Response
+    #[Route('/avis/ajouter/morceau/{id}', name: 'app_avis_ajouter_morceau', methods: ['POST'])]
+    public function ajouterAvisMorceau(Morceau $morceau, Request $request, EntityManagerInterface $em): Response
     {
         // 1. Sécurité : On vérifie que l'utilisateur est bien connecté
         $user = $this->getUser();
         if (!$user) {
-            $this->addFlash('danger', 'Tu dois être connecté pour noter un album !');
-            return $this->redirectToRoute('app_login'); // Redirige vers ta page de connexion
+            $this->addFlash('error', 'Tu dois être connecté pour poster un avis.');
+            // On le renvoie vers la page de l'album (ou vers la page de connexion)
+            return $this->redirectToRoute('app_album_show', ['id' => $morceau->getDiscographie()->getId()]);
         }
 
-        // 2. On récupère la note passée dans l'URL (?note=5)
-        $note = $request->query->get('note');
+        // 2. On récupère les données envoyées par ton formulaire HTML
+        $note = $request->request->get('note');
+        $commentaire = $request->request->get('commentaire');
 
-        if ($note) {
-            // 3. On crée le nouvel Avis
+        // 3. On vérifie que les champs obligatoires sont bien remplis
+        if ($note && $commentaire) {
+
+            // 4. On crée le nouvel Avis !
             $avis = new Avis();
             $avis->setNote((int) $note);
-            $avis->setDiscographie($discographie);
+            $avis->setCommentaire($commentaire);
+            $avis->setMorceau($morceau);
             $avis->setUser($user);
-            $avis->setDateCreation(new \DateTime()); // Obligatoire selon ton schéma SQL
-            
-            // 4. On sauvegarde en base de données
+
+            // LES DEUX LIGNES MAGIQUES AJOUTÉES ICI :
+            // On relie l'avis à l'album du morceau
+            $avis->setDiscographie($morceau->getDiscographie());
+            // On sauvegarde le nom de l'image de la pochette
+            $avis->setImage($morceau->getDiscographie()->getPochette());
+
             $em->persist($avis);
             $em->flush();
 
-            $this->addFlash('success', 'Ta note a bien été enregistrée !');
+            $this->addFlash('success', 'Ton avis a été posté avec succès ! 🌟');
+        } else {
+            $this->addFlash('error', 'Il manque la note ou le commentaire.');
         }
 
-        // 5. On redirige l'utilisateur d'où il vient (ou vers la page de l'album)
-        // Remplace 'app_discographie_index' par le nom de la route où s'affichent tes cartes
-        return $this->redirectToRoute('app_discographie_index'); 
+        // 6. On redirige l'utilisateur vers la page de l'album où il était
+        return $this->redirectToRoute('app_album_show', [
+            'id' => $morceau->getDiscographie()->getId()
+        ]);
     }
 }

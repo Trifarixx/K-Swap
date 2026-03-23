@@ -12,7 +12,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
-#[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')] // Backticks car mot réservé SQL
+#[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
@@ -38,8 +38,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Avis::class)]
     private Collection $avis;
 
-    // Relation ManyToMany pour les BIAS (Favoris)
-    // Doctrine va créer la table user_bias automatiquement
+    // Relation ManyToMany pour les bias (Favoris)
     #[ORM\ManyToMany(targetEntity: Idol::class)]
     #[ORM\JoinTable(name: 'user_bias')]
     private Collection $biases;

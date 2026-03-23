@@ -1,0 +1,10 @@
+// 1. Les @use doivent TOUJOURS être tout en haut du fichier
+@use "variables";
+@use "base";
+@use "layout";
+@use "components";
+@use "pages";
+
+// 2. Les @import d'URL externes (comme Google Fonts) restent des @import classiques
+@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200");

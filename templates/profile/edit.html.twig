@@ -1,0 +1,73 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}K-Swap | Modifier mon Profil
+{% endblock %}
+
+{% block body %}
+	<div class="app-layout">
+		{% include 'header.html.twig' %}
+		{% include 'sidebar.html.twig' %}
+
+		<main class="main-content">
+
+			<div class="page-header fade-in">
+				<h1 class="page-title">Modifier mon Profil</h1>
+				<p class="page-subtitle">Mets à jour tes informations personnelles et ton avatar.</p>
+			</div>
+
+			<div class="panel-box fade-in" style="animation-delay: 0.1s; max-width: 600px; margin: 0 auto;">
+				<h3 class="panel-title">
+					<span class="material-symbols-rounded">manage_accounts</span>
+					Tes informations
+				</h3>
+
+				{{ form_start(form) }}
+				<div class="form-group">
+					{{ form_label(form.pseudonyme) }}
+					{{ form_widget(form.pseudonyme) }}
+					<div class="form-error">
+						{{ form_errors(form.pseudonyme) }}
+					</div>
+				</div>
+
+				<div class="form-group">
+					{{ form_label(form.email) }}
+					{{ form_widget(form.email) }}
+					<div class="form-error">
+						{{ form_errors(form.email) }}
+					</div>
+				</div>
+
+				<div class="form-group">
+					{{ form_label(form.avatarFile) }}
+					<div class="flex items-center gap-4 mt-2 mb-4">
+						{% if app.user.avatar %}
+							<img src="{{ asset(app.user.avatar) }}" alt="{{ app.user.pseudonyme }}" class="user-avatar" style="width: 60px; height: 60px; border-radius: 50%;">
+						{% else %}
+							<div class="user-avatar-placeholder" style="width: 60px; height: 60px; border-radius: 50%; background: linear-gradient(135deg, var(--primary), var(--accent)); font-size: 1.5rem;">{{ app.user.pseudonyme|first|upper }}</div>
+						{% endif %}
+						<div class="flex-grow">
+							{{ form_widget(form.avatarFile) }}
+							<p class="help-text" style="color: rgba(255,255,255,0.4); font-size: 0.8rem; margin-top: 5px;">JPEG, PNG, WEBP</p>
+						</div>
+					</div>
+					<div class="form-error">
+						{{ form_errors(form.avatarFile) }}
+					</div>
+				</div>
+
+				<button type="submit" class="neon-btn-submit auth-submit-btn">
+					Enregistrer les modifications
+				</button>
+				{{ form_end(form) }}
+
+				<div class="auth-footer" style="text-align: center; margin-top: 20px; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 20px;">
+					<a href="{{ path('app_profile') }}" class="auth-link" style="color: var(--text-muted);">Annuler et revenir au profil</a>
+				</div>
+			</div>
+
+		</main>
+
+		<aside class="right-panel"></aside>
+	</div>
+{% endblock %}

@@ -11,8 +11,6 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: GroupeRepository::class)]
 class Groupe extends Artiste
 {
-    // Pas d'ID ici car il hérite de Artiste
-
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $nomGroupe = null;
 
@@ -70,7 +68,7 @@ class Groupe extends Artiste
         return $this;
     }
 
-        public function getGenres(): array
+    public function getGenres(): array
     {
         return $this->genres ?? [];
     }

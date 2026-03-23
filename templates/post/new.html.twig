@@ -1,63 +1,198 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}KSwipe - Nouveau Post
+{% block title %}K-Swap | Créer une publication
 {% endblock %}
 
 {% block body %}
-	<div
-		class="app-layout">
+	<div class="app-layout">
+		{% include 'header.html.twig' %}
+		{% include 'sidebar.html.twig' %}
 
-		<!-- 3. MAIN CONTENT (Le cœur du site) -->
-		<main class="main-content flex-center-page" style="grid-column: 0 / 0;">
-			<div class="post-creation-card">
-				<h1 class="card-header-title">
-					<span class="material-symbols-rounded">edit_square</span>
-					Créer un post
-				</h1>
+		<main class="main-content neon-page">
 
-				{{ form_start(form) }}
-				<div class="mb-4">
-					{{ form_widget(form.commentaire, {
-                        'attr': {
-                            'class': 'custom-textarea', 
-                            'placeholder': 'Partage quelque chose avec la communauté...'
-                        }
-                    }) }}
-					<div class="text-red-400 text-sm mt-2">
-						{{ form_errors(form.commentaire) }}
-					</div>
-				</div>
-
-				<div class="file-upload-container">
-					<label for="{{ form.imageFile.vars.id }}" class="file-upload-label">
-						<span class="material-symbols-rounded text-2xl">add_photo_alternate</span>
-						<span class="font-medium">Ajouter une photo (Optionnel)</span>
-					</label>
-
-					{{ form_widget(form.imageFile, {'attr': {'class': 'file-upload-input'}}) }}
-
-					<div class="text-red-400 text-sm mt-2">
-						{{ form_errors(form.imageFile) }}
-					</div>
-				</div>
-
-				<button type="submit" class="btn-submit-post">
-					Publier maintenant
-				</button>
-
-				{{ form_end(form) }}
+			<div class="page-header">
+				<h1 class="page-title">Nouvelle Publication</h1>
+				<p class="page-subtitle">Partage ton avis sur une musique ou un album avec la communauté.</p>
 			</div>
+
+			<form action="{{ path('app_post_new') }}" method="POST" id="post-form">
+
+				<div
+					class="post-creation-container">
+
+					{# COLONNE GAUCHE : L'ÉDITEUR #}
+					<div class="panel-box left-panel">
+						<h3 class="panel-title">
+							<span class="material-symbols-rounded">edit_square</span>
+							Ton message
+						</h3>
+
+						<div class="editor-toolbar">
+							<button type="button" class="editor-btn" onclick="formatText('bold')" title="Gras">
+								<b>B</b>
+							</button>
+							<button type="button" class="editor-btn" onclick="formatText('italic')" title="Italique">
+								<i>I</i>
+							</button>
+							<button type="button" class="editor-btn" onclick="formatText('underline')" title="Souligné">
+								<u>U</u>
+							</button>
+							<div style="width: 1px; background: rgba(255,255,255,0.1); margin: 0 5px;"></div>
+							<button type="button" class="editor-btn" onclick="formatText('insertOrderedList')" title="Liste numérotée">1.</button>
+							<button type="button" class="editor-btn" onclick="formatText('insertUnorderedList')" title="Liste à puces">•</button>
+						</div>
+
+						<div class="rich-text-area" contenteditable="true" id="editor-content" placeholder="Que veux-tu dire sur ce son ? Écris ton avis détaillé ici..."></div>
+
+						<textarea name="commentaire" id="hidden-commentaire" style="display:none;"></textarea>
+
+						<button type="submit" class="neon-btn-submit auth-submit-btn">Publier la review</button>
+					</div>
+
+					{# COLONNE DROITE : LA RECHERCHE #}
+					<div class="panel-box right-panel">
+						<h3 class="panel-title">
+							<span class="material-symbols-rounded">library_music</span>
+							Lier une musique
+						</h3>
+
+						<input type="text" id="music-search-input" class="search-input-lg" placeholder="🔍 Chercher un artiste, morceau, album...">
+
+						<div class="search-results" id="search-results-container">
+							<div class="empty-search-msg">
+								<span class="material-symbols-rounded empty-search-icon">search</span>
+								Tape pour chercher une musique...
+							</div>
+						</div>
+
+						<input
+						type="hidden" name="morceau_id" id="selected-morceau-id" required>
+
+						{# APERÇU DE LA SÉLECTION #}
+						<div id="selection-preview" style="display: none;">
+							<p>Musique sélectionnée :</p>
+
+							<div class="selection-box">
+								<img id="selection-image" src="" alt="Cover">
+								<strong id="selection-title"></strong>
+							</div>
+
+							<button type="button" onclick="cancelSelection()" class="btn-cancel-selection">
+								Choisir une autre
+							</button>
+						</div>
+					</div>
+				</div>
+			</form>
 		</main>
 	</div>
 
 	<script>
-		document.querySelector('.file-upload-input').addEventListener('change', function (e) {
-const fileName = e.target.files[0] ?. name;
-const label = document.querySelector('.file-upload-label span:last-child');
-if (fileName) {
-label.textContent = fileName;
-label.style.color = 'var(--primary)';
+		function formatText(command) {
+document.execCommand(command, false, null);
+document.getElementById('editor-content').focus();
+}
+
+document.getElementById('post-form').addEventListener('submit', function (e) {
+const editorHTML = document.getElementById('editor-content').innerHTML;
+document.getElementById('hidden-commentaire').value = editorHTML;
+
+if (!document.getElementById('selected-morceau-id').value) {
+e.preventDefault();
+alert("Tu dois absolument lier une musique avant de publier !");
 }
 });
+
+const searchInput = document.getElementById('music-search-input');
+const resultsContainer = document.getElementById('search-results-container');
+const defaultImage = "{{ asset('img/logo_kpop.png') }}";
+
+let typingTimer;
+const doneTypingInterval = 400;
+
+searchInput.addEventListener('keyup', function () {
+clearTimeout(typingTimer);
+let query = this.value.trim();
+
+if (query.length > 2) {
+resultsContainer.innerHTML = `<p class="status-msg-loading">Recherche en cours...</p>`;
+
+typingTimer = setTimeout(() => {
+fetch('/api/search/morceaux?q=' + encodeURIComponent(query)).then(response => {
+if (!response.ok) 
+throw new Error("Erreur serveur");
+
+return response.json();
+}).then(data => {
+resultsContainer.innerHTML = '';
+
+if (data.length === 0) {
+resultsContainer.innerHTML = `<p class="empty-msg">Aucun morceau trouvé pour "${query}".</p>`;
+return;
+}
+
+data.forEach(item => {
+let imageUrl = item.pochette ? (item.pochette.startsWith('http') ? item.pochette : '/images/albums/' + item.pochette) : defaultImage;
+
+let titrePropre = item.titre ? item.titre.replace(/'/g, "\\'") : 'Inconnu';
+let artistePropre = item.artiste ? item.artiste.replace(/'/g, "\\'") : 'Inconnu';
+
+resultsContainer.innerHTML += `
+                                    <div class="result-item" onclick="selectMusic(${
+item.id
+}, '${titrePropre} - ${artistePropre}', '${imageUrl}')">
+                                        <img src="${imageUrl}" alt="Cover" class="result-cover" referrerpolicy="no-referrer">
+                                        <div class="result-item-content">
+                                            <div class="result-item-title">${
+item.titre
+}</div>
+                                            <div class="result-item-artist">${
+item.artiste
+} • ${
+item.album
+}</div>
+                                        </div>
+                                    </div>
+                                `;
+});
+}).catch(err => {
+console.error(err);
+resultsContainer.innerHTML = `<p class="status-msg-error">Erreur lors de la recherche.</p>`;
+});
+
+}, doneTypingInterval);
+
+} else {
+resultsContainer.innerHTML = `
+                    <div class="empty-search-msg">
+                        <span class="material-symbols-rounded empty-search-icon">search</span>
+                        Tape au moins 3 lettres pour chercher.
+                    </div>
+                `;
+}
+});
+
+function selectMusic(id, title, imageUrl) {
+document.getElementById('selected-morceau-id').value = id;
+document.getElementById('selection-title').innerText = title;
+document.getElementById('selection-image').src = imageUrl;
+
+document.getElementById('selection-preview').style.display = 'block';
+resultsContainer.style.display = 'none';
+searchInput.value = '';
+}
+
+function cancelSelection() {
+document.getElementById('selected-morceau-id').value = '';
+document.getElementById('selection-preview').style.display = 'none';
+resultsContainer.style.display = 'flex';
+
+resultsContainer.innerHTML = `
+                <div class="empty-search-msg">
+                    <span class="material-symbols-rounded empty-search-icon">search</span>
+                    Recherche une nouvelle musique ci-dessus.
+                </div>
+            `;
+}
 	</script>
 {% endblock %}

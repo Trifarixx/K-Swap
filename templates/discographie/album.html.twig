@@ -10,86 +10,181 @@
 		{% include 'sidebar.html.twig' %}
 
 		<main
-			class="main-content spotify-page">
+			class="main-content neon-page">
+			{# PREPARATION DE L'IMAGE POUR LE FOND DYNAMIQUE #}
+			{% set cleanUrl = album.pochette ? album.pochette|trim : '' %}
+			{% set coverUrl = '' %}
+			{% if cleanUrl %}
+				{% set coverUrl = cleanUrl starts with 'http' or cleanUrl starts with '//' ? cleanUrl : asset('images/albums/' ~ cleanUrl) %}
+			{% else %}
+				{% set coverUrl = asset('img/logo_kpop.png') %}
+			{% endif %}
 
-			{# 1. L'EN-TÊTE GÉANT #}
-			<div class="sp-header">
-				<div class="sp-cover-wrapper">
-					{% if album.pochette %}
-						{% set cleanUrl = album.pochette|trim %}
-						<img src="{{ cleanUrl starts with 'http' ? cleanUrl : asset('images/albums/' ~ cleanUrl) }}" alt="{{ album.titre }}" class="sp-cover" referrerpolicy="no-referrer">
+			{# Le seul attribut style autorisé ici car l'URL est dynamique #}
+			<div class="album-blurred-bg" style="background-image: url('{{ coverUrl }}');"></div>
+			<div class="bg-overlay"></div>
+
+			<div class="neon-content">
+				<div class="neon-header">
+					<div class="neon-cover-wrapper">
+						<img src="{{ coverUrl }}" alt="{{ album.titre }}" class="neon-cover">
+					</div>
+
+					<div class="neon-info">
+						<h1 class="neon-title">{{ album.titre | upper }}</h1>
+						<div class="neon-meta">
+							<span class="neon-artist">{{ album.artiste.nomScene | default('Artiste Inconnu') }}</span>
+							<span class="neon-dot">•</span>
+							<span>{{ album.morceaux|length }}
+								titres</span>
+						</div>
+					</div>
+				</div>
+
+				<div class="neon-tracklist">
+					{% for morceau in album.morceaux %}
+						<div class="neon-track-row clickable-track" data-id="{{ morceau.id }}" data-title="{{ morceau.titre }}" data-youtube="{{ morceau.lienYoutube | default('') }}">
+
+							<div class="col-num">{{ loop.index }}</div>
+							<div class="col-title">
+								<span class="track-name">{{ morceau.titre }}</span>
+								<span class="track-artist">{{ album.artiste.nomScene | default('') }}</span>
+							</div>
+							<div class="col-duration">
+								{% if morceau.duree %}
+									{{ (morceau.duree / 60)|round(0, 'floor') }}:{{ (morceau.duree % 60)|format('%02d') }}
+								{% else %}
+									--:--
+								{% endif %}
+							</div>
+						</div>
 					{% else %}
-						<img src="{{ asset('img/logo_kpop.png') }}" alt="{{ album.titre }}" class="sp-cover">
-					{% endif %}
-				</div>
-
-				<div class="sp-info">
-					<span class="sp-type">{{ album.type|default('Album') | upper }}</span>
-					<h1 class="sp-title">{{ album.titre }}</h1>
-					<div class="sp-meta">
-						<span class="sp-artist">{{ album.artiste.nomScene | default('Artiste Inconnu') }}</span>
-						<span class="sp-dot">•</span>
-						<span>{{ album.dateSortie ? album.dateSortie|date('Y') : '----' }}</span>
-						<span class="sp-dot">•</span>
-						<span>{{ album.morceaux|length }}
-							titres</span>
-					</div>
+						<p class="empty-msg">Aucune piste disponible.</p>
+					{% endfor %}
 				</div>
 			</div>
-
-			{# 2. LA BARRE D'ACTION ET DE NOTATION #}
-			<div class="sp-actions">
-				<button class="sp-btn-play">
-					<span class="material-symbols-rounded">play_arrow</span>
-				</button>
-
-				{# Le système de notation pur, beau et simple #}
-				<div class="sp-rating-container">
-					<span class="rating-text">Noter :</span>
-					<div class="sp-stars">
-						{% for i in 1..5 %}
-							<a href="{{ path('app_avis_add', {'id': album.id, 'note': i}) }}" class="material-symbols-rounded star-btn" title="Donner {{ i }} étoile(s)">
-								star
-							</a>
-						{% endfor %}
-					</div>
-				</div>
-			</div>
-
-			{# 3. LA TRACKLIST #}
-			<div class="sp-tracklist">
-				<div class="sp-track-header">
-					<div class="col-num">#</div>
-					<div class="col-title">Titre</div>
-					<div class="col-duration">
-						<span class="material-symbols-rounded">schedule</span>
-					</div>
-				</div>
-
-				{% for morceau in album.morceaux %}
-					<div class="sp-track-row">
-						<div class="col-num">{{ loop.index }}</div>
-						<div class="col-title">
-							<span class="track-name">{{ morceau.titre }}</span>
-							<span class="track-artist">{{ album.artiste.nomScene | default('') }}</span>
-						</div>
-						<div
-							class="col-duration">
-							{# Formatage de la durée (ex: 186s -> 3:06) #}
-							{% if morceau.duree %}
-								{{ (morceau.duree / 60)|round(0, 'floor') }}:{{ (morceau.duree % 60)|number_format(0, '', '') }}
-							{% else %}
-								--:--
-							{% endif %}
-						</div>
-					</div>
-				{% else %}
-					<p style="padding: 20px; color: #aaa;">Aucune piste disponible.</p>
-				{% endfor %}
-			</div>
-
 		</main>
 
-		<aside class="right-panel"></aside>
+		{# LE PANNEAU LATERAL AVEC LECTEUR ET FORMULAIRE D'AVIS #}
+		<aside id="track-side-panel" class="track-side-panel">
+			<div class="panel-header">
+				<h2 id="panel-track-title">Titre du morceau</h2>
+				<button id="close-panel" class="close-btn">
+					<span class="material-symbols-rounded">close</span>
+				</button>
+			</div>
+			<div
+				class="panel-content">
+				{# Conteneur du lecteur vidéo #}
+				<div id="panel-youtube-container" class="youtube-container"></div>
+
+				{# Section Avis avec le système d'étoiles #}
+				<div class="review-section">
+					<h3>Ton avis sur ce morceau</h3>
+					<form id="track-review-form" action="#" method="POST">
+
+						<div class="form-group">
+							<label>Ta note :</label>
+							<div class="star-rating">
+								<input type="radio" id="star5" name="note" value="5" required/>
+								<label for="star5" title="5 étoiles">★</label>
+
+								<input type="radio" id="star4" name="note" value="4"/>
+								<label for="star4" title="4 étoiles">★</label>
+
+								<input type="radio" id="star3" name="note" value="3"/>
+								<label for="star3" title="3 étoiles">★</label>
+
+								<input type="radio" id="star2" name="note" value="2"/>
+								<label for="star2" title="2 étoiles">★</label>
+
+								<input type="radio" id="star1" name="note" value="1"/>
+								<label for="star1" title="1 étoile">★</label>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label>Commentaire :</label>
+							<textarea name="commentaire" rows="4" placeholder="Ce refrain est incroyable..." required class="neon-input"></textarea>
+						</div>
+
+						<button type="submit" class="neon-btn-submit auth-submit-btn">Poster mon avis</button>
+					</form>
+				</div>
+			</div>
+		</aside>
 	</div>
+
+	{# LE JAVASCRIPT POUR GERER LE LECTEUR YOUTUBE #}
+	<script>
+		document.addEventListener('DOMContentLoaded', () => {
+const panel = document.getElementById('track-side-panel');
+const ytContainer = document.getElementById('panel-youtube-container');
+const titleEl = document.getElementById('panel-track-title');
+const closeBtn = document.getElementById('close-panel');
+const form = document.getElementById('track-review-form');
+
+if (closeBtn && panel) {
+closeBtn.addEventListener('click', () => {
+panel.classList.remove('active');
+if (ytContainer) 
+ytContainer.innerHTML = '';
+
+
+
+});
+}
+
+document.querySelectorAll('.clickable-track').forEach(row => {
+row.addEventListener('click', () => {
+if (! panel || ! ytContainer || ! titleEl) 
+return;
+
+
+
+const trackId = row.dataset.id;
+const trackTitle = row.dataset.title;
+const ytLink = row.dataset.youtube;
+
+titleEl.textContent = trackTitle;
+// Met à jour l'URL du formulaire pour cibler la bonne musique
+if (form) 
+form.action = "/avis/ajouter/morceau/" + trackId;
+
+
+
+panel.classList.add('active');
+
+const playVideo = (url) => {
+const videoId = url.includes('v=') ? url.split('v=')[1].split('&')[0] : url.split('/').pop();
+ytContainer.innerHTML = '<iframe width="100%" height="250" src="https://www.youtube.com/embed/' + videoId + '" frameborder="0" allowfullscreen></iframe>';
+};
+
+if (ytLink && ytLink !== '') {
+playVideo(ytLink);
+} else {
+ytContainer.innerHTML = '<p class="status-msg-loading">Recherche en cours...</p>';
+fetch('/api/youtube/' + trackId).then(res => {
+if (!res.ok) 
+throw new Error("Erreur serveur");
+
+
+
+return res.json();
+}).then(data => {
+if (data.url) {
+row.dataset.youtube = data.url;
+playVideo(data.url);
+} else {
+ytContainer.innerHTML = '<p class="status-msg-error">Vidéo introuvable sur YouTube</p>';
+}
+}).catch(err => {
+ytContainer.innerHTML = '<p class="status-msg-error">Erreur de connexion</p>';
+console.error(err);
+});
+}
+});
+});
+});
+	</script>
 {% endblock %}

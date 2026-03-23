@@ -1,0 +1,853 @@
+/* --- BOUTONS --- */
+.btn {
+    padding: 12px 28px;
+    border-radius: 50px;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: transform 0.2s;
+
+    &:hover {
+        transform: translateY(-2px);
+    }
+
+    &-primary {
+        background: white;
+        color: var(--bg-main);
+    }
+    &-glass {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: white;
+    }
+}
+
+/* --- BOUTON NEON (Formulaires et Posts) --- */
+.neon-btn-submit {
+    padding: 14px 24px;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+    border: none;
+    border-radius: 12px;
+    color: white;
+    font-weight: bold;
+    font-size: 1rem;
+    cursor: pointer;
+    transition:
+        transform 0.2s,
+        box-shadow 0.2s;
+
+    &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(236, 72, 153, 0.4); /* Halo rose K-Swap */
+    }
+}
+
+.btn-icon {
+    background: none;
+    color: var(--text-muted);
+    padding: 8px;
+    border-radius: 50%;
+    transition: 0.2s;
+    &:hover {
+        color: var(--accent);
+        background: rgba(236, 72, 153, 0.1);
+    }
+}
+
+/* --- TITRES DE SECTIONS --- */
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    margin-bottom: 1.5rem;
+
+    .section-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+    }
+    .see-all {
+        color: var(--primary);
+        font-weight: 600;
+        font-size: 0.9rem;
+    }
+}
+
+/* --- CARTES ALBUMS CLASSIQUES --- */
+.album-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 1.5rem;
+    padding: 40px 20px; // Combiné avec ta 2ème déclaration
+}
+
+.album-card {
+    background: var(--bg-secondary);
+    border-radius: 16px;
+    padding: 16px;
+    transition: all 0.3s;
+    border: 1px solid var(--glass-border);
+
+    &:hover {
+        transform: translateY(-5px);
+        background: rgba(30, 41, 59, 0.8);
+        border-color: var(--primary);
+        .play-overlay {
+            opacity: 1;
+        }
+    }
+
+    .album-img-wrapper {
+        position: relative;
+        border-radius: 12px;
+        overflow: hidden;
+        aspect-ratio: 1/1;
+        margin-bottom: 12px;
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .play-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+    }
+}
+
+/* --- LE CONTENEUR DU FEED --- */
+#feed-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+/* --- CARTES FEED (AVIS) --- */
+.feed-card {
+    background: var(--bg-secondary);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    transition:
+        transform 0.2s,
+        border-color 0.2s;
+
+    &:hover {
+        border-color: var(--primary);
+    }
+
+    .feed-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            .user-avatar {
+                width: 45px;
+                height: 45px;
+                border-radius: 50%;
+                object-fit: cover;
+                border: 2px solid var(--primary);
+            }
+            .user-avatar-placeholder {
+                width: 45px;
+                height: 45px;
+                border-radius: 50%;
+                background: var(--primary);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-weight: bold;
+            }
+            .user-name {
+                font-size: 1rem;
+                font-weight: 700;
+                color: white;
+                margin: 0;
+            }
+            .post-date {
+                font-size: 0.8rem;
+                color: var(--text-muted);
+            }
+        }
+        .rating-badge {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 4px 10px;
+            border-radius: 20px;
+            color: #fbbf24;
+            font-weight: bold;
+        }
+    }
+
+    .feed-content p {
+        color: #e2e8f0;
+        line-height: 1.6;
+        font-size: 0.95rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .feed-album {
+        background: rgba(15, 23, 42, 0.5);
+        padding: 10px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        .album-mini {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            img,
+            .album-placeholder {
+                width: 50px;
+                height: 50px;
+                border-radius: 8px;
+                object-fit: cover;
+            }
+            .album-placeholder {
+                background: #334155;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: #94a3b8;
+            }
+            .album-details {
+                display: flex;
+                flex-direction: column;
+                .album-title {
+                    font-weight: 700;
+                    font-size: 0.9rem;
+                    color: white;
+                }
+                .album-artist {
+                    font-size: 0.8rem;
+                    color: var(--text-muted);
+                }
+            }
+        }
+    }
+}
+
+/* --- CARTE POLAROID --- */
+.polaroid-card {
+    background-color: transparent;
+    width: 320px;
+    height: 450px;
+    perspective: 1000px;
+
+    &:hover .polaroid-inner {
+        transform: rotateY(180deg);
+    }
+
+    .polaroid-inner {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        text-align: center;
+        transition: transform 0.8s cubic-bezier(0.4, 0.2, 0.2, 1);
+        transform-style: preserve-3d;
+    }
+
+    .polaroid-front,
+    .polaroid-back {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        backface-visibility: hidden;
+        border-radius: 12px;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .polaroid-front {
+        background-color: #fff;
+        border: 1px solid #eee;
+        .album-cover {
+            width: 100%;
+            height: 280px;
+            object-fit: cover;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .album-title {
+            margin: 0;
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: #ff6db3;
+        }
+        .album-year {
+            margin: 5px 0 0 0;
+            color: #777;
+            font-size: 0.9rem;
+        }
+        .flip-hint {
+            margin-top: auto;
+            font-size: 0.8rem;
+            color: #aaa;
+            font-style: italic;
+        }
+    }
+
+    .polaroid-back {
+        background-color: #1a1a2e;
+        color: white;
+        transform: rotateY(180deg);
+        overflow-y: auto;
+        .back-title {
+            margin-top: 0;
+            margin-bottom: 15px;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+            padding-bottom: 10px;
+            font-size: 1.2rem;
+        }
+
+        .album-rating-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: rgba(255, 255, 255, 0.05);
+            padding: 10px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            .rating-label {
+                font-size: 0.9rem;
+                color: #ccc;
+                font-weight: 600;
+            }
+            .tier-rating {
+                display: flex;
+                gap: 6px;
+            }
+        }
+
+        .tier-btn {
+            text-decoration: none;
+            border: none;
+            border-radius: 4px;
+            width: 28px;
+            height: 28px;
+            font-weight: 900;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition:
+                transform 0.2s,
+                filter 0.2s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            &:hover {
+                transform: scale(1.15);
+                filter: brightness(1.2);
+            }
+        }
+        .tier-s {
+            background-color: #ffd700;
+            color: #000;
+        }
+        .tier-a {
+            background-color: #ff4500;
+            color: #fff;
+        }
+        .tier-b {
+            background-color: #1e90ff;
+            color: #fff;
+        }
+        .tier-c {
+            background-color: #32cd32;
+            color: #000;
+        }
+
+        .tracklist {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            text-align: left;
+            .track-item {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 8px 0;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+                font-size: 0.9rem;
+                .track-name {
+                    font-weight: 500;
+                    max-width: 75%;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
+                .track-duration {
+                    color: #888;
+                    font-size: 0.8rem;
+                }
+            }
+        }
+    }
+}
+
+/* --- FEED & ALBUMS LIÉS --- */
+.feed-album-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
+.feed-album {
+    position: relative;
+    overflow: hidden;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    margin-top: 16px;
+    padding: 16px;
+    transition: transform 0.2s;
+    cursor: pointer;
+
+    /* Remplace le onmouseover inline */
+    &:hover {
+        transform: translateY(-2px);
+    }
+
+    .album-blur-bg {
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background-size: cover;
+        background-position: center;
+        filter: blur(40px) brightness(0.3) saturate(1.5);
+        z-index: 0;
+        pointer-events: none;
+    }
+
+    .album-mini {
+        position: relative;
+        z-index: 1;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+
+        img {
+            width: 60px;
+            height: 60px;
+            border-radius: 6px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+            object-fit: cover;
+        }
+    }
+
+    .album-details {
+        display: flex;
+        flex-direction: column;
+
+        .track-title {
+            font-weight: bold;
+            color: #ff6db3;
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
+
+        .album-title {
+            font-weight: 600;
+            color: white;
+            font-size: 16px;
+            margin-bottom: 2px;
+        }
+
+        .album-artist {
+            color: #ccc;
+            font-size: 13px;
+        }
+    }
+}
+
+/* --- MESSAGES ET ALERTES --- */
+.empty-msg {
+    padding: 20px;
+    color: #aaa;
+    text-align: center;
+}
+
+.auth-error-msg {
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid #ef4444;
+    color: #ef4444;
+    padding: 0.75rem;
+    border-radius: 12px;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    font-size: 0.9rem;
+}
+
+.form-error {
+    color: #ef4444;
+    font-size: 0.85rem;
+    margin-top: 0.25rem;
+}
+
+/* --- AUTHENTIFICATION --- */
+.auth-icon-wrapper {
+    text-align: center;
+    margin-bottom: 1rem;
+
+    .material-symbols-rounded {
+        font-size: 48px;
+        &.icon-accent {
+            color: var(--accent);
+        }
+        &.icon-primary {
+            color: var(--primary);
+        }
+    }
+}
+
+.auth-submit-btn {
+    width: 100%;
+    margin-top: 1rem;
+}
+
+/* --- DIVERS (Pages par défaut Symfony) --- */
+.example-wrapper {
+    margin: 1em auto;
+    max-width: 800px;
+    width: 95%;
+    font: 18px/1.5 sans-serif;
+
+    code {
+        background: #f5f5f5;
+        padding: 2px 6px;
+        color: #333;
+    }
+}
+
+.img-contain {
+    object-fit: contain !important;
+}
+
+/* =========================================
+   CARTES DISCOGRAPHIE (Groupes & Albums)
+========================================= */
+.disco-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 24px;
+    padding-bottom: 40px;
+}
+
+.disco-card {
+    background: rgba(255, 255, 255, 0.03);
+    padding: 16px;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    border: 1px solid transparent;
+
+    /* Les animations au survol de la carte globale */
+    &:hover {
+        background: rgba(255, 255, 255, 0.08);
+        border-color: rgba(255, 255, 255, 0.1);
+        transform: translateY(-5px);
+
+        .disco-image-wrapper img {
+            transform: scale(1.05);
+        }
+
+        .disco-overlay {
+            opacity: 1;
+        }
+
+        .btn-play {
+            transform: translateY(0);
+        }
+    }
+
+    /* Le conteneur de l'image (Carré parfait) */
+    .disco-image-wrapper {
+        position: relative;
+        width: 100%;
+        aspect-ratio: 1/1;
+        border-radius: 8px;
+        overflow: hidden;
+        margin-bottom: 16px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        /* L'ombre qui apparaît au survol */
+        .disco-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.2);
+            opacity: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.3s ease;
+        }
+
+        /* Le bouton Play rose/violet */
+        .btn-play {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transform: translateY(10px);
+            transition:
+                transform 0.3s ease,
+                background 0.2s;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+
+            &:hover {
+                background: var(--accent);
+                transform: scale(1.1) !important;
+            }
+        }
+    }
+
+    /* Les textes sous l'image */
+    .disco-info {
+        .disco-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--text-white);
+            margin: 0 0 4px 0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .disco-subtitle {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            display: block;
+        }
+    }
+}
+
+/* =========================================
+   PANNEAU LATÉRAL (Lecteur YouTube & Avis)
+========================================= */
+.clickable-track {
+    cursor: pointer;
+}
+
+.track-side-panel {
+    position: fixed;
+    top: 0;
+    right: -450px;
+    width: 400px;
+    height: 100vh;
+    background-color: #0f111a;
+    border-left: 1px solid rgba(236, 72, 153, 0.3);
+    box-shadow: -10px 0 30px rgba(0, 0, 0, 0.8);
+    z-index: 9999;
+    transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    flex-direction: column;
+
+    &.active {
+        right: 0;
+    }
+
+    .panel-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+
+        h2 {
+            font-size: 1.5rem;
+            color: white;
+            margin: 0;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: #cbd5e1;
+            cursor: pointer;
+            transition: color 0.2s;
+
+            &:hover {
+                color: var(--accent);
+            }
+        }
+    }
+
+    .panel-content {
+        padding: 20px;
+        overflow-y: auto;
+        flex-grow: 1;
+
+        .youtube-container {
+            margin-bottom: 30px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .no-video {
+            padding: 30px;
+            text-align: center;
+            color: #94a3b8;
+            font-style: italic;
+        }
+
+        /* --- FORMULAIRE D'AVIS --- */
+        .review-section {
+            margin-top: 20px;
+
+            h3 {
+                margin-bottom: 15px;
+                font-size: 1.2rem;
+                color: var(--accent);
+            }
+
+            .form-group {
+                margin-bottom: 20px;
+
+                label {
+                    display: block;
+                    margin-bottom: 8px;
+                    color: #cbd5e1;
+                    font-size: 0.9rem;
+                }
+
+                .neon-input {
+                    width: 100%;
+                    background-color: rgba(255, 255, 255, 0.05);
+                    border: 1px solid rgba(255, 255, 255, 0.2);
+                    border-radius: 8px;
+                    color: white;
+                    padding: 10px;
+                    font-family: inherit;
+                    transition: all 0.2s;
+
+                    &:focus {
+                        outline: none;
+                        border-color: var(--accent);
+                        box-shadow: 0 0 10px rgba(236, 72, 153, 0.3);
+                    }
+                }
+
+                .star-rating {
+                    display: flex;
+                    flex-direction: row-reverse;
+                    justify-content: flex-end;
+                    gap: 5px;
+
+                    input[type="radio"] {
+                        display: none;
+                    }
+
+                    label {
+                        font-size: 30px;
+                        color: #444;
+                        cursor: pointer;
+                        transition: all 0.2s ease-in-out;
+                    }
+
+                    /* Allume l'étoile survolée ou cliquée ET celles à sa gauche */
+                    input[type="radio"]:checked ~ label,
+                    label:hover,
+                    label:hover ~ label {
+                        color: #ff6db3;
+                        text-shadow: 0 0 10px rgba(255, 109, 179, 0.5);
+                    }
+                }
+            }
+        }
+    }
+}
+
+/* =========================================
+   FORMULAIRES (Réutilisables)
+========================================= */
+.form-group {
+    margin-bottom: 20px;
+
+    .form-label {
+        display: block;
+        margin-bottom: 8px;
+        color: #cbd5e1;
+        font-size: 0.9rem;
+        font-weight: 600;
+    }
+
+    .form-input {
+        width: 100%;
+        background-color: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 12px;
+        color: white;
+        padding: 12px 16px;
+        font-family: inherit;
+        transition: all 0.2s;
+
+        &:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 10px rgba(139, 92, 246, 0.3);
+            background-color: rgba(255, 255, 255, 0.08);
+        }
+    }
+
+    /* Style spécifique pour le champ d'upload de fichier */
+    .form-input-file {
+        color: rgba(255, 255, 255, 0.6);
+        font-size: 0.9rem;
+
+        &::-webkit-file-upload-button {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border: none;
+            border-radius: 8px;
+            color: white;
+            padding: 8px 16px;
+            margin-right: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: transform 0.2s;
+
+            &:hover {
+                transform: scale(1.05);
+            }
+        }
+    }
+}
+
+.auth-submit-btn {
+    width: 100%;
+    margin-top: 1rem;
+}

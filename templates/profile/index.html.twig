@@ -1,0 +1,75 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}K-Swap | Mon Profil
+{% endblock %}
+
+{% block body %}
+	<div class="app-layout">
+		{% include 'header.html.twig' %}
+		{% include 'sidebar.html.twig' %}
+
+		<main
+			class="main-content">
+
+			{# --- EN-TÊTE DU PROFIL --- #}
+			<div class="profile-header-card fade-in">
+				<div
+					class="profile-header-content">
+
+					{# Avatar #}
+					{% if app.user.avatar %}
+						<img src="{{ asset(app.user.avatar) }}" alt="{{ app.user.pseudonyme }}" class="profile-avatar-large">
+					{% else %}
+						<div class="profile-avatar-placeholder-large">{{ app.user.pseudonyme|first|upper }}</div>
+					{% endif %}
+
+					{# Infos & Stats #}
+					<div class="profile-info">
+						<h1>{{ app.user.pseudonyme }}</h1>
+						<span class="profile-email">{{ app.user.email }}</span>
+
+						<div class="profile-stats">
+							<div class="stat-badge">
+								<span class="material-symbols-rounded">reviews</span>
+								{{ avis_list|length }}
+								Avis publiés
+							</div>
+						</div>
+					</div>
+
+					{# Bouton pour modifier le profil #}
+					<div>
+						{# Bouton pour modifier le profil #}
+						<div>
+							<a href="{{ path('app_profile_edit') }}" class="btn btn-glass">
+								<span class="material-symbols-rounded">edit</span>
+								Modifier
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			{# --- LISTE DE MES AVIS --- #}
+			<div class="section-header fade-in" style="animation-delay: 0.1s;">
+				<h2 class="section-title">Mes dernières publications</h2>
+			</div>
+
+			<div id="feed-container">
+				{% if avis_list is empty %}
+					<div class="empty-msg" style="background: rgba(255,255,255,0.02); border-radius: 16px; border: 1px dashed rgba(255,255,255,0.1);">
+						<span class="material-symbols-rounded" style="font-size: 48px; opacity: 0.5; display: block; margin-bottom: 10px;">speaker_notes_off</span>
+						Tu n'as pas encore publié d'avis.
+						<br><br>
+						<a href="{{ path('app_post_new') }}" class="btn btn-primary">Créer mon premier post</a>
+					</div>
+				{% else %}
+					{% include 'index/_feed_items.html.twig' %}
+				{% endif %}
+			</div>
+
+		</main>
+
+		<aside class="right-panel"></aside>
+	</div>
+{% endblock %}

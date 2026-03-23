@@ -15,7 +15,7 @@ class Avis
     private ?int $id = null;
 
     #[ORM\Column(nullable: true)]
-    private ?int $note = null; // Ex: 4 sur 5
+    private ?int $note = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $commentaire = null;
@@ -33,6 +33,9 @@ class Avis
     #[ORM\ManyToOne(inversedBy: 'avis')]
     #[ORM\JoinColumn(nullable: true)]
     private ?Discographie $discographie = null;
+
+    #[ORM\ManyToOne(inversedBy: 'avis')]
+    private ?Morceau $morceau = null;
 
     public function __construct()
     {
@@ -107,6 +110,18 @@ class Avis
     public function setDiscographie(?Discographie $discographie): static
     {
         $this->discographie = $discographie;
+        return $this;
+    }
+
+    public function getMorceau(): ?Morceau
+    {
+        return $this->morceau;
+    }
+
+    public function setMorceau(?Morceau $morceau): static
+    {
+        $this->morceau = $morceau;
+
         return $this;
     }
 }

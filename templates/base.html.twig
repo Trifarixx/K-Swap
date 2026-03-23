@@ -1,16 +1,15 @@
 <!DOCTYPE html>
 <html>
 	<head>
+		<link rel="icon" href="{{ asset('img/favicon.ico') }}" type="image/x-icon">
 		<meta charset="UTF-8">
 		<title>
-			{% block title %}Welcome!
+			{% block title %}K-Swap
 			{% endblock %}
 		</title>
 
 		{% block stylesheets %}
-			{{ encore_entry_link_tags('app') }}
-
-			<link rel="stylesheet" href="{{ asset('css/Styles.css') }}">
+			<link rel="stylesheet" href="{{ asset('build/app.css') }}">
 			<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"/>
 		{% endblock %}
 

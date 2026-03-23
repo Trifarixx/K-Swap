@@ -3,13 +3,12 @@
 {% block title %}KSwipe - Connexion
 {% endblock %}
 
-
 {% block body %}
 	<div class="auth-container">
 		<div class="auth-card">
 
-			<div style="text-align: center; margin-bottom: 1rem;">
-				<span class="material-symbols-rounded" style="font-size: 48px; color: var(--accent);">lock</span>
+			<div class="auth-icon-wrapper">
+				<span class="material-symbols-rounded icon-accent">lock</span>
 			</div>
 
 			<h1 class="auth-title">Connexion</h1>
@@ -17,7 +16,7 @@
 
 			<form method="post">
 				{% if error %}
-					<div style="background: rgba(239, 68, 68, 0.1); border: 1px solid #ef4444; color: #ef4444; padding: 0.75rem; border-radius: 12px; margin-bottom: 1.5rem; text-align: center; font-size: 0.9rem;">
+					<div class="auth-error-msg">
 						{{ error.messageKey|trans(error.messageData, 'security') }}
 					</div>
 				{% endif %}
@@ -41,7 +40,7 @@
 
 				<input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 
-				<button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">
+				<button type="submit" class="btn btn-primary auth-submit-btn">
 					Se connecter
 				</button>
 

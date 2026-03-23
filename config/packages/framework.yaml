@@ -1,9 +1,12 @@
 # see https://symfony.com/doc/current/reference/configuration/framework.html
 framework:
-    secret: '%env(APP_SECRET)%'
-
+    secret: "%env(APP_SECRET)%"
+    php_errors:
+        log: true
+    # Cette ligne permet de ne pas bloquer les iframes en local
     # Note that the session will be started ONLY if you read or write from it.
-    session: true
+    session:
+        cookie_samesite: lax
 
     #esi: true
     #fragments: true
