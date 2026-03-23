@@ -1,38 +1,62 @@
 {% set current_route = app.request.attributes.get('_route') %}
 
-<aside class="sidebar">
-    
-    <nav class="flex flex-col gap-1 w-full">
-        <div class="nav-section-title">Menu</div>
+<aside
+	class="sidebar">
 
-        {# ACCUEIL #}
-        {# Remplace 'app_home' par le vrai nom de ta route d'accueil si c'est différent #}
-        <a href="{{ path('app_home') }}" class="nav-item {% if current_route == 'app_home' %}active{% endif %}">
-            <span class="material-symbols-rounded nav-icon">home</span>
-            <span class="nav-text">Accueil</span>
-        </a>
+	{# --- Profil Utilisateur --- #}
+	{% if app.user %}
+		<a href="{{ path('app_profile') }}" class="profile-widget {% if current_route == 'app_profile' %}active{% endif %}">
 
-        {# DÉCOUVRIR (Lien mort pour l'instant) #}
-        <a href="#" class="nav-item {% if current_route == 'app_decouvrir' %}active{% endif %}">
-            <span class="material-symbols-rounded nav-icon">explore</span>
-            <span class="nav-text">Découvrir</span>
-        </a>
+			{% if app.user.avatar %}
+				<img src="{{ asset(app.user.avatar) }}" alt="{{ app.user.pseudonyme }}" class="user-avatar">
+			{% else %}
+				<div class="user-avatar-placeholder">{{ app.user.pseudonyme|first|upper }}</div>
+			{% endif %}
 
-        {# DISCOGRAPHIES #}
-        {# J'utilise un tableau (array) pour que le bouton reste allumé si tu es sur la liste, sur la page d'un groupe, ou sur un album précis ! #}
-        <a href="{{ path('app_discographie') }}" class="nav-item {% if current_route in ['app_discographie', 'app_groupe_show', 'app_album_show'] %}active{% endif %}">
-            <span class="material-symbols-rounded nav-icon">album</span>
-            <span class="nav-text">Discographies</span>
-        </a>
+			<div class="profile-details">
+				<span class="profile-name">{{ app.user.pseudonyme }}</span>
+				<span class="profile-link">Gérer mon profil</span>
+			</div>
+		</a>
+	{% else %}
+		{# Bouton de connexion si l'utilisateur n'est pas connecté #}
+		<a href="{{ path('app_login') }}" class="profile-widget">
+			<div class="user-avatar-placeholder" style="background: rgba(255,255,255,0.1);">
+				<span class="material-symbols-rounded">person</span>
+			</div>
+			<div class="profile-details">
+				<span class="profile-name">Non connecté</span>
+				<span class="profile-link">Se connecter</span>
+			</div>
+		</a>
+	{% endif %}
 
-        {# ARTISTES (Lien mort pour l'instant) #}
-        <a href="#" class="nav-item {% if current_route == 'app_artistes' %}active{% endif %}">
-            <span class="material-symbols-rounded nav-icon">groups</span>
-            <span class="nav-text">Artistes</span>
-        </a>
-    </nav>
+	{# --- MENU PRINCIPAL --- #}
+	<nav class="flex flex-col gap-1 w-full mt-2">
+		<div class="nav-section-title">Menu</div>
 
-	<!-- Menu Bibliothèque -->
+		<a href="{{ path('app_home') }}" class="nav-item {% if current_route == 'app_home' %}active{% endif %}">
+			<span class="material-symbols-rounded nav-icon">home</span>
+			<span class="nav-text">Accueil</span>
+		</a>
+
+		<a href="#" class="nav-item {% if current_route == 'app_decouvrir' %}active{% endif %}">
+			<span class="material-symbols-rounded nav-icon">explore</span>
+			<span class="nav-text">Découvrir</span>
+		</a>
+
+		<a href="{{ path('app_discographie') }}" class="nav-item {% if current_route in ['app_discographie', 'app_groupe_show', 'app_album_show'] %}active{% endif %}">
+			<span class="material-symbols-rounded nav-icon">album</span>
+			<span class="nav-text">Discographies</span>
+		</a>
+
+		<a href="#" class="nav-item {% if current_route == 'app_artistes' %}active{% endif %}">
+			<span class="material-symbols-rounded nav-icon">groups</span>
+			<span class="nav-text">Artistes</span>
+		</a>
+	</nav>
+
+	{# --- MENU BIBLIOTHÈQUE --- #}
 	<nav class="flex flex-col gap-1 w-full mt-4">
 		<div class="nav-section-title">Ma Bibliothèque</div>
 
@@ -49,6 +73,5 @@
 			<span class="nav-text">Playlists</span>
 		</a>
 	</nav>
-
 
 </aside>

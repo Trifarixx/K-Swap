@@ -131,6 +131,7 @@ if (ytContainer)
 ytContainer.innerHTML = '';
 
 
+
 });
 }
 
@@ -151,6 +152,7 @@ if (form)
 form.action = "/avis/ajouter/morceau/" + trackId;
 
 
+
 panel.classList.add('active');
 
 const playVideo = (url) => {
@@ -165,6 +167,7 @@ ytContainer.innerHTML = '<p class="status-msg-loading">Recherche en cours...</p>
 fetch('/api/youtube/' + trackId).then(res => {
 if (!res.ok) 
 throw new Error("Erreur serveur");
+
 
 
 return res.json();

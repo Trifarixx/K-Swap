@@ -665,18 +665,17 @@
 .track-side-panel {
     position: fixed;
     top: 0;
-    right: -450px; /* Caché par défaut en dehors de l'écran */
+    right: -450px;
     width: 400px;
     height: 100vh;
     background-color: #0f111a;
-    border-left: 1px solid rgba(236, 72, 153, 0.3); /* Bordure rose subtile */
+    border-left: 1px solid rgba(236, 72, 153, 0.3);
     box-shadow: -10px 0 30px rgba(0, 0, 0, 0.8);
     z-index: 9999;
     transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     display: flex;
     flex-direction: column;
 
-    /* Classe ajoutée par JS pour faire glisser le panneau */
     &.active {
         right: 0;
     }
@@ -763,7 +762,6 @@
                     }
                 }
 
-                /* MAGIE SCSS : Le système d'étoiles (Radio buttons cachés) */
                 .star-rating {
                     display: flex;
                     flex-direction: row-reverse;
@@ -792,4 +790,64 @@
             }
         }
     }
+}
+
+/* =========================================
+   FORMULAIRES (Réutilisables)
+========================================= */
+.form-group {
+    margin-bottom: 20px;
+
+    .form-label {
+        display: block;
+        margin-bottom: 8px;
+        color: #cbd5e1;
+        font-size: 0.9rem;
+        font-weight: 600;
+    }
+
+    .form-input {
+        width: 100%;
+        background-color: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 12px;
+        color: white;
+        padding: 12px 16px;
+        font-family: inherit;
+        transition: all 0.2s;
+
+        &:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 10px rgba(139, 92, 246, 0.3);
+            background-color: rgba(255, 255, 255, 0.08);
+        }
+    }
+
+    /* Style spécifique pour le champ d'upload de fichier */
+    .form-input-file {
+        color: rgba(255, 255, 255, 0.6);
+        font-size: 0.9rem;
+
+        &::-webkit-file-upload-button {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border: none;
+            border-radius: 8px;
+            color: white;
+            padding: 8px 16px;
+            margin-right: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: transform 0.2s;
+
+            &:hover {
+                transform: scale(1.05);
+            }
+        }
+    }
+}
+
+.auth-submit-btn {
+    width: 100%;
+    margin-top: 1rem;
 }
