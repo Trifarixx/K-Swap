@@ -1,11 +1,75 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}K-Swipe | {{ artiste.nomScene }}{% endblock %}
+{% block title %}{{ idol.nomScene }} | K-Swipe{% endblock %}
 
 {% block body %}
 <div class="app-layout">
     {% include 'header.html.twig' %}
     {% include 'sidebar.html.twig' %}
-        
+
+<main class="main-content">
+
+    <!-- HERO -->
+    <div class="artist-hero">
+        <div class="artist-image">
+            {% if idol.image %}
+                {% set cleanUrl = idol.image|trim %}
+                {% if cleanUrl starts with 'http' or cleanUrl starts with '//' or cleanUrl starts with 'data:image' %}
+                    <img src="{{ cleanUrl }}" alt="{{ idol.nomScene }}">
+                {% else %}
+                    <img src="{{ asset('uploads/artistes/' ~ cleanUrl) }}" alt="{{ idol.nomScene }}">
+                {% endif %}
+            {% else %}
+                <img src="{{ asset('img/logo_kpop.png') }}" alt="{{ idol.nomScene }}">
+            {% endif %}
+        </div>
+
+        <div class="artist-info">
+            <h1>{{ idol.nomScene ?: idol.nomReel }}</h1>
+
+            <p class="real-name">
+                Nom réel : {{ idol.nomReel ?: 'Non renseigné' }}
+            </p>
+
+            <p class="birth">
+                🎂 {{ idol.dateNaissance ? idol.dateNaissance|date('d/m/Y') : 'Date inconnue' }}
+            </p>
+        </div>
+    </div>
+
+    <!-- MEMBRES DU GROUPE -->
+    <div class="artist-section">
+        <h2>Membres du même groupe</h2>
+
+        <div class="members-grid">
+            {% for membreGroupe in idol.groupes %}
+                {% set groupe = membreGroupe.groupe %}
+
+                {% for membre in groupe.membres %}
+                    {% if membre.idol.id != idol.id %}
+                        {% set other = membre.idol %}
+
+                        <a href="{{ path('app_artiste_show', {'id': other.id}) }}" class="member-card">
+                            
+                            {% if other.image %}
+                                {% set cleanUrl = other.image|trim %}
+                                {% if cleanUrl starts with 'http' or cleanUrl starts with '//' or cleanUrl starts with 'data:image' %}
+                                    <img src="{{ cleanUrl }}" alt="{{ other.nomScene }}">
+                                {% else %}
+                                    <img src="{{ asset('uploads/artistes/' ~ cleanUrl) }}" alt="{{ other.nomScene }}">
+                                {% endif %}
+                            {% else %}
+                                <img src="{{ asset('img/logo_kpop.png') }}">
+                            {% endif %}
+
+                            <span>{{ other.nomScene }}</span>
+                        </a>
+
+                    {% endif %}
+                {% endfor %}
+            {% endfor %}
+        </div>
+    </div>
+
 </div>
 {% endblock %}

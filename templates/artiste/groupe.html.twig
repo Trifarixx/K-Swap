@@ -1,0 +1,57 @@
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Groupe - {{ groupe.nomGroupe }}{% endblock %}
+
+{% block body %}
+<div class="app-layout">
+    {% include 'header.html.twig' %}
+    {% include 'sidebar.html.twig' %}
+
+    <main class="main-content">
+       
+        <div class="hero-card">
+            <h1 class="hero-title">Membres du groupe : {{ groupe.nomGroupe }}</h1>
+            <p class="hero-subtitle">
+                {{ groupe.nomFanclub ?: 'Groupe K-Pop' }}
+            </p>
+        </div>
+
+        {% if membres is not empty %}
+            <div class="disco-grid">
+                {% for membre in membres %}
+                    {% set idol = membre.idol %}
+
+                    <a href="{{ path('app_artiste_show', {'id': idol.id}) }}" class="disco-card">
+
+                        <div class="disco-image-wrapper">
+                            {% if idol.image %}
+                                {% set cleanUrl = idol.image|trim %}
+
+                                {% if cleanUrl starts with 'http' or cleanUrl starts with '//' or cleanUrl starts with 'data:image' %}
+                                    <img src="{{ cleanUrl }}" alt="{{ idol.nomScene }}" loading="lazy">
+                                {% else %}
+                                    <img src="{{ asset('uploads/artistes/' ~ cleanUrl) }}" alt="{{ idol.nomScene }}" loading="lazy">
+                                {% endif %}
+                            {% else %}
+                                <img src="{{ asset('img/logo_kpop.png') }}" alt="{{ idol.nomScene }}">
+                            {% endif %}
+                        </div>
+
+                        <div class="disco-info">
+                            <h3>{{ idol.nomScene ?: idol.nomReel }}</h3>
+                            <span>
+                                {{ idol.dateNaissance ? idol.dateNaissance|date('d/m/Y') : 'Idol K-Pop' }}
+                            </span>
+                        </div>
+
+                    </a>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="empty">Aucun membre disponible pour ce groupe.</p>
+        {% endif %}
+
+    </main>
+</div>
+{% endblock %}
