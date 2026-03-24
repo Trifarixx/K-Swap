@@ -6,12 +6,15 @@
 <div class="app-layout">
     {% include 'header.html.twig' %}
     {% include 'sidebar.html.twig' %}
+  
 
 <main class="main-content">
 
     <!-- HERO -->
     <div class="artist-hero">
         <div class="artist-image">
+        <h1>Informations de l'artiste :</h1>
+        <br>
             {% if idol.image %}
                 {% set cleanUrl = idol.image|trim %}
                 {% if cleanUrl starts with 'http' or cleanUrl starts with '//' or cleanUrl starts with 'data:image' %}
