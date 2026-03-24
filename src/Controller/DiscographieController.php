@@ -11,7 +11,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class DiscographieController extends AbstractController
 {
-    // 1. La page d'accueil (Tous les groupes)
+    // La page d'accueil avec la liste de tous les groupes
     #[Route('/discographie', name: 'app_discographie')]
     public function index(GroupeRepository $groupeRepository): Response
     {
@@ -21,7 +21,7 @@ class DiscographieController extends AbstractController
         ]);
     }
 
-    // 2. La page d'un groupe (Tous ses albums)
+    // 2. La page d'un groupe avec tous ses albums
     #[Route('/discographie/groupe/{id}', name: 'app_groupe_show')]
     public function show(Groupe $groupe): Response
     {
@@ -30,7 +30,7 @@ class DiscographieController extends AbstractController
         ]);
     }
 
-    // 3. Page d'un album (Tous les morceaux de l'album)
+    // 3. Page d'un album avec tous ses morceaux et la possibilité de poster un avis sur chaque morceau
     #[Route('/discographie/album/{id}', name: 'app_album_show')]
     public function showAlbum(Discographie $album): Response
     {

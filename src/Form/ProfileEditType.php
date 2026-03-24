@@ -47,6 +47,7 @@ class ProfileEditType extends AbstractType
                         'maxSize' => '2M',
                         'mimeTypes' => [
                             'image/jpeg',
+                            'image/jpg',
                             'image/png',
                             'image/webp',
                         ],

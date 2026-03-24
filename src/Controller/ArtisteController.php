@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Controller;
 
 use App\Entity\Groupe;
@@ -17,38 +18,37 @@ final class ArtisteController extends AbstractController
     {
         // Récupère tous les groupes
         $groupes = $groupeRepository->findAll();
-       
+
 
         return $this->render('artiste/index.html.twig', [
             'groupes' => $groupeRepository->findAll(),
-           
-        
+
+
         ]);
     }
 
     #[Route('/artiste/groupe/{id}', name: 'app_artiste_groupe')]
-public function groupe(Groupe $groupe): Response
-{
-    // Récupère tous les membres du groupe
-    $membres = $groupe->getMembres(); // Collection de MembreGroupe
+    public function groupe(Groupe $groupe): Response
+    {
+        // Récupère tous les membres du groupe
+        $membres = $groupe->getMembres(); // Collection de MembreGroupe
 
-    return $this->render('artiste/groupe.html.twig', [
-        'groupe' => $groupe,
-        'membres' => $membres,
-    ]);
-}
-
-    // Page artiste : fiche complète d’un idol
-  
-    #[Route('/artiste/{id}', name: 'app_artiste_show')]
-public function show(?Idol $idol): Response
-{
-    if (!$idol) {
-        throw $this->createNotFoundException('Idol non trouvé.');
+        return $this->render('artiste/groupe.html.twig', [
+            'groupe' => $groupe,
+            'membres' => $membres,
+        ]);
     }
 
-    return $this->render('artiste/show.html.twig', [
-        'idol' => $idol,
-    ]);
-}
+    // Page artiste : fiche complète d’un idol
+    #[Route('/artiste/{id}', name: 'app_artiste_show')]
+    public function show(?Idol $idol): Response
+    {
+        if (!$idol) {
+            throw $this->createNotFoundException('Idol non trouvé.');
+        }
+
+        return $this->render('artiste/show.html.twig', [
+            'idol' => $idol,
+        ]);
+    }
 }

@@ -24,13 +24,13 @@ class RegistrationController extends AbstractController
             /** @var string $plainPassword */
             $plainPassword = $form->get('plainPassword')->getData();
 
-            // encode the plain password
+            // 1. Hashage du mot de passe
             $user->setPassword($userPasswordHasher->hashPassword($user, $plainPassword));
 
             $entityManager->persist($user);
             $entityManager->flush();
 
-            // do anything else you need here, like send an email
+            // 2. Redirection après inscription vers la page d'accueil ou de connexion
 
             return $this->redirectToRoute('app_home');
         }

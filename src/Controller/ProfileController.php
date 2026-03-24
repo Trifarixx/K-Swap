@@ -21,7 +21,7 @@ class ProfileController extends AbstractController
     #[Route('/profil', name: 'app_profile')]
     public function index(AvisRepository $avisRepository): Response
     {
-        // ... (ton code actuel pour l'index) ...
+
         $user = $this->getUser();
         $mesAvis = $avisRepository->findBy(['user' => $user], ['dateCreation' => 'DESC']);
 
@@ -56,7 +56,6 @@ class ProfileController extends AbstractController
                         $newFilename
                     );
                 } catch (FileException $e) {
-                    // Gérer l'erreur si nécessaire
                     $this->addFlash('error', 'Une erreur est survenue lors de l\'upload de l\'avatar.');
                 }
 

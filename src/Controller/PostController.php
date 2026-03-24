@@ -19,17 +19,17 @@ class PostController extends AbstractController
     #[Route('/post/nouveau', name: 'app_post_new')]
     public function new(Request $request, EntityManagerInterface $em, MorceauRepository $morceauRepository, SluggerInterface $slugger): Response
     {
-        // 1. SI LA REQUÊTE EST EN POST, C'EST QUE LE FORMULAIRE A ÉTÉ SOUMIS
+        // 1. si le formulaire est soumis en POST, on traite les données
         if ($request->isMethod('POST')) {
 
             $avis = new Avis();
             $avis->setUser($this->getUser());
 
-            // 2. RÉCUPÉRATION DES DONNÉES ENVOYÉES MANUELLEMENT
+            // On récupère les données du formulaire
             $commentaire = $request->request->get('commentaire');
             $morceauId = $request->request->get('morceau_id');
 
-            // On vérifie que le commentaire n'est pas vide (le HTML de base du contenteditable peut contenir des balises vides)
+            // On vérifie que le commentaire n'est pas vide (le HTML de base du content-editable peut contenir des balises vides)
             $cleanCommentaire = trim(strip_tags($commentaire));
             if (empty($cleanCommentaire)) {
                 $this->addFlash('error', 'Le message ne peut pas être vide.');
@@ -38,24 +38,21 @@ class PostController extends AbstractController
 
             $avis->setCommentaire($commentaire);
 
-            // 3. GESTION DE LA MUSIQUE LIÉE (Si l'utilisateur en a sélectionné une)
+            // 3. la gestion du morceau sélectionné, obligatoire pour que le post soit lié à un album et puisse afficher la pochette dans le Feed
             if ($morceauId) {
                 $morceau = $morceauRepository->find($morceauId);
                 if ($morceau) {
                     $avis->setMorceau($morceau);
-                    // On n'oublie pas de lier l'album pour que ton Feed affiche la pochette !
+                    // On n'oublie pas de lier l'album pour que le feed puisse afficher la pochette
                     $avis->setDiscographie($morceau->getDiscographie());
                 }
             } else {
-                // Tu peux rendre ça obligatoire ou non dans ton PHP, 
-                // mais on a mis une sécurité JS tout à l'heure pour obliger le choix.
                 $this->addFlash('error', 'Tu dois sélectionner une musique.');
                 return $this->redirectToRoute('app_post_new');
             }
 
-            // 4. GESTION DE L'IMAGE UPLOADÉE (Si on rajoute un input file plus tard)
-            // Dans notre nouveau design, on n'a pas mis de bouton d'upload d'image, 
-            // mais je garde ton code au cas où tu voudrais le remettre plus tard dans le Twig : <input type="file" name="imageFile">
+            // 4. Gestion de l'image uploadée (optionnel)
+            // si je dois le remettre : <input type="file" name="imageFile">
             $imageFile = $request->files->get('imageFile');
 
             if ($imageFile) {

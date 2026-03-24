@@ -22,7 +22,7 @@ final class IndexController extends AbstractController
 
         $avisList = $avisRepository->findFeed($page, $limit);
 
-        // Si c'est une requête AJAX (notre script JS), on renvoie juste les articles
+        // Si c'est une requête AJAX, on renvoie juste les articles
         if ($request->query->get('ajax')) {
             return $this->render('index/_feed_items.html.twig', [
                 'avis_list' => $avisList
