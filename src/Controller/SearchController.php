@@ -11,7 +11,7 @@ use Symfony\Component\Routing\Attribute\Route;
 class SearchController extends AbstractController
 {
     #[Route('/api/search/morceaux', name: 'api_search_morceaux', methods: ['GET'])]
-    public function searchMorceaux(Request $request, MorceauRepository $morceauRepository): JsonResponse
+    public function searchMorceaux(Request $request, MorceauRepository $morceauRepository,): JsonResponse
     {
         $query = $request->query->get('q', '');
 
@@ -25,8 +25,8 @@ class SearchController extends AbstractController
             ->where('m.titre LIKE :query')
             ->orWhere('d.titre LIKE :query')
             ->orWhere('a.nomScene LIKE :query')
-            ->setParameter('query', '%' . $query . '%')
-            ->setMaxResults(10);
+            ->setParameter('query', '%' . $query . '%')  
+            ->setMaxResults(10);  
 
         $morceaux = $qb->getQuery()->getResult();
 
@@ -36,10 +36,17 @@ class SearchController extends AbstractController
                 'id' => $m->getId(),
                 'titre' => $m->getTitre(),
                 'album' => $m->getDiscographie()->getTitre(),
+                'album_id' => $m->getDiscographie()->getId(),
                 'artiste' => $m->getDiscographie()->getArtiste()->getNomScene(),
                 'pochette' => $m->getDiscographie()->getPochette()
             ];
+            
         }
+       
+       
+       
+        
+
 
         return new JsonResponse($results);
     }
