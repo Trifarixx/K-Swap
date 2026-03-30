@@ -18,9 +18,7 @@
 				<p class="page-subtitle">Partage ton avis sur une musique ou un album avec la communauté.</p>
 			</div>
 
-			{# =========================================
-									               Formulaire de création de post
-									            ========================================= #}
+			{# Formulaire de création de post #}
 			<form action="{{ path('app_post_new') }}" method="POST" id="post-form">
 
 				<div
@@ -34,7 +32,7 @@
 						</h3>
 
 						<div class="form-group" style="margin-top: 15px;">
-							<textarea name="commentaire" id="commentaire" rows="8" class="neon-input" style="width: 100%; resize: vertical;" placeholder="Que veux-tu dire sur ce son ? Écris ton avis détaillé ici..." required></textarea>
+							<textarea name="commentaire" id="commentaire" rows="5" class="neon-input" placeholder="Que veux-tu dire sur ce son ? Écris ton avis détaillé ici..." required></textarea>
 						</div>
 
 						<button type="submit" class="neon-btn-submit auth-submit-btn" style="margin-top: 15px;">Publier la review</button>

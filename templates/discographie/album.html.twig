@@ -28,9 +28,7 @@
 			<div class="album-blurred-bg" style="background-image: url('{{ coverUrl }}');"></div>
 			<div class="bg-overlay"></div>
 
-			{# =========================================
-						               En tête de l'album : Image + Titre + Artiste
-						            ========================================= #}
+			{# En tête de l'album : Image + Titre + Artiste #}
 			<div class="neon-content">
 				<div
 					class="neon-header">
@@ -58,9 +56,7 @@
 					</div>
 				</div>
 
-				{# =========================================
-								                   Liste des morceaux de l'album
-								                ========================================= #}
+				{# Liste des morceaux de l'album #}
 				<div
 					class="neon-tracklist">
 
@@ -98,10 +94,7 @@
 			</div>
 		</main>
 
-		{# =========================================
-				           panneau latéral (Lecteur YT + Avis)
-				           Ce panneau est masqué par défaut et s'ouvre via JS
-				        ========================================= #}
+		{# panneau latéral (Lecteur YT + Avis) Ce panneau est masqué par défaut et s'ouvre via JS #}
 		<aside id="track-side-panel" class="track-side-panel">
 			<div class="panel-header">
 				<h2 id="panel-track-title">Titre du morceau</h2>
@@ -122,24 +115,21 @@
 						id="track-review-form" action="#" method="POST">
 
 						{# Système d'étoiles #}
-						<div class="form-group">
-							<label>Ta note :</label>
-							<div class="star-rating">
-								<input type="radio" id="star5" name="note" value="5" required/>
-								<label for="star5" title="5 étoiles">★</label>
+						<div class="star-rating">
+							<input type="radio" id="star5" name="note" value="5" required/>
+							<label for="star5" title="5 étoiles"></label>
 
-								<input type="radio" id="star4" name="note" value="4"/>
-								<label for="star4" title="4 étoiles">★</label>
+							<input type="radio" id="star4" name="note" value="4"/>
+							<label for="star4" title="4 étoiles"></label>
 
-								<input type="radio" id="star3" name="note" value="3"/>
-								<label for="star3" title="3 étoiles">★</label>
+							<input type="radio" id="star3" name="note" value="3"/>
+							<label for="star3" title="3 étoiles"></label>
 
-								<input type="radio" id="star2" name="note" value="2"/>
-								<label for="star2" title="2 étoiles">★</label>
+							<input type="radio" id="star2" name="note" value="2"/>
+							<label for="star2" title="2 étoiles"></label>
 
-								<input type="radio" id="star1" name="note" value="1"/>
-								<label for="star1" title="1 étoile">★</label>
-							</div>
+							<input type="radio" id="star1" name="note" value="1"/>
+							<label for="star1" title="1 étoile"></label>
 						</div>
 
 						{# Champ Commentaire #}
@@ -155,9 +145,7 @@
 		</aside>
 	</div>
 
-	{# ================================================================================================
-		       JavaScript pour gérer l'ouverture/fermeture du panneau latéral et l'injection du lecteur YouTube
-		    ================================================================================================ #}
+	{# JavaScript pour gérer l'ouverture/fermeture du panneau latéral et l'injection du lecteur YouTube #}
 	<script>
 		// On s'assure que le HTML est complètement chargé avant d'exécuter le script
 document.addEventListener('DOMContentLoaded', () => { // Récupération des éléments du DOM
@@ -211,14 +199,14 @@ ytContainer.innerHTML = '<iframe width="100%" height="250" src="https://www.yout
 // Si on a déjà un lien Youtube en base de données, on le lit directement
 if (ytLink && ytLink !== '') {
 playVideo(ytLink);
-}
-// Sinon, on va interroger notre API locale pour le chercher dynamiquement else {
+} else { // Sinon, on va interroger notre API locale pour le chercher dynamiquement
 ytContainer.innerHTML = '<p class="status-msg-loading">Recherche en cours...</p>';
 
 // Appel AJAX vers le contrôleur Symfony
 fetch('/api/youtube/' + trackId).then(res => {
 if (!res.ok) 
 throw new Error("Erreur serveur");
+
 
 
 return res.json();
@@ -233,10 +221,9 @@ ytContainer.innerHTML = '<p class="status-msg-error">Vidéo introuvable sur YouT
 ytContainer.innerHTML = '<p class="status-msg-error">Erreur de connexion</p>';
 console.error(err);
 });
-}}
-);
-});
 }
-);
+});
+});
+});
 	</script>
 {% endblock %}

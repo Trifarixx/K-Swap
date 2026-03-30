@@ -18,9 +18,7 @@
 				<p class="page-subtitle">Mets à jour tes informations personnelles et ton avatar.</p>
 			</div>
 
-			{# =========================================
-			               Panneau de modification du profil
-			            ========================================= #}
+			{# Panneau de modification du profil #}
 			{# On centre le panneau et on limite sa largeur pour un rendu plus esthétique #}
 			<div class="panel-box fade-in" style="animation-delay: 0.1s; max-width: 600px; margin: 0 auto;">
 
@@ -92,7 +90,6 @@
 					Enregistrer les modifications
 				</button>
 
-				=
 				{# form_end() ferme la balise </form> et génère les champs cachés restants (comme le token CSRF s'il n'a pas été rendu manuellement) #}
 				{{ form_end(form) }}
 
