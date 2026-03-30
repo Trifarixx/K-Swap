@@ -6,39 +6,63 @@
 
 {% block body %}
 	<div class="app-layout">
+
 		{% include 'header.html.twig' %}
 		{% include 'sidebar.html.twig' %}
 
 		<main class="main-content">
 
-			<div class="hero-card fade-in">
-				<h1 class="hero-title">Membres du groupe :
+			{# En-tête du groupe #}
+			{# Affiche les informations principales du groupe sélectionné #}
+				<div class="hero-card fade-in"> <h1 class="hero-title">Membres du groupe :
 					{{ groupe.nomGroupe }}</h1>
-				<p class="hero-subtitle">
+				<p
+					class="hero-subtitle">
+					{# Affiche le nom du fanclub s'il existe, sinon un texte par défaut #}
 					{{ groupe.nomFanclub ?: 'Groupe K-Pop' }}
 				</p>
 			</div>
 
+			{# Liste Membres #}
+			{# On vérifie d'abord s'il y a des membres associés à ce groupe dans la base de données #}
 			{% if membres is not empty %}
-				<div class="disco-grid mt-6">
+
+				<div
+					class="disco-grid mt-6">
+
+					{# Boucle sur chaque membre appartenant au groupe #}
 					{% for membre in membres %}
+
+						{# Raccourci : on stocke l'entité Idol liée à ce membre dans une variable pour simplifier le code #}
 						{% set idol = membre.idol %}
 
-						<a href="{{ path('app_artiste_show', {'id': idol.id}) }}" class="disco-card fade-in">
+						{# carte membre #}
+						{# Redirige vers la page de profil détaillée de l'idol via l'URL 'app_artiste_show' #}
+							<a
+							href="{{ path('app_artiste_show', {'id': idol.id}) }}" class="disco-card fade-in"> {# -- SECTION IMAGE -- #}
+							<div
+								class="disco-image-wrapper">
 
-							<div class="disco-image-wrapper">
+								{# Vérifie si l'idole a une image en base de données #}
 								{% if idol.image %}
+									{# Supprime les espaces inutiles autour de l'URL #}
 									{% set cleanUrl = idol.image|trim %}
 
+									{# Condition : Est-ce une URL externe (http, //) ou une image stockée localement ? #}
 									{% if cleanUrl starts with 'http' or cleanUrl starts with '//' or cleanUrl starts with 'data:image' %}
+										{# Image Externe : On utilise referrerpolicy="no-referrer" pour contrer les protections anti-hotlinking #}
 										<img src="{{ cleanUrl }}" alt="{{ idol.nomScene }}" loading="lazy" referrerpolicy="no-referrer">
 									{% else %}
+										{# Image Locale : On va chercher le fichier dans le dossier public/uploads/artistes/ #}
 										<img src="{{ asset('uploads/artistes/' ~ cleanUrl) }}" alt="{{ idol.nomScene }}" loading="lazy">
 									{% endif %}
+
+									{# Si l'idole n'a pas d'image, on affiche une image par défaut #}
 								{% else %}
 									<img src="{{ asset('img/logo_kpop.png') }}" alt="{{ idol.nomScene }}">
 								{% endif %}
 
+								{# Effet visuel (sombre + icône "personne") qui apparaît quand on passe la souris sur la carte #}
 								<div class="disco-overlay">
 									<div class="btn-play">
 										<span class="material-symbols-rounded">person</span>
@@ -46,16 +70,23 @@
 								</div>
 							</div>
 
-							<div class="disco-info">
+							{# informations textuelles du membre #}
+							<div
+								class="disco-info">
+								{# Affiche le nom de scène. S'il n'y en a pas, on affiche le vrai nom en solution de repli #}
 								<h3 class="disco-title">{{ idol.nomScene ?: idol.nomReel }}</h3>
+
+								{# Affiche la date de naissance formatée (ex: 20/03/2002), sinon un texte par défaut #}
 								<span class="disco-subtitle">
-									{{ idol.dateNaissance ? idol.dateNaissance|date('d/m/Y') : 'Idol K-Pop' }}
+									{{ idol.dateNaissance ? idol.dateNaissance|date('d/m/Y') : 'Non renseignée' }}
 								</span>
 							</div>
 
 						</a>
 					{% endfor %}
 				</div>
+
+				{# cas où le groupe est vide #}
 			{% else %}
 				<div class="empty-msg">
 					<span class="material-symbols-rounded" style="font-size: 48px; opacity: 0.5; display: block; margin-bottom: 10px;">group_off</span>
@@ -66,5 +97,6 @@
 		</main>
 
 		<aside class="right-panel"></aside>
+
 	</div>
 {% endblock %}

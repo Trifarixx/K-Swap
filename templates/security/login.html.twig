@@ -5,8 +5,11 @@
 
 {% block body %}
 	<div class="auth-container">
-		<div class="auth-card">
 
+		<div
+			class="auth-card">
+
+			{# En tete de carte #}
 			<div class="auth-icon-wrapper">
 				<span class="material-symbols-rounded icon-accent">lock</span>
 			</div>
@@ -14,40 +17,63 @@
 			<h1 class="auth-title">Connexion</h1>
 			<p class="auth-subtitle">Content de te revoir !</p>
 
+			{# Formulaire de connexion #}
 			<form method="post">
-				{% if error %}
-					<div class="auth-error-msg">
+
+				{# Gestion des erreurs #}
+				{# Si les identifiants sont incorrects, Symfony renvoie une variable 'error' #}
+					{% if error %}
+						<div
+						class="auth-error-msg"> {# On traduit le message d'erreur (ex: "Invalid credentials.") en utilisant le domaine 'security' #}
 						{{ error.messageKey|trans(error.messageData, 'security') }}
 					</div>
 				{% endif %}
 
+				{# Champ : Email #}
 				<div class="form-group">
 					<label for="username" class="form-label">Email</label>
+
+					{# 
+										    - L'attribut name="_username" est obligatoire pour Symfony
+										    - value="{{ last_username }}" permet de pré-remplir l'email si l'utilisateur s'est trompé de mot de passe juste avant
+										#}
 					<input type="email" value="{{ last_username }}" name="_username" id="username" class="form-input" autocomplete="email" required autofocus placeholder="ton@email.com">
 				</div>
 
+				{# Champ : Mot de passe #}
 				<div class="form-group">
 					<label for="password" class="form-label">Mot de passe</label>
+
+					{# L'attribut name="_password" est obligatoire #}
 					<input type="password" name="_password" id="password" class="form-input" autocomplete="current-password" required placeholder="••••••••">
 				</div>
 
+				{# Champ : Se souvenir de moi #}
 				<div class="form-group">
-					<label class="custom-checkbox">
+					<label
+						class="custom-checkbox">
+						{# L'attribut name="_remember_me" active le cookie de connexion persistante dans Symfony #}
 						<input type="checkbox" name="_remember_me">
 						<span>Se souvenir de moi</span>
 					</label>
 				</div>
 
-				<input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+				{# Token CSRF #}
+				{# Obligatoire pour éviter les failles CSRF. La valeur doit correspondre à la clé 'authenticate' configurée dans security.yaml #}
+				<input
+				type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 
+				{# Bouton de connexion #}
 				<button type="submit" class="btn btn-primary auth-submit-btn">
 					Se connecter
 				</button>
 
+				{# Lien vers la page d'inscription #}
 				<div class="auth-footer">
 					Pas encore de compte ?
 					<a href="{{ path('app_register') }}" class="auth-link">S'inscrire</a>
 				</div>
+
 			</form>
 		</div>
 	</div>

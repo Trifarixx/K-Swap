@@ -5,59 +5,53 @@
 
 {% block body %}
 	<div class="app-layout">
+
 		{% include 'header.html.twig' %}
 		{% include 'sidebar.html.twig' %}
 
-		<main class="main-content neon-page">
+		<main
+			class="main-content neon-page">
 
+			{# En tête de la page #}
 			<div class="page-header">
 				<h1 class="page-title">Nouvelle Publication</h1>
 				<p class="page-subtitle">Partage ton avis sur une musique ou un album avec la communauté.</p>
 			</div>
 
+			{# =========================================
+									               Formulaire de création de post
+									            ========================================= #}
 			<form action="{{ path('app_post_new') }}" method="POST" id="post-form">
 
 				<div
 					class="post-creation-container">
 
-					{# COLONNE GAUCHE : L'ÉDITEUR #}
+					{# Panneau gauche : formulaire de création #}
 					<div class="panel-box left-panel">
 						<h3 class="panel-title">
 							<span class="material-symbols-rounded">edit_square</span>
 							Ton message
 						</h3>
 
-						<div class="editor-toolbar">
-							<button type="button" class="editor-btn" onclick="formatText('bold')" title="Gras">
-								<b>B</b>
-							</button>
-							<button type="button" class="editor-btn" onclick="formatText('italic')" title="Italique">
-								<i>I</i>
-							</button>
-							<button type="button" class="editor-btn" onclick="formatText('underline')" title="Souligné">
-								<u>U</u>
-							</button>
-							<div style="width: 1px; background: rgba(255,255,255,0.1); margin: 0 5px;"></div>
-							<button type="button" class="editor-btn" onclick="formatText('insertOrderedList')" title="Liste numérotée">1.</button>
-							<button type="button" class="editor-btn" onclick="formatText('insertUnorderedList')" title="Liste à puces">•</button>
+						<div class="form-group" style="margin-top: 15px;">
+							<textarea name="commentaire" id="commentaire" rows="8" class="neon-input" style="width: 100%; resize: vertical;" placeholder="Que veux-tu dire sur ce son ? Écris ton avis détaillé ici..." required></textarea>
 						</div>
 
-						<div class="rich-text-area" contenteditable="true" id="editor-content" placeholder="Que veux-tu dire sur ce son ? Écris ton avis détaillé ici..."></div>
-
-						<textarea name="commentaire" id="hidden-commentaire" style="display:none;"></textarea>
-
-						<button type="submit" class="neon-btn-submit auth-submit-btn">Publier la review</button>
+						<button type="submit" class="neon-btn-submit auth-submit-btn" style="margin-top: 15px;">Publier la review</button>
 					</div>
 
-					{# COLONNE DROITE : LA RECHERCHE #}
+					{# Panneau droit : sélection de la musique #}
 					<div class="panel-box right-panel">
 						<h3 class="panel-title">
 							<span class="material-symbols-rounded">library_music</span>
 							Lier une musique
 						</h3>
 
-						<input type="text" id="music-search-input" class="search-input-lg" placeholder="🔍 Chercher un artiste, morceau, album...">
+						{# Champ de recherche asynchrone #}
+						<input
+						type="text" id="music-search-input" class="search-input-lg" placeholder="Chercher un artiste, morceau, album...">
 
+						{# Conteneur où s'afficheront les résultats de la recherche #}
 						<div class="search-results" id="search-results-container">
 							<div class="empty-search-msg">
 								<span class="material-symbols-rounded empty-search-icon">search</span>
@@ -65,10 +59,13 @@
 							</div>
 						</div>
 
+						{# Zone de sélection de la musique #}
+
+						{# Ce champ caché stocke l'ID de la musique choisie pour l'envoyer au serveur #}
 						<input
 						type="hidden" name="morceau_id" id="selected-morceau-id" required>
 
-						{# APERÇU DE LA SÉLECTION #}
+						{# Cette div est masquée par défaut et s'affiche quand l'utilisateur clique sur un résultat #}
 						<div id="selection-preview" style="display: none;">
 							<p>Musique sélectionnée :</p>
 
@@ -77,6 +74,7 @@
 								<strong id="selection-title"></strong>
 							</div>
 
+							{# Bouton pour annuler la sélection #}
 							<button type="button" onclick="cancelSelection()" class="btn-cancel-selection">
 								Choisir une autre
 							</button>
@@ -87,22 +85,17 @@
 		</main>
 	</div>
 
+	{# Script de gestion du formulaire de création de post + Recherche asynchrone de musique (AJAX) #}
 	<script>
-		function formatText(command) {
-document.execCommand(command, false, null);
-document.getElementById('editor-content').focus();
-}
-
-document.getElementById('post-form').addEventListener('submit', function (e) {
-const editorHTML = document.getElementById('editor-content').innerHTML;
-document.getElementById('hidden-commentaire').value = editorHTML;
-
+		// Gestion du formulaire de création de post
+document.getElementById('post-form').addEventListener('submit', function (e) { // Vérification qu'une musique a bien été sélectionnée avant d'envoyer au PHP
 if (!document.getElementById('selected-morceau-id').value) {
-e.preventDefault();
+e.preventDefault(); // Annule l'envoi du formulaire
 alert("Tu dois absolument lier une musique avant de publier !");
 }
 });
 
+// Recherche asynchrone de musique (AJAX)
 const searchInput = document.getElementById('music-search-input');
 const resultsContainer = document.getElementById('search-results-container');
 const defaultImage = "{{ asset('img/logo_kpop.png') }}";
@@ -122,6 +115,8 @@ fetch('/api/search/morceaux?q=' + encodeURIComponent(query)).then(response => {
 if (!response.ok) 
 throw new Error("Erreur serveur");
 
+
+
 return response.json();
 }).then(data => {
 resultsContainer.innerHTML = '';
@@ -133,7 +128,6 @@ return;
 
 data.forEach(item => {
 let imageUrl = item.pochette ? (item.pochette.startsWith('http') ? item.pochette : '/images/albums/' + item.pochette) : defaultImage;
-
 let titrePropre = item.titre ? item.titre.replace(/'/g, "\\'") : 'Inconnu';
 let artistePropre = item.artiste ? item.artiste.replace(/'/g, "\\'") : 'Inconnu';
 
@@ -172,6 +166,7 @@ resultsContainer.innerHTML = `
 }
 });
 
+// Selection d'une musique dans les résultats de recherche
 function selectMusic(id, title, imageUrl) {
 document.getElementById('selected-morceau-id').value = id;
 document.getElementById('selection-title').innerText = title;
@@ -182,6 +177,7 @@ resultsContainer.style.display = 'none';
 searchInput.value = '';
 }
 
+// Annulation de la sélection
 function cancelSelection() {
 document.getElementById('selected-morceau-id').value = '';
 document.getElementById('selection-preview').style.display = 'none';

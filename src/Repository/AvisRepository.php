@@ -38,7 +38,7 @@ class AvisRepository extends ServiceEntityRepository
             ->leftJoin('a.discographie', 'd')
             ->leftJoin('d.artiste', 'ar')
             ->orderBy('a.dateCreation', 'DESC')
-            ->addOrderBy('a.id', 'DESC') // <--- AJOUTEZ CETTE LIGNE
+            ->addOrderBy('a.id', 'DESC')
             ->setFirstResult(($page - 1) * $limit)
             ->setMaxResults($limit);
 

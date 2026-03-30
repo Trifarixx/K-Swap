@@ -1,28 +1,46 @@
 {% extends 'base.html.twig' %}
 
+{# Le titre de l'onglet s'adapte dynamiquement : on affiche le nom de scène, ou le vrai nom s'il n'y a pas de nom de scène #}
 {% block title %}K-Swap |
 	{{ idol.nomScene ?: idol.nomReel }}
 {% endblock %}
 
 {% block body %}
 	<div class="app-layout">
+
 		{% include 'header.html.twig' %}
 		{% include 'sidebar.html.twig' %}
 
-		<main class="main-content">
+		<main
+			class="main-content">
 
+			{# =========================================
+												               Section 1 : Présentation de l'idole
+												            ========================================= #}
 			<div
 				class="idol-showcase fade-in">
 
-				{# --- IMAGE GÉANTE (Côté gauche) --- #}
-				<div class="idol-image-container">
+				{# colonne gauche : image #}
+				<div
+					class="idol-image-container">
+
+					{# Vérifie si l'idole possède une image en base de données #}
 					{% if idol.image %}
+						{# Nettoyage de l'URL pour éviter les espaces parasites #}
 						{% set cleanUrl = idol.image|trim %}
+
+						{# Si l'image provient du web #}
 						{% if cleanUrl starts with 'http' or cleanUrl starts with '//' or cleanUrl starts with 'data:image' %}
-							<img src="{{ cleanUrl }}" alt="{{ idol.nomScene }}" referrerpolicy="no-referrer">
+							{# ...on utilise referrerpolicy pour forcer l'affichage même si le site source bloque le hotlinking #}
+							<img
+							src="{{ cleanUrl }}" alt="{{ idol.nomScene }}" referrerpolicy="no-referrer">
+
+							{# Si l'image a été uploadée localement sur le serveur... #}
 						{% else %}
 							<img src="{{ asset('uploads/artistes/' ~ cleanUrl) }}" alt="{{ idol.nomScene }}">
 						{% endif %}
+
+						{# S'il n'y a aucune image, on affiche une silhouette (placeholder) de remplacement #}
 					{% else %}
 						<div class="placeholder-idol">
 							<span class="material-symbols-rounded">person</span>
@@ -30,27 +48,35 @@
 					{% endif %}
 				</div>
 
-				{# --- INFOS EN GRAND (Côté droit) --- #}
-				<div class="idol-details">
+				{# Colonne droite : informations idol #}
+				<div
+					class="idol-details">
 
+					{# Nom principal #}
 					<h1 class="idol-name-massive">{{ idol.nomScene ?: idol.nomReel }}</h1>
 
+					{# Sous-titre : Vrai nom (s'il existe en plus du nom de scène) #}
 					{% if idol.nomReel and idol.nomScene %}
 						<div class="idol-real-name">{{ idol.nomReel }}</div>
 					{% else %}
 						<div class="idol-real-name">Idol K-Pop</div>
 					{% endif %}
 
-					<div class="idol-stats-grid">
+					{# Boîtes de statistiques (Cartes infos) #}
+					<div
+						class="idol-stats-grid">
+
+						{# Carte 1 : Date de naissance #}
 						<div class="idol-stat-box">
 							<span class="material-symbols-rounded">cake</span>
 							<div class="stat-content">
 								<span class="stat-label">Date de naissance</span>
+								{# Formatage de la date en Jour/Mois/Année. Si elle est vide, on affiche "Inconnue" #}
 								<span class="stat-value">{{ idol.dateNaissance ? idol.dateNaissance|date('d/m/Y') : 'Inconnue' }}</span>
 							</div>
 						</div>
 
-						{# Plus tard, tu pourras boucler ici pour afficher les groupes de l'idol ! #}
+						{# Carte 2 : Statut (Actif/Inactif) #}
 						<div class="idol-stat-box">
 							<span class="material-symbols-rounded">stars</span>
 							<div class="stat-content">
@@ -60,6 +86,7 @@
 						</div>
 					</div>
 
+					{# Bloc de texte "À propos" (Biographie) #}
 					<div class="panel-box" style="margin: 0; background: rgba(30, 41, 59, 0.4); border: 1px solid rgba(255,255,255,0.05);">
 						<h3 class="panel-title" style="margin-bottom: 15px;">
 							<span class="material-symbols-rounded">info</span>
@@ -74,8 +101,13 @@
 				</div>
 			</div>
 
-			{# --- SECTION : MEMBRES DU GROUPE --- #}
+			{# =========================================
+												               section 2 : Autres membres du même groupe
+												            ========================================= #}
+			{# On s'assure que l'idole appartient bien à au moins un groupe avant d'afficher cette section #}
 			{% if idol.groupes is defined and idol.groupes|length > 0 %}
+
+				{# Titre de la section avec un petit délai d'animation (0.3s) #}
 				<div class="section-header fade-in" style="margin-top: 60px; animation-delay: 0.3s;">
 					<h2 class="section-title" style="display: flex; align-items: center; gap: 10px;">
 						<span class="material-symbols-rounded">groups</span>
@@ -83,15 +115,27 @@
 					</h2>
 				</div>
 
-				<div class="artist-grid">
+				<div
+					class="artist-grid">
+
+					{# Boucle 1 : On parcourt tous les groupes auxquels appartient notre idole #}
 					{% for membreGroupe in idol.groupes %}
 						{% set groupe = membreGroupe.groupe %}
 
+						{# Boucle 2 : On parcourt tous les membres de ce groupe en question #}
 						{% for membre in groupe.membres %}
+
+							{# On exclut l'idole actuelle pour ne pas l'afficher dans ses propres collègues #}
 							{% if membre.idol.id != idol.id %}
+
+								{# On stocke le collègue dans la variable 'other' #}
 								{% set other = membre.idol %}
 
-								<a href="{{ path('app_artiste_show', {'id': other.id}) }}" class="artist-card fade-in">
+								{# Carte autre membre du groupe #}
+								<a
+									href="{{ path('app_artiste_show', {'id': other.id}) }}" class="artist-card fade-in">
+
+									{# Gestion de l'image (identique à celle de l'idole principale) #}
 									<div class="artist-image-wrapper">
 										{% if other.image %}
 											{% set cleanUrl = other.image|trim %}
@@ -104,6 +148,7 @@
 											<img src="{{ asset('img/logo_kpop.png') }}" alt="{{ other.nomScene }}">
 										{% endif %}
 
+										{# Effet de survol (Bouton "Profil") #}
 										<div class="artist-overlay">
 											<div class="btn-view">
 												<span class="material-symbols-rounded">visibility</span>
@@ -112,9 +157,12 @@
 										</div>
 									</div>
 
+									{# Infos du collègue sous son image #}
 									<div class="artist-info">
 										<h3 class="artist-name">{{ other.nomScene ?: other.nomReel }}</h3>
-										<span class="artist-role">
+										<span
+											class="artist-role">
+											{# Affiche le nom du groupe en sous-titre #}
 											{{ groupe.nomGroupe }}
 										</span>
 									</div>
@@ -125,8 +173,10 @@
 					{% endfor %}
 				</div>
 			{% endif %}
+
 		</main>
 
 		<aside class="right-panel"></aside>
+
 	</div>
 {% endblock %}

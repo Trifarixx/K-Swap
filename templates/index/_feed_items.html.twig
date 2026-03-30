@@ -1,32 +1,53 @@
 {% for avis in avis_list %}
+
+	{# carte avis #}
 	<article
 		class="feed-card fade-in mb-6">
-		{# 1. En-tête du post (Utilisateur + Note) #}
-		<div class="feed-header">
-			<div class="user-info">
+
+		{# en tête du post #}
+		<div
+			class="feed-header">
+
+			{# -- Infos de l'utilisateur -- #}
+			<div
+				class="user-info">
+
+				{# Gestion de l'avatar utilisateur #}
 				{% if avis.user.avatar %}
+					{# Si l'utilisateur a uploadé une photo de profil #}
 					<img src="{{ asset(avis.user.avatar) }}" alt="{{ avis.user.pseudonyme }}" class="user-avatar">
 				{% else %}
+					{# On affiche un rond de couleur avec la 1ère lettre de son pseudo en majuscule #}
 					<div class="user-avatar-placeholder">{{ avis.user.pseudonyme|first|upper }}</div>
 				{% endif %}
+
+				{# Nom et date du post #}
 				<div>
 					<h4 class="user-name">{{ avis.user.pseudonyme }}</h4>
+					{# Formatage de la date #}
 					<span class="post-date">{{ avis.dateCreation|date('d M Y à H:i') }}</span>
 				</div>
 			</div>
+
+			{# Badge de la Note #}
+			{# On ne l'affiche que si l'utilisateur a laissé une note #}
 			{% if avis.note %}
 				<div class="rating-badge">
 					<span class="material-symbols-rounded">star</span>
 					<span>{{ avis.note }}/5</span>
 				</div>
 			{% endif %}
+
 		</div>
 
-		{# 2. contenu du post (Commentaire + Image uploadée) #}
-		<div class="feed-content">
+		{# Contenu du post #}
+		<div
+			class="feed-content">
+
+			{# Le texte de l'avis ou du message #}
 			<p>{{ avis.commentaire }}</p>
 
-			{# Affiche l'image uploadée seulement si ce n'est pas un avis musical #}
+			{# Si l'utilisateur a attaché une image à son post (et que ce n'est pas une review de morceau direct) #}
 			{% if avis.image and not avis.morceau %}
 				<div class="post-image mb-4 rounded-xl overflow-hidden mt-3">
 					<img src="{{ asset('uploads/posts/' ~ avis.image) }}" alt="Post image" class="w-full h-auto object-cover">
@@ -34,35 +55,48 @@
 			{% endif %}
 		</div>
 
-		{# 3. Album et Morceau liés #}
+		{# Si cet avis est rattaché à une discographie (album), on affiche une jolie carte intégrée en bas du post #}
 		{% if avis.discographie %}
-			<a
-				href="{{ path('app_album_show', {'id': avis.discographie.id}) }}" class="feed-album-link">
 
-				{# Conteneur principal #}
+			{# La carte de l'album est entièrement cliquable et renvoie vers la page de l'album #}
+			<a href="{{ path('app_album_show', {'id': avis.discographie.id}) }}" class="feed-album-link">
+
 				<div
 					class="feed-album">
 
-					{# préparation de l'image #}
+					{# -- Logique de la pochette (identique aux autres vues) -- #}
 					{% set cleanPochette = avis.discographie.pochette ? avis.discographie.pochette|trim : '' %}
 					{% set pochetteUrl = cleanPochette ? (cleanPochette starts with 'http' or cleanPochette starts with '//' ? cleanPochette : asset('images/albums/' ~ cleanPochette)) : asset('img/logo_kpop.png') %}
 
-					{# Image floutée en fond (seul style conservé car l'URL est dynamique) #}
 					<div class="album-blur-bg" style="background-image: url('{{ pochetteUrl }}');"></div>
 
-					<div class="album-mini">
-						<img src="{{ pochetteUrl }}" alt="Cover" referrerpolicy="no-referrer">
+					{# Contenu de la petite carte album #}
+					<div
+						class="album-mini">
 
-						<div class="album-details">
+						{# Image de la pochette #}
+						<img
+						src="{{ pochetteUrl }}" alt="Cover" referrerpolicy="no-referrer">
+
+						{# Détails du morceau/album #}
+						<div
+							class="album-details">
+
+							{# Si l'avis cible un morceau précis de l'album, on affiche son titre en premier #}
 							{% if avis.morceau %}
 								<span class="track-title">{{ avis.morceau.titre }}</span>
 							{% endif %}
+
+							{# Affichage du titre de l'album et de l'artiste #}
 							<span class="album-title">{{ avis.discographie.titre }}</span>
 							<span class="album-artist">{{ avis.discographie.artiste.nomScene }}</span>
 						</div>
 					</div>
+
 				</div>
 			</a>
 		{% endif %}
+
 	</article>
+
 {% endfor %}

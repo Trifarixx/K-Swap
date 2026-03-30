@@ -5,31 +5,50 @@
 
 {% block body %}
 	<div class="app-layout">
+
 		{% include 'header.html.twig' %}
 		{% include 'sidebar.html.twig' %}
 
-		<main class="main-content">
+		<main
+			class="main-content">
 
+			{# En tete de page #}
 			<div class="page-header fade-in">
 				<h1 class="page-title">Modifier mon Profil</h1>
 				<p class="page-subtitle">Mets à jour tes informations personnelles et ton avatar.</p>
 			</div>
 
+			{# =========================================
+			               Panneau de modification du profil
+			            ========================================= #}
+			{# On centre le panneau et on limite sa largeur pour un rendu plus esthétique #}
 			<div class="panel-box fade-in" style="animation-delay: 0.1s; max-width: 600px; margin: 0 auto;">
+
 				<h3 class="panel-title">
 					<span class="material-symbols-rounded">manage_accounts</span>
 					Tes informations
 				</h3>
 
+				{# Formulaire Symfony #}
+				{# form_start() génère la balise <form> avec la bonne méthode (POST) et le jeton CSRF de sécurité #}
 				{{ form_start(form) }}
-				<div class="form-group">
+
+				{# Champs du formulaire #}
+				<div
+					class="form-group">
+					{# Affiche le <label> généré par ton FormType PHP #}
 					{{ form_label(form.pseudonyme) }}
+
+					{# Affiche l'input (<input type="text">). Symfony lui appliquera automatiquement la classe CSS configurée dans le FormType #}
 					{{ form_widget(form.pseudonyme) }}
+
+					{# Zone dédiée à l'affichage des erreurs de validation (ex: "Ce pseudo est déjà pris") #}
 					<div class="form-error">
 						{{ form_errors(form.pseudonyme) }}
 					</div>
 				</div>
 
+				{# Champ : Email #}
 				<div class="form-group">
 					{{ form_label(form.email) }}
 					{{ form_widget(form.email) }}
@@ -38,34 +57,51 @@
 					</div>
 				</div>
 
+				{# Champ : Image de profil #}
 				<div class="form-group">
 					{{ form_label(form.avatarFile) }}
+
 					<div class="flex items-center gap-4 mt-2 mb-4">
-						{% if app.user.avatar %}
-							<img src="{{ asset(app.user.avatar) }}" alt="{{ app.user.pseudonyme }}" class="user-avatar" style="width: 60px; height: 60px; border-radius: 50%;">
+
+						{# Aperçu de l'avatar actuel #}
+						{# Si l'utilisateur possède déjà une image de profil #}
+							{% if app.user.avatar %}
+							<img
+							src="{{ asset(app.user.avatar) }}" alt="{{ app.user.pseudonyme }}" class="user-avatar" style="width: 60px; height: 60px; border-radius: 50%;"> {# Sinon, on affiche le cercle coloré avec l'initiale de son pseudo #}
 						{% else %}
-							<div class="user-avatar-placeholder" style="width: 60px; height: 60px; border-radius: 50%; background: linear-gradient(135deg, var(--primary), var(--accent)); font-size: 1.5rem;">{{ app.user.pseudonyme|first|upper }}</div>
+							<div class="user-avatar-placeholder" style="width: 60px; height: 60px; border-radius: 50%; background: linear-gradient(135deg, var(--primary), var(--accent)); font-size: 1.5rem;">
+								{{ app.user.pseudonyme|first|upper }}
+							</div>
 						{% endif %}
+
+						{# Upload de la pp #}
 						<div class="flex-grow">
 							{{ form_widget(form.avatarFile) }}
 							<p class="help-text" style="color: rgba(255,255,255,0.4); font-size: 0.8rem; margin-top: 5px;">JPEG, PNG, WEBP</p>
 						</div>
 					</div>
+
+					{# Gestion des erreurs liées à l'upload (ex: fichier trop lourd, mauvais format) #}
 					<div class="form-error">
 						{{ form_errors(form.avatarFile) }}
 					</div>
 				</div>
 
+				{# bouton d'enregistrement des modifications #}
 				<button type="submit" class="neon-btn-submit auth-submit-btn">
 					Enregistrer les modifications
 				</button>
+
+				=
+				{# form_end() ferme la balise </form> et génère les champs cachés restants (comme le token CSRF s'il n'a pas été rendu manuellement) #}
 				{{ form_end(form) }}
 
+				{# Annulation #}
 				<div class="auth-footer" style="text-align: center; margin-top: 20px; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 20px;">
 					<a href="{{ path('app_profile') }}" class="auth-link" style="color: var(--text-muted);">Annuler et revenir au profil</a>
 				</div>
-			</div>
 
+			</div>
 		</main>
 
 		<aside class="right-panel"></aside>

@@ -582,7 +582,7 @@
         }
     }
 
-    /* Le conteneur de l'image (Carré parfait) */
+    /* Le conteneur de l'image */
     .disco-image-wrapper {
         position: relative;
         width: 100%;
@@ -796,52 +796,71 @@
    FORMULAIRES (Réutilisables)
 ========================================= */
 .form-group {
-    margin-bottom: 20px;
+    margin-bottom: 24px;
 
     .form-label {
         display: block;
         margin-bottom: 8px;
         color: #cbd5e1;
-        font-size: 0.9rem;
-        font-weight: 600;
+        font-size: 0.85rem;
+        font-weight: 500;
     }
 
     .form-input {
-        width: 100%;
-        background-color: rgba(255, 255, 255, 0.05);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        border-radius: 12px;
+        width: 95%;
+        background-color: rgba(0, 0, 0, 0.25);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 8px;
         color: white;
-        padding: 12px 16px;
+        font-size: 0.95rem;
+        padding: 10px 14px;
         font-family: inherit;
-        transition: all 0.2s;
+        transition: all 0.3s ease;
 
         &:focus {
             outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 10px rgba(139, 92, 246, 0.3);
-            background-color: rgba(255, 255, 255, 0.08);
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(236, 72, 153, 0.15);
+            background-color: rgba(0, 0, 0, 0.35);
+        }
+
+        &:-webkit-autofill,
+        &:-webkit-autofill:hover,
+        &:-webkit-autofill:focus,
+        &:-webkit-autofill:active {
+            -webkit-transition: background-color 5000s ease-in-out 0s;
+            transition: background-color 5000s ease-in-out 0s;
+            -webkit-text-fill-color: white !important;
         }
     }
 
-    /* Style spécifique pour le champ d'upload de fichier */
     .form-input-file {
-        color: rgba(255, 255, 255, 0.6);
-        font-size: 0.9rem;
+        color: rgba(255, 255, 255, 0.4);
+        font-size: 0.85rem;
+        margin-top: 5px;
 
-        &::-webkit-file-upload-button {
-            background: linear-gradient(135deg, var(--primary), var(--accent));
+        /* Cible spécifiquement le bouton "Choisir un fichier" */
+        &::file-selector-button {
+            background: linear-gradient(
+                135deg,
+                var(--primary),
+                var(--accent)
+            ); /* Violet vers Rose */
             border: none;
-            border-radius: 8px;
+            border-radius: 6px;
             color: white;
             padding: 8px 16px;
-            margin-right: 10px;
+            margin-right: 12px;
             cursor: pointer;
             font-weight: 600;
-            transition: transform 0.2s;
+            font-size: 0.85rem;
+            transition:
+                opacity 0.2s,
+                transform 0.2s;
 
             &:hover {
-                transform: scale(1.05);
+                opacity: 0.9;
+                transform: translateY(-1px);
             }
         }
     }

@@ -6,58 +6,91 @@
 
 {% block body %}
 	<div class="app-layout">
+
 		{% include 'header.html.twig' %}
 		{% include 'sidebar.html.twig' %}
 
-		<main
-			class="main-content neon-page">
-			{# PREPARATION DE L'IMAGE POUR LE FOND DYNAMIQUE #}
+		<main class="main-content neon-page">
+
+			{# Récupération et traitement de l'URL de la pochette #}
+			{# On nettoie la chaîne (supprime les espaces) #}
 			{% set cleanUrl = album.pochette ? album.pochette|trim : '' %}
 			{% set coverUrl = '' %}
-			{% if cleanUrl %}
+
+			{# Si une pochette existe, on vérifie son type (Lien web VS Fichier local) #}
+				{% if cleanUrl %}
 				{% set coverUrl = cleanUrl starts with 'http' or cleanUrl starts with '//' ? cleanUrl : asset('images/albums/' ~ cleanUrl) %}
+				{# S'il n'y a pas de pochette, on met l'image par défaut #}
 			{% else %}
 				{% set coverUrl = asset('img/logo_kpop.png') %}
 			{% endif %}
 
-			{# Le seul attribut style autorisé ici car l'URL est dynamique #}
 			<div class="album-blurred-bg" style="background-image: url('{{ coverUrl }}');"></div>
 			<div class="bg-overlay"></div>
 
+			{# =========================================
+						               En tête de l'album : Image + Titre + Artiste
+						            ========================================= #}
 			<div class="neon-content">
-				<div class="neon-header">
+				<div
+					class="neon-header">
+
+					{# Pochette de l'album #}
 					<div class="neon-cover-wrapper">
 						<img src="{{ coverUrl }}" alt="{{ album.titre }}" class="neon-cover">
 					</div>
 
-					<div class="neon-info">
+					{# Informations #}
+					<div
+						class="neon-info">
+						{# Titre mis en majuscules automatiquement avec le filtre |upper #}
 						<h1 class="neon-title">{{ album.titre | upper }}</h1>
-						<div class="neon-meta">
+
+						<div
+							class="neon-meta">
+							{# Nom de l'artiste (ou 'Artiste Inconnu' si la donnée est manquante) #}
 							<span class="neon-artist">{{ album.artiste.nomScene | default('Artiste Inconnu') }}</span>
 							<span class="neon-dot">•</span>
+							{# Compte le nombre de morceaux dans l'album #}
 							<span>{{ album.morceaux|length }}
 								titres</span>
 						</div>
 					</div>
 				</div>
 
-				<div class="neon-tracklist">
-					{% for morceau in album.morceaux %}
-						<div class="neon-track-row clickable-track" data-id="{{ morceau.id }}" data-title="{{ morceau.titre }}" data-youtube="{{ morceau.lienYoutube | default('') }}">
+				{# =========================================
+								                   Liste des morceaux de l'album
+								                ========================================= #}
+				<div
+					class="neon-tracklist">
 
+					{# Boucle sur chaque morceau de l'album #}
+					{% for morceau in album.morceaux %}
+
+						{# Ligne du morceau (Cliquable) #}
+						{# On injecte les données (ID, Titre, lien YT) dans des attributs "data-*" pour que le JavaScript puisse les lire au clic #}
+							<div
+							class="neon-track-row clickable-track" data-id="{{ morceau.id }}" data-title="{{ morceau.titre }}" data-youtube="{{ morceau.lienYoutube | default('') }}"> {# Numéro de la piste (loop.index génère 1, 2, 3 automatiquement) #}
 							<div class="col-num">{{ loop.index }}</div>
+
+							{# Titre et Artiste #}
 							<div class="col-title">
 								<span class="track-name">{{ morceau.titre }}</span>
 								<span class="track-artist">{{ album.artiste.nomScene | default('') }}</span>
 							</div>
+
+							{# Formatage de la durée (secondes -> MM:SS) #}
 							<div class="col-duration">
 								{% if morceau.duree %}
+									{# Divise par 60 et arrondit à l'inférieur pour les minutes, modulo 60 pour les secondes restantes #}
 									{{ (morceau.duree / 60)|round(0, 'floor') }}:{{ (morceau.duree % 60)|format('%02d') }}
 								{% else %}
 									--:--
 								{% endif %}
 							</div>
 						</div>
+
+						{# Cas où l'album est vide #}
 					{% else %}
 						<p class="empty-msg">Aucune piste disponible.</p>
 					{% endfor %}
@@ -65,7 +98,10 @@
 			</div>
 		</main>
 
-		{# LE PANNEAU LATERAL AVEC LECTEUR ET FORMULAIRE D'AVIS #}
+		{# =========================================
+				           panneau latéral (Lecteur YT + Avis)
+				           Ce panneau est masqué par défaut et s'ouvre via JS
+				        ========================================= #}
 		<aside id="track-side-panel" class="track-side-panel">
 			<div class="panel-header">
 				<h2 id="panel-track-title">Titre du morceau</h2>
@@ -73,16 +109,19 @@
 					<span class="material-symbols-rounded">close</span>
 				</button>
 			</div>
+
 			<div
 				class="panel-content">
-				{# Conteneur du lecteur vidéo #}
+				{# Zone où l'iframe YouTube sera injectée par le JS #}
 				<div id="panel-youtube-container" class="youtube-container"></div>
 
-				{# Section Avis avec le système d'étoiles #}
+				{# Formulaire pour noter et commenter le morceau #}
 				<div class="review-section">
 					<h3>Ton avis sur ce morceau</h3>
-					<form id="track-review-form" action="#" method="POST">
+					<form
+						id="track-review-form" action="#" method="POST">
 
+						{# Système d'étoiles #}
 						<div class="form-group">
 							<label>Ta note :</label>
 							<div class="star-rating">
@@ -103,6 +142,7 @@
 							</div>
 						</div>
 
+						{# Champ Commentaire #}
 						<div class="form-group">
 							<label>Commentaire :</label>
 							<textarea name="commentaire" rows="4" placeholder="Ce refrain est incroyable..." required class="neon-input"></textarea>
@@ -115,26 +155,30 @@
 		</aside>
 	</div>
 
-	{# LE JAVASCRIPT POUR GERER LE LECTEUR YOUTUBE #}
+	{# ================================================================================================
+		       JavaScript pour gérer l'ouverture/fermeture du panneau latéral et l'injection du lecteur YouTube
+		    ================================================================================================ #}
 	<script>
-		document.addEventListener('DOMContentLoaded', () => {
+		// On s'assure que le HTML est complètement chargé avant d'exécuter le script
+document.addEventListener('DOMContentLoaded', () => { // Récupération des éléments du DOM
 const panel = document.getElementById('track-side-panel');
 const ytContainer = document.getElementById('panel-youtube-container');
 const titleEl = document.getElementById('panel-track-title');
 const closeBtn = document.getElementById('close-panel');
 const form = document.getElementById('track-review-form');
 
+// Fermeture du panneau au clic
 if (closeBtn && panel) {
 closeBtn.addEventListener('click', () => {
 panel.classList.remove('active');
-if (ytContainer) 
+// On vide le conteneur YT pour couper le son de la vidéo quand on ferme
+if (ytContainer) {
 ytContainer.innerHTML = '';
-
-
-
+}
 });
 }
 
+// Clic sur une piste de la tracklist
 document.querySelectorAll('.clickable-track').forEach(row => {
 row.addEventListener('click', () => {
 if (! panel || ! ytContainer || ! titleEl) 
@@ -142,37 +186,44 @@ return;
 
 
 
+// Récupération des données injectées dans le HTML (les fameux data-*)
 const trackId = row.dataset.id;
 const trackTitle = row.dataset.title;
 const ytLink = row.dataset.youtube;
 
+// Mise à jour de l'interface du panneau
 titleEl.textContent = trackTitle;
-// Met à jour l'URL du formulaire pour cibler la bonne musique
-if (form) 
+
+// Mise à jour de l'URL du formulaire pour cibler le bon morceau en BDD
+if (form) {
 form.action = "/avis/ajouter/morceau/" + trackId;
+}
 
-
-
+// Affiche visuellement le panneau latéral
 panel.classList.add('active');
 
-const playVideo = (url) => {
+// Fonction utilitaire pour injecter le lecteur YouTube
+const playVideo = (url) => { // Extraction intelligente de l'ID de la vidéo, qu'elle soit sous forme de lien classique (?v=...) ou de lien raccourci (youtu.be/...)
 const videoId = url.includes('v=') ? url.split('v=')[1].split('&')[0] : url.split('/').pop();
 ytContainer.innerHTML = '<iframe width="100%" height="250" src="https://www.youtube.com/embed/' + videoId + '" frameborder="0" allowfullscreen></iframe>';
 };
 
+// Si on a déjà un lien Youtube en base de données, on le lit directement
 if (ytLink && ytLink !== '') {
 playVideo(ytLink);
-} else {
+}
+// Sinon, on va interroger notre API locale pour le chercher dynamiquement else {
 ytContainer.innerHTML = '<p class="status-msg-loading">Recherche en cours...</p>';
+
+// Appel AJAX vers le contrôleur Symfony
 fetch('/api/youtube/' + trackId).then(res => {
 if (!res.ok) 
 throw new Error("Erreur serveur");
 
 
-
 return res.json();
 }).then(data => {
-if (data.url) {
+if (data.url) { // On sauvegarde le lien dans le HTML pour ne pas refaire la recherche si on reclique dessus
 row.dataset.youtube = data.url;
 playVideo(data.url);
 } else {
@@ -182,9 +233,10 @@ ytContainer.innerHTML = '<p class="status-msg-error">Vidéo introuvable sur YouT
 ytContainer.innerHTML = '<p class="status-msg-error">Erreur de connexion</p>';
 console.error(err);
 });
+}}
+);
+});
 }
-});
-});
-});
+);
 	</script>
 {% endblock %}

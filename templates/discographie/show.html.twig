@@ -1,6 +1,8 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}K-Swap | Albums de
+{% block title %}
+	K-Swap | Albums de
+	{# Si le nom du groupe est vide, on affiche le nom de scène de l'artiste #}
 	{{ groupe.nomGroupe ?: groupe.nomScene }}
 {% endblock %}
 
@@ -9,26 +11,44 @@
 		{% include 'header.html.twig' %}
 		{% include 'sidebar.html.twig' %}
 
-		<main class="main-content">
+		<main
+			class="main-content">
+
+			{# en-tête de la page : nom du groupe + image de fond floutée #}
 			<div class="hero-card fade-in">
 				<h1 class="hero-title">Discographie :
-					{{ groupe.nomGroupe ?: groupe.nomScene }}</h1>
+					{{ groupe.nomGroupe ?: groupe.nomScene }}
+				</h1>
 			</div>
 
-			<div class="disco-grid mt-6">
+			{# Grille des albums du groupe #}
+			<div
+				class="disco-grid mt-6">
+
+				{# Boucle sur les albums #}
 				{% for album in groupe.discographies %}
 
-					{# Le lien pointe vers notre nouvelle page Album #}
-					<a href="{{ path('app_album_show', {'id': album.id}) }}" class="disco-card fade-in" style="text-decoration: none; color: inherit; display: block;">
+					{# Carte Album #}
+					{# Redirige vers la vue détaillée de cet album précis #}
+						<a
+						href="{{ path('app_album_show', {'id': album.id}) }}" class="disco-card fade-in" style="text-decoration: none; color: inherit; display: block;"> {# Gestion image #}
+						<div
+							class="disco-image-wrapper">
 
-						<div class="disco-image-wrapper">
+							{# Vérifie si l'album possède une pochette #}
 							{% if album.pochette %}
 								{% set cleanUrl = album.pochette|trim %}
+
+								{# Si c'est une URL externe #}
 								{% if cleanUrl starts with 'http' or cleanUrl starts with '//' %}
-									<img src="{{ cleanUrl }}" alt="{{ album.titre }}" loading="lazy" referrerpolicy="no-referrer">
+									<img
+									src="{{ cleanUrl }}" alt="{{ album.titre }}" loading="lazy" referrerpolicy="no-referrer">
+									{# Si c'est un fichier stocké localement sur le serveur #}
 								{% else %}
 									<img src="{{ asset('images/albums/' ~ cleanUrl) }}" alt="{{ album.titre }}" loading="lazy">
 								{% endif %}
+
+								{# pochette par défaut si aucune image n'est trouvée #}
 							{% else %}
 								<img src="{{ asset('img/logo_kpop.png') }}" alt="{{ album.titre }}" loading="lazy" style="object-fit: contain;">
 							{% endif %}
@@ -40,22 +60,33 @@
 							</div>
 						</div>
 
-						<div class="disco-info">
+						{# Informations textuelles #}
+						<div
+							class="disco-info">
+							{# Titre de l'album #}
 							<h3 class="disco-title">{{ album.titre }}</h3>
-							<span class="disco-subtitle">
+
+							{# Sous-titre : Année de sortie #}
+							<span
+								class="disco-subtitle">
+								{# Si une date existe, le filtre |date('Y') extrait uniquement l'année (ex: "2024" au lieu du "15/04/2024") #}
 								{{ album.dateSortie ? album.dateSortie|date('Y') : 'Année inconnue' }}
 							</span>
 						</div>
 
 					</a>
+
+					{# cas où aucun album n'est trouvé #}
 				{% else %}
 					<div class="col-12">
 						<p class="text-gray-400">Aucun album disponible pour ce groupe.</p>
 					</div>
 				{% endfor %}
+
 			</div>
 		</main>
 
 		<aside class="right-panel"></aside>
+
 	</div>
 {% endblock %}
