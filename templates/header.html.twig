@@ -1,7 +1,8 @@
 <header class="top-header">
-    <div class="search-bar">
+    <div class="search-bar" id="search-container">
         <span class="material-symbols-rounded search-icon">search</span>
-        <input type="text" class="search-input" placeholder="Rechercher">
+        <input type="text" class="search-input" id="search-input" placeholder="Rechercher un titre, album, artiste...">
+        <div class="search-results" id="search-results" style="display:none;"></div>
     </div>
 
     <div class="header-actions">
@@ -10,3 +11,60 @@
         </a>
     </div>
 </header>
+
+<script>
+(function () {
+    const input = document.getElementById('search-input');
+    const resultsBox = document.getElementById('search-results');
+    let debounceTimer;
+
+    input.addEventListener('input', function () {
+        clearTimeout(debounceTimer);
+        const query = this.value.trim();
+
+        if (query.length < 2) {
+            resultsBox.style.display = 'none';
+            resultsBox.innerHTML = '';
+            return;
+        }
+
+        debounceTimer = setTimeout(() => {
+            fetch(`/api/search/morceaux?q=${encodeURIComponent(query)}`)
+                .then(res => res.json())
+                .then(data => {
+                    if (data.length === 0) {
+                        resultsBox.innerHTML = '<div class="search-no-result">Aucun résultat</div>';
+                    } else {
+                        resultsBox.innerHTML = data.map(item => `
+                            <div class="search-result-item" data-album-id="${item.album_id}">
+                                <img src="${item.pochette || '/images/default-cover.png'}" alt="pochette" class="search-result-pochette">
+                                <div class="search-result-info">
+                                    <span class="search-result-titre">${item.titre}</span>
+                                    <span class="search-result-meta">${item.artiste} — ${item.album}fan</span>
+                                </div>
+                            </div>
+                        `).join('');
+
+                        resultsBox.querySelectorAll('.search-result-item').forEach(el => {
+                            el.addEventListener('click', () => {
+                                window.location.href = `/discographie/album/${el.dataset.albumId}`;
+                            });
+                        });
+                    }
+                    resultsBox.style.display = 'block';
+                })
+                .catch(() => {
+                    resultsBox.innerHTML = '<div class="search-no-result">Erreur lors de la recherche</div>';
+                    resultsBox.style.display = 'block';
+                });
+        }, 300);
+    });
+
+    // Ferme le dropdown en cliquant ailleurs
+    document.addEventListener('click', function (e) {
+        if (!document.getElementById('search-container').contains(e.target)) {
+            resultsBox.style.display = 'none';
+        }
+    });
+})();
+</script>

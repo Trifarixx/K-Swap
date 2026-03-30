@@ -117,7 +117,7 @@ class Discographie
         }
 
         return $this;
-    }
+    }   
 
     public function removeMorceau(Morceau $morceau): static
     {
