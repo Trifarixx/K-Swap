@@ -18,8 +18,9 @@
 				<p class="page-subtitle">Partage ton avis sur une musique ou un album avec la communauté.</p>
 			</div>
 
-			{# Formulaire de création de post #}
-			<form action="{{ path('app_post_new') }}" method="POST" id="post-form">
+			{# Formulaire PRINCIPAL de création de post #}
+			{# N'oublie jamais le enctype pour l'upload de fichiers ! #}
+			<form action="{{ path('app_post_new') }}" method="POST" id="post-form" enctype="multipart/form-data">
 
 				<div
 					class="post-creation-container">
@@ -35,6 +36,22 @@
 							<textarea name="commentaire" id="commentaire" rows="5" class="neon-input" placeholder="Que veux-tu dire sur ce son ? Écris ton avis détaillé ici..." required></textarea>
 						</div>
 
+						{# --- ZONE AJOUT MÉDIAS (Image ou Vidéo) --- #}
+						<div class="media-addition-bar" style="margin-top: 15px;">
+							<button type="button" class="btn-add-media" id="btn-trigger-media" title="Ajouter une image ou une vidéo">
+								<span class="material-symbols-rounded">perm_media</span>
+								<span style="margin-left: 8px;">Ajouter une image ou vidéo</span>
+							</button>
+						</div>
+
+						{# Champ file caché (Accepte les images et les vidéos MP4/WebM) #}
+						<input
+						type="file" name="media_post" id="post-media-input" accept="image/png, image/jpeg, image/webp, image/gif, video/mp4, video/webm" style="display: none;">
+
+						{# Zone de prévisualisation générée en JS #}
+						<div id="media-preview-container" class="media-preview-box" style="display: none; margin-top: 15px; position: relative;"></div>
+						{# ----------------------------------------- #}
+
 						<button type="submit" class="neon-btn-submit auth-submit-btn" style="margin-top: 15px;">Publier la review</button>
 					</div>
 
@@ -45,11 +62,8 @@
 							Lier une musique
 						</h3>
 
-						{# Champ de recherche asynchrone #}
-						<input
-						type="text" id="music-search-input" class="search-input-lg" placeholder="Chercher un artiste, morceau, album...">
+						<input type="text" id="music-search-input" class="search-input-lg" placeholder="Chercher un artiste, morceau, album...">
 
-						{# Conteneur où s'afficheront les résultats de la recherche #}
 						<div class="search-results" id="search-results-container">
 							<div class="empty-search-msg">
 								<span class="material-symbols-rounded empty-search-icon">search</span>
@@ -57,13 +71,8 @@
 							</div>
 						</div>
 
-						{# Zone de sélection de la musique #}
+						<input type="hidden" name="morceau_id" id="selected-morceau-id" required>
 
-						{# Ce champ caché stocke l'ID de la musique choisie pour l'envoyer au serveur #}
-						<input
-						type="hidden" name="morceau_id" id="selected-morceau-id" required>
-
-						{# Cette div est masquée par défaut et s'affiche quand l'utilisateur clique sur un résultat #}
 						<div id="selection-preview" style="display: none;">
 							<p>Musique sélectionnée :</p>
 
@@ -72,7 +81,6 @@
 								<strong id="selection-title"></strong>
 							</div>
 
-							{# Bouton pour annuler la sélection #}
 							<button type="button" onclick="cancelSelection()" class="btn-cancel-selection">
 								Choisir une autre
 							</button>
@@ -83,17 +91,74 @@
 		</main>
 	</div>
 
-	{# Script de gestion du formulaire de création de post + Recherche asynchrone de musique (AJAX) #}
 	<script>
-		// Gestion du formulaire de création de post
-document.getElementById('post-form').addEventListener('submit', function (e) { // Vérification qu'une musique a bien été sélectionnée avant d'envoyer au PHP
-if (!document.getElementById('selected-morceau-id').value) {
-e.preventDefault(); // Annule l'envoi du formulaire
-alert("Tu dois absolument lier une musique avant de publier !");
-}
+		// ==========================================================
+// 1. GESTION DES MÉDIAS LOCAUX (IMAGE & VIDÉO)
+// ==========================================================
+const mediaInput = document.getElementById('post-media-input');
+const mediaPreviewContainer = document.getElementById('media-preview-container');
+let currentObjectUrl = null;
+// Pour vider la mémoire du navigateur
+
+// Clic sur le bouton stylisé -> Ouvre l'explorateur de fichiers
+document.getElementById('btn-trigger-media').addEventListener('click', () => {
+mediaInput.click();
 });
 
-// Recherche asynchrone de musique (AJAX)
+// Quand un fichier est sélectionné
+mediaInput.addEventListener('change', function () {
+const file = this.files[0];
+if (! file) 
+return;
+
+
+
+// Sécurité : on libère l'ancienne URL si elle existe
+if (currentObjectUrl) {
+URL.revokeObjectURL(currentObjectUrl);
+}
+
+// Crée une URL locale temporaire pour l'aperçu
+currentObjectUrl = URL.createObjectURL(file);
+let mediaElementHTML = '';
+
+/* Si c'est une image */
+if (file.type.startsWith('image/')) {
+mediaElementHTML = `<img src="${currentObjectUrl}" alt="Aperçu du média" class="preview-media-element">`;
+}
+/* Si c'est une vidéo */ else if (file.type.startsWith('video/')) {
+mediaElementHTML = `<video src="${currentObjectUrl}" controls class="preview-media-element"></video>`;
+}
+/* Si c'est un format non supporté (sécurité front-end) */ else {
+alert("Format de fichier non supporté. Utilise une image ou une vidéo MP4/WebM.");
+removeMedia();
+return;
+}
+
+// On injecte le média et le bouton de suppression
+mediaPreviewContainer.innerHTML = `
+                ${mediaElementHTML}
+                <button type="button" class="btn-remove-media" onclick="removeMedia()" title="Retirer le média">
+                    <span class="material-symbols-rounded">close</span>
+                </button>
+            `;
+mediaPreviewContainer.style.display = 'inline-block';
+});
+
+// Fonction pour retirer le média
+window.removeMedia = function () {
+mediaInput.value = ""; // Vide le champ file
+mediaPreviewContainer.innerHTML = ""; // Vide l'aperçu
+mediaPreviewContainer.style.display = "none";
+if (currentObjectUrl) {
+URL.revokeObjectURL(currentObjectUrl); // Nettoie la mémoire
+currentObjectUrl = null;
+}
+};
+
+// ==========================================================
+// 2. GESTION RECHERCHE MUSIQUE (AJAX)
+// ==========================================================
 const searchInput = document.getElementById('music-search-input');
 const resultsContainer = document.getElementById('search-results-container');
 const defaultImage = "{{ asset('img/logo_kpop.png') }}";
@@ -130,22 +195,22 @@ let titrePropre = item.titre ? item.titre.replace(/'/g, "\\'") : 'Inconnu';
 let artistePropre = item.artiste ? item.artiste.replace(/'/g, "\\'") : 'Inconnu';
 
 resultsContainer.innerHTML += `
-                                    <div class="result-item" onclick="selectMusic(${
+                                <div class="result-item" onclick="selectMusic(${
 item.id
 }, '${titrePropre} - ${artistePropre}', '${imageUrl}')">
-                                        <img src="${imageUrl}" alt="Cover" class="result-cover" referrerpolicy="no-referrer">
-                                        <div class="result-item-content">
-                                            <div class="result-item-title">${
+                                    <img src="${imageUrl}" alt="Cover" class="result-cover" referrerpolicy="no-referrer">
+                                    <div class="result-item-content">
+                                        <div class="result-item-title">${
 item.titre
 }</div>
-                                            <div class="result-item-artist">${
+                                        <div class="result-item-artist">${
 item.artiste
 } • ${
 item.album
 }</div>
-                                        </div>
                                     </div>
-                                `;
+                                </div>
+                            `;
 });
 }).catch(err => {
 console.error(err);
@@ -164,7 +229,6 @@ resultsContainer.innerHTML = `
 }
 });
 
-// Selection d'une musique dans les résultats de recherche
 function selectMusic(id, title, imageUrl) {
 document.getElementById('selected-morceau-id').value = id;
 document.getElementById('selection-title').innerText = title;
@@ -175,11 +239,10 @@ resultsContainer.style.display = 'none';
 searchInput.value = '';
 }
 
-// Annulation de la sélection
 function cancelSelection() {
 document.getElementById('selected-morceau-id').value = '';
 document.getElementById('selection-preview').style.display = 'none';
-resultsContainer.style.display = 'flex';
+resultsContainer.style.display = 'block';
 
 resultsContainer.innerHTML = `
                 <div class="empty-search-msg">

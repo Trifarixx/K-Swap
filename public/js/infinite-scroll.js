@@ -22,43 +22,44 @@ document.addEventListener("DOMContentLoaded", function () {
         if (isLoading || nextPage > totalPages) return;
 
         isLoading = true;
-        console.log("Chargement page " + nextPage + "...");
 
         // On appelle le contrôleur avec ?page=X&ajax=1
         fetch(`/?page=${nextPage}&ajax=1`)
-            .then(response => {
+            .then((response) => {
                 if (!response.ok) throw new Error("Erreur réseau");
                 return response.text();
             })
-            .then(html => {
+            .then((html) => {
                 // On ajoute le HTML à la fin du conteneur
-                container.insertAdjacentHTML('beforeend', html);
-                
+                container.insertAdjacentHTML("beforeend", html);
+
                 nextPage++;
                 isLoading = false;
 
                 // Si on a tout chargé, on cache le loader
                 if (nextPage > totalPages) {
                     trigger.style.display = "none";
-                    console.log("Fin du feed atteinte !");
                 }
             })
-            .catch(err => {
+            .catch((err) => {
                 console.error(err);
                 isLoading = false;
             });
     };
 
     // L'Observateur : détecte quand le trigger entre dans l'écran
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                loadMore();
-            }
-        });
-    }, {
-        rootMargin: "200px" // On charge un peu avant d'arriver tout en bas pour la fluidité
-    });
+    const observer = new IntersectionObserver(
+        (entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    loadMore();
+                }
+            });
+        },
+        {
+            rootMargin: "200px", // On charge un peu avant d'arriver tout en bas pour la fluidité
+        },
+    );
 
     observer.observe(trigger);
 });

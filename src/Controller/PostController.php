@@ -46,14 +46,10 @@ class PostController extends AbstractController
                     // On n'oublie pas de lier l'album pour que le feed puisse afficher la pochette
                     $avis->setDiscographie($morceau->getDiscographie());
                 }
-            } else {
-                $this->addFlash('error', 'Tu dois sélectionner une musique.');
-                return $this->redirectToRoute('app_post_new');
             }
 
-            // 4. Gestion de l'image uploadée (optionnel)
-            // si je dois le remettre : <input type="file" name="imageFile">
-            $imageFile = $request->files->get('imageFile');
+            // 4. Gestion de l'image uploadée
+            $imageFile = $request->files->get('media_post');
 
             if ($imageFile) {
                 $originalFilename = pathinfo($imageFile->getClientOriginalName(), PATHINFO_FILENAME);

@@ -40,19 +40,19 @@
 
 		</div>
 
-		{# Contenu du post #}
-		<div
-			class="feed-content">
+		<div class="feed-content">
+			{# 1. Le texte du post #}
+			{# On utilise une div au lieu d'un <p> pour éviter les conflits si ton éditeur ajoute déjà des <p> en HTML #}
+				<div class="post-text"> {{ avis.commentaire|raw }}
+			</div>
 
-			{# Le texte de l'avis ou du message #}
-			<p>{{ avis.commentaire }}</p>
-
-			{# Si l'utilisateur a attaché une image à son post (et que ce n'est pas une review de morceau direct) #}
-			{% if avis.image and not avis.morceau %}
-				<div class="post-image mb-4 rounded-xl overflow-hidden mt-3">
-					<img src="{{ asset('uploads/posts/' ~ avis.image) }}" alt="Post image" class="w-full h-auto object-cover">
+			{# 2. L'image uploadée par l'utilisateur #}
+			{% if avis.image and avis.image|trim is not empty %}
+				<div class="feed-media-container">
+					<img src="{{ asset('uploads/posts/' ~ avis.image) }}" alt="Image du post" class="feed-media" onerror="this.onerror=null; this.closest('.feed-media-container').style.display='none';">
 				</div>
 			{% endif %}
+
 		</div>
 
 		{# Si cet avis est rattaché à une discographie (album), on affiche une jolie carte intégrée en bas du post #}
