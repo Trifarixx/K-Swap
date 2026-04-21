@@ -40,7 +40,7 @@
 			<span class="nav-text">Accueil</span>
 		</a>
 
-		<a href="#" class="nav-item {% if current_route == 'app_decouvrir' %}active{% endif %}">
+		<a href="{{ path('app_decouvrir') }}" class="nav-item {% if current_route == 'app_decouvrir' %}active{% endif %}">
 			<span class="material-symbols-rounded nav-icon">explore</span>
 			<span class="nav-text">Découvrir</span>
 		</a>

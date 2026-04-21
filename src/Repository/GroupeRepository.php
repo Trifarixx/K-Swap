@@ -15,4 +15,16 @@ class GroupeRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Groupe::class);
     }
+        /**
+     * Retourne l'ID d'un groupe aléatoire via SQL RAND() (MySQL).
+     * Null si la table est vide.
+     */
+    public function findRandomId(): ?int
+    {
+        $result = $this->getEntityManager()->getConnection()
+            ->executeQuery('SELECT id FROM groupe ORDER BY RAND() LIMIT 1')
+            ->fetchOne();
+
+        return $result !== false ? (int) $result : null;
+    }
 }

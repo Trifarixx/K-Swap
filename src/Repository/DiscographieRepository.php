@@ -37,4 +37,16 @@ class DiscographieRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+        /**
+     * Retourne l'ID d'un album aléatoire via SQL RAND() (MySQL).
+     * Null si la table est vide.
+     */
+    public function findRandomId(): ?int
+    {
+        $result = $this->getEntityManager()->getConnection()
+            ->executeQuery('SELECT id FROM discographie ORDER BY RAND() LIMIT 1')
+            ->fetchOne();
+
+        return $result !== false ? (int) $result : null;
+    }
 }
