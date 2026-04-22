@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use App\Entity\Commentaire;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
@@ -43,10 +44,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\JoinTable(name: 'user_bias')]
     private Collection $biases;
 
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Commentaire::class, cascade: ['remove'], orphanRemoval: true)]
+    private Collection $commentaires;
+
     public function __construct()
     {
         $this->avis = new ArrayCollection();
         $this->biases = new ArrayCollection();
+        $this->commentaires = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -148,6 +153,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function removeBias(Idol $bias): static
     {
         $this->biases->removeElement($bias);
+        return $this;
+    }
+
+    public function getCommentaires(): Collection
+    {
+        return $this->commentaires;
+    }
+
+    public function addCommentaire(Commentaire $commentaire): static
+    {
+        if (!$this->commentaires->contains($commentaire)) {
+            $this->commentaires->add($commentaire);
+            $commentaire->setUser($this);
+        }
+        return $this;
+    }
+
+    public function removeCommentaire(Commentaire $commentaire): static
+    {
+        if ($this->commentaires->removeElement($commentaire)) {
+            if ($commentaire->getUser() === $this) {
+                $commentaire->setUser(null);
+            }
+        }
         return $this;
     }
 }

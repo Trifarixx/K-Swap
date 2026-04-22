@@ -95,7 +95,50 @@
 
 				</div>
 			</a>
+
+			
 		{% endif %}
+
+		<div class="feed-comments">
+			<h4 class="comments-title">
+				Commentaires
+				<span class="comments-count">{{ avis.commentaires|length }}</span>
+			</h4>
+
+			{% if avis.commentaires|length > 0 %}
+				<ul class="comments-list">
+					{% for commentaire in avis.commentaires %}
+						<li class="comment-item">
+							{% if commentaire.user.avatar %}
+								<img src="{{ asset(commentaire.user.avatar) }}" alt="{{ commentaire.user.pseudonyme }}" class="comment-avatar">
+							{% else %}
+								<div class="comment-avatar-placeholder">{{ commentaire.user.pseudonyme|first|upper }}</div>
+							{% endif %}
+							<div class="comment-body">
+								<div class="comment-header">
+									<span class="comment-author">{{ commentaire.user.pseudonyme }}</span>
+									<span class="comment-date">{{ commentaire.dateCreation|date('d/m/Y H:i') }}</span>
+								</div>
+								<p class="comment-content">{{ commentaire.contenu|nl2br }}</p>
+							</div>
+						</li>
+					{% endfor %}
+				</ul>
+			{% else %}
+				<p class="comments-empty">Aucun commentaire pour le moment. Soyez le premier !</p>
+			{% endif %}
+
+			<form method="post" action="{{ path('app_avis_commenter', {'id': avis.id}) }}" class="comment-form">
+				<textarea 
+					name="contenu" 
+					class="comment-textarea" 
+					rows="2" 
+					required 
+					placeholder="Écrire un commentaire..."
+					maxlength="1000"></textarea>
+				<button type="submit" class="comment-submit">Publier</button>
+			</form>
+		</div>
 
 	</article>
 

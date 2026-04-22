@@ -40,7 +40,10 @@ class AvisRepository extends ServiceEntityRepository
             ->orderBy('a.dateCreation', 'DESC')
             ->addOrderBy('a.id', 'DESC')
             ->setFirstResult(($page - 1) * $limit)
-            ->setMaxResults($limit);
+            ->setMaxResults($limit)
+            ->addSelect('c', 'uc')
+            ->leftJoin('a.commentaires', 'c')
+            ->leftJoin('c.user', 'uc');
 
         return new Paginator($query);
     }

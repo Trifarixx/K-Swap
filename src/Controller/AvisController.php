@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use App\Entity\Commentaire;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use App\Entity\Avis;
 use App\Entity\Morceau;
 use Doctrine\ORM\EntityManagerInterface;
@@ -54,5 +56,28 @@ class AvisController extends AbstractController
         return $this->redirectToRoute('app_album_show', [
             'id' => $morceau->getDiscographie()->getId()
         ]);
+    }
+
+    #[Route('/avis/{id}/commenter', name: 'app_avis_commenter', methods: ['POST'])]
+    #[IsGranted('ROLE_USER')]
+    public function commenter(Avis $avis, Request $request, EntityManagerInterface $em): Response
+    {
+        $contenu = trim((string) $request->request->get('contenu', ''));
+
+        if ($contenu === '') {
+            $this->addFlash('error', 'Le commentaire ne peut pas être vide.');
+            return $this->redirectToRoute('app_home');
+        }
+
+        $commentaire = new Commentaire();
+        $commentaire->setContenu($contenu);
+        $commentaire->setUser($this->getUser());
+        $commentaire->setAvis($avis);
+
+        $em->persist($commentaire);
+        $em->flush();
+
+        $this->addFlash('success', 'Commentaire publié.');
+        return $this->redirectToRoute('app_home');
     }
 }

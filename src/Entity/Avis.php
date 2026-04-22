@@ -5,6 +5,9 @@ namespace App\Entity;
 use App\Repository\AvisRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use App\Entity\Commentaire;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
 #[ORM\Entity(repositoryClass: AvisRepository::class)]
 class Avis
@@ -37,9 +40,13 @@ class Avis
     #[ORM\ManyToOne(inversedBy: 'avis')]
     private ?Morceau $morceau = null;
 
+    #[ORM\OneToMany(mappedBy: 'avis', targetEntity: Commentaire::class, cascade: ['remove'], orphanRemoval: true)]
+    private Collection $commentaires;
+
     public function __construct()
     {
         $this->dateCreation = new \DateTime();
+        $this->commentaires = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -122,6 +129,30 @@ class Avis
     {
         $this->morceau = $morceau;
 
+        return $this;
+    }
+
+    public function getCommentaires(): Collection
+    {
+        return $this->commentaires;
+    }
+
+    public function addCommentaire(Commentaire $commentaire): static
+    {
+        if (!$this->commentaires->contains($commentaire)) {
+            $this->commentaires->add($commentaire);
+            $commentaire->setAvis($this);
+        }
+        return $this;
+    }
+
+    public function removeCommentaire(Commentaire $commentaire): static
+    {
+        if ($this->commentaires->removeElement($commentaire)) {
+            if ($commentaire->getAvis() === $this) {
+                $commentaire->setAvis(null);
+            }
+        }
         return $this;
     }
 }
