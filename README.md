@@ -10,11 +10,10 @@ K-Swap est une plateforme communautaire et une base de données interactive déd
 
 - 🗂️ **Base de Données Musique** : Gestion complète des Artistes, Groupes, Idols, Albums et Morceaux.
 - 📱 **Feed Social** : Fil d'actualité pour partager du contenu et interagir avec la communauté.
-- ⭐ **Avis & Notes** : Laissez des critiques sur les albums et les artistes.
+- ⭐ **Avis & Notes** : Laissez des critiques sur les albums et commenter les posts des autres utilisateurs.
 - 🔍 **Recherche Avancée** : Moteur de recherche performant pour le catalogue musical.
 - 🔗 **Intégrations API** : YouTube (clips vidéo).
-- 🛠️ **Outils d'Import** : Commandes CLI pour scraper et importer massivement des données JSON.
-
+- 👤 **Gestion de Profil** : Consulter vos posts et modifier vos informations de profil.
 
 ## 🛠 Tech Stack
 
@@ -30,4 +29,4 @@ K-Swap est une plateforme communautaire et une base de données interactive déd
 Clonez le projet
 
 ```bash
-  git clone [https://github.com/trifarixx/k-swap.git](https://github.com/trifarixx/k-swap.git)
+  git clone [https://github.com/trifarixx/k-swap.git](https://github.com/trifarixx/k-swap.git
