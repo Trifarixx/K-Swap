@@ -15,7 +15,7 @@ K-Swap est une plateforme communautaire et une base de données interactive déd
 - 🔗 **Intégrations API** : YouTube (clips vidéo).
 - 👤 **Gestion de Profil** : Consulter vos posts et modifier vos informations de profil.
 
-## 🛠 Tech Stack
+## 🛠 informations Techniques
 
 **Frontend:** Twig, SASS/SCSS, Webpack Encore, Stimulus & Turbo (Symfony UX)
 
@@ -25,9 +25,65 @@ K-Swap est une plateforme communautaire et une base de données interactive déd
 
 **Cahier des charges:** Présent à la racine du projet
 
-## 🚀 Run Locally
+**Dump SQL** Présent dans le fichier 'Jeu de données'
 
 Clonez le projet
 
 ```bash
   git clone https://github.com/Trifarixx/K-Swap.git
+```
+
+Installer les dépendances 
+
+```bash
+  composer install
+  npm install
+```
+
+## 🗄️ Déploiement & Migration BDD (VM Debian)
+
+En utilisant le logiciel FileZilla, mettre le fichier .gz à la racine de la Machine Virtuel Debian
+
+```bash
+sudo apt update && sudo apt install unzip
+```
+Maintenant décomprésser le fichier .gz
+
+```bash
+gunzip Kswap.sql.gz
+```
+
+Ensuite il faut créer la base de donnée et l'utilisateur
+
+```bash
+sudo mysql
+create databases KSwap;
+create user 'yoasobi'@'ip_de_la_machine_virtuel' identified by 'mot_de_passe_à_modifier';
+grant all privileges on *.* to 'yoasobi'@1'ip_de_la_machine_virtuel';
+flush privileges;
+exit
+```
+Maintenant l'Importation
+
+```bash
+sudo mysql KSwap --force < Kswap.sql
+```
+## ⚠️ informations Complémentaires
+
+**Dans le cas ou 'composer install' ne fonctionne pas :**
+Se rendre sur c:\tools\php83 puis dans le php.ini SI le 'php.ini' n'est pas présent dupliquer le 'php.ini- development' puis renommer le 'php.ini' Ensuite ouvrer le dans le bloc note en mode administrateur. Exécuter la commande ctrl + f puis écrire 'fileinfo' et enlever le point virgule devant. 
+
+**Dans le cas ou vous choissisez de ne pas prendre les identifiants données :**  ne pas oublier de se rendre dans le .env pour changer les informations de connexion à la base de données. ex :
+
+```php
+DATABASE_URL="mysql://nom_utilisateur:mot_de_passe@ip_de_la_machine_virtuel:3306/nom_de_la_base_de_données?charset=utf8mb4"
+```
+
+## 🚀 Lancement de l'application 
+
+Lancer le serveur
+
+```bash
+  symfony serve
+```
+et ctrl + clique sur : http://127.0.0.1:8000/
