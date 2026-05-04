@@ -23,7 +23,7 @@ K-Swap est une plateforme communautaire et une base de données interactive déd
 
 **Infrastructure:** MySQL/MariaDB
 
-** Cahier des charges:** Présent à la racine du projet
+**Cahier des charges:** Présent à la racine du projet
 
 ## 🚀 Run Locally
 
