@@ -30,4 +30,4 @@ K-Swap est une plateforme communautaire et une base de données interactive déd
 Clonez le projet
 
 ```bash
-  git clone [https://github.com/trifarixx/k-swap.git](https://github.com/trifarixx/k-swap.git
+  git clone https://github.com/Trifarixx/K-Swap.git
