@@ -21,8 +21,9 @@ K-Swap est une plateforme communautaire et une base de données interactive déd
 
 **Backend:** PHP 8.2+, Symfony 6.4+/7.x, Doctrine ORM
 
-**Infrastructure:** Docker, Docker Compose, MySQL/MariaDB
+**Infrastructure:** MySQL/MariaDB
 
+** Cahier des charges:** Présent à la racine du projet
 
 ## 🚀 Run Locally
 
