@@ -44,6 +44,8 @@ Installer les dépendances
 
 En utilisant le logiciel FileZilla, mettre le fichier .gz à la racine de la Machine Virtuel Debian
 
+Ensuite exécuter les commandes suivantes : 
+
 ```bash
 sudo apt update && sudo apt install unzip
 ```
