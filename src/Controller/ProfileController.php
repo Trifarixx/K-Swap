@@ -14,6 +14,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\String\Slugger\SluggerInterface;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 #[IsGranted('ROLE_USER')]
 class ProfileController extends AbstractController
@@ -31,7 +32,7 @@ class ProfileController extends AbstractController
     }
 
     #[Route('/profil/modifier', name: 'app_profile_edit')]
-    public function edit(Request $request, EntityManagerInterface $entityManager, SluggerInterface $slugger): Response
+    public function edit(Request $request, EntityManagerInterface $entityManager, SluggerInterface $slugger, UserPasswordHasherInterface $userPasswordHasher): Response
     {
         /** @var User $user */
         $user = $this->getUser();
@@ -40,6 +41,7 @@ class ProfileController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
+            // Gestion de l'avatar
             /** @var UploadedFile $avatarFile */
             $avatarFile = $form->get('avatarFile')->getData();
 
@@ -63,6 +65,21 @@ class ProfileController extends AbstractController
                 $user->setAvatar('uploads/avatars/' . $newFilename);
             }
 
+            // Gestion de mot de passe
+            // On récupère le nouveau mot de passe s'il a été rempli
+            $newPassword = $form->get('newPassword')->getData();
+
+            if ($newPassword) {
+                // On hache le mot de passe de manière sécurisée
+                $hashedPassword = $userPasswordHasher->hashPassword(
+                    $user,
+                    $newPassword
+                );
+                // On met à jour l'entité
+                $user->setPassword($hashedPassword);
+            }
+
+            // On sauvegarde le tout (avatar + pseudo + email + potentiel mot de passe)
             $entityManager->flush();
 
             $this->addFlash('success', 'Ton profil a été mis à jour avec succès !');

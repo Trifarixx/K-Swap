@@ -14,41 +14,45 @@
 
 			{# En-tête de profil (Informations Utilisateur) #}
 			<div class="profile-header-card fade-in">
-				<div class="profile-header-content">
+				<div class="profile-header-content" style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 20px;">
 
-					{# Avatar #}
-					{# On utilise app.user qui représente l'utilisateur actuellement connecté #}
-						{% if app.user.avatar %}
-						<img src="{{ asset(app.user.avatar) }}" alt="{{ app.user.pseudonyme }}" class="profile-avatar-large">
-					{% else %}
-						{# On prend la première lettre du pseudo (|first) et on la met en majuscule (|upper) #}
-						<div class="profile-avatar-placeholder-large">{{ app.user.pseudonyme|first|upper }}</div>
-					{% endif %}
-
-					{# Infos & Statistiques #}
 					<div
-						class="profile-info">
-						{# Pseudo et Email #}
-						<h1>{{ app.user.pseudonyme }}</h1>
-						<span class="profile-email">{{ app.user.email }}</span>
+						style="display: flex; align-items: center; gap: 20px;">
+						{# Avatar #}
+						{% if app.user.avatar %}
+							<img src="{{ asset(app.user.avatar) }}" alt="{{ app.user.pseudonyme }}" class="profile-avatar-large" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 3px solid var(--primary);">
+						{% else %}
+							<div class="profile-avatar-placeholder-large" style="width: 100px; height: 100px; border-radius: 50%; background: linear-gradient(135deg, var(--primary), var(--accent)); display: flex; align-items: center; justify-content: center; font-size: 2.5rem; font-weight: bold; color: white;">
+								{{ app.user.pseudonyme|first|upper }}
+							</div>
+						{% endif %}
 
-						{# Badge de statistiques #}
-						<div class="profile-stats">
-							<div class="stat-badge">
-								<span class="material-symbols-rounded">reviews</span>
-								{# On compte combien d'avis sont dans le tableau avec le filtre |length #}
-								{{ avis_list|length }}
-								Avis publiés
+						{# Infos & Statistiques #}
+						<div class="profile-info">
+							<h1 style="margin: 0; font-size: 1.8rem;">{{ app.user.pseudonyme }}</h1>
+							<span class="profile-email" style="color: var(--text-muted); font-size: 0.9rem;">{{ app.user.email }}</span>
+
+							{# Badge de statistiques #}
+							<div class="profile-stats" style="margin-top: 10px;">
+								<div class="stat-badge" style="display: inline-flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.1); padding: 5px 12px; border-radius: 20px; font-size: 0.85rem;">
+									<span class="material-symbols-rounded" style="font-size: 18px; color: var(--accent);">reviews</span>
+									<strong>{{ avis_list|length }}</strong>
+									Avis publiés
+								</div>
 							</div>
 						</div>
 					</div>
 
-					{# Modification #}
-					<div>
-						{# Lien vers le formulaire d'édition qu'on a commenté juste avant #}
-						<a href="{{ path('app_profile_edit') }}" class="btn btn-glass">
-							<span class="material-symbols-rounded">edit</span>
+					{# Actions (Modification & Déconnexion) #}
+					<div style="display: flex; gap: 10px;">
+						<a href="{{ path('app_profile_edit') }}" class="btn btn-glass" style="padding: 10px 20px;">
+							<span class="material-symbols-rounded" style="font-size: 20px;">edit</span>
 							Modifier
+						</a>
+
+						{# Petit raccourci de déconnexion sur profil #}
+						<a href="{{ path('app_logout') }}" class="btn btn-glass" style="padding: 10px; color: #ef4444; border-color: rgba(239, 68, 68, 0.3);" title="Se déconnecter">
+							<span class="material-symbols-rounded" style="font-size: 20px;">logout</span>
 						</a>
 					</div>
 
@@ -56,7 +60,7 @@
 			</div>
 
 			{# Liste des avis publiés par l'utilisateur #}
-			<div class="section-header fade-in" style="animation-delay: 0.1s;">
+			<div class="section-header fade-in" style="animation-delay: 0.1s; margin-top: 40px;">
 				<h2 class="section-title">Mes dernières publications</h2>
 			</div>
 
@@ -66,18 +70,16 @@
 				{# Cas où l'utilisateur n'a encore rien publié #}
 				{% if avis_list is empty %}
 
-					{# Message d'incitation avec un bouton pour l'encourager à poster #}
-					<div class="empty-msg" style="background: rgba(255,255,255,0.02); border-radius: 16px; border: 1px dashed rgba(255,255,255,0.1);">
-						<span class="material-symbols-rounded" style="font-size: 48px; opacity: 0.5; display: block; margin-bottom: 10px;">speaker_notes_off</span>
-						Tu n'as pas encore publié d'avis.
-						<br><br>
-						<a href="{{ path('app_post_new') }}" class="btn btn-primary">Créer mon premier post</a>
+					<div class="empty-msg" style="background: rgba(255,255,255,0.02); border-radius: 16px; border: 1px dashed rgba(255,255,255,0.1); padding: 40px; text-align: center;">
+						<span class="material-symbols-rounded" style="font-size: 48px; opacity: 0.5; display: block; margin-bottom: 15px;">speaker_notes_off</span>
+						<p style="color: var(--text-muted); margin-bottom: 20px;">Tu n'as pas encore publié d'avis sur tes morceaux préférés.</p>
+						<a href="{{ path('app_post_new') }}" class="neon-btn-submit" style="text-decoration: none; display: inline-block;">Créer mon premier post</a>
 					</div>
 
 					{# Cas où l'utilisateur a des publications #}
 				{% else %}
 
-					{# Au lieu de réécrire toute la boucle d'affichage, on inclut intelligemment le même fichier qui gère le fil d'actualité ! #}
+					{# Inclusion du fil d'actualité centralisé #}
 					{% include 'index/_feed_items.html.twig' %}
 
 				{% endif %}

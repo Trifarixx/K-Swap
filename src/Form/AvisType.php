@@ -30,14 +30,16 @@ class AvisType extends AbstractType
                 'required' => false,
                 'constraints' => [
                     new Image([
-                        'maxSize' => '5M',
+                        'maxSize' => '10M',
                         'mimeTypes' => [
                             'image/jpeg',
                             'image/jpg',
                             'image/png',
                             'image/webp',
+                            'image/avif',
+                            'image/gif',
                         ],
-                        'mimeTypesMessage' => 'Merci d\'envoyer une image valide (JPG, PNG, WEBP)',
+                        'mimeTypesMessage' => 'Merci d\'envoyer une image valide (JPG, PNG, JPEG, WEBP, AVIF, GIF)',
                     ])
                 ],
                 'attr' => ['class' => 'form-file']
