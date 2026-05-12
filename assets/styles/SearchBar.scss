@@ -1,6 +1,6 @@
 .search-bar {
     position: relative;
-}
+}       
 
 .search-results {
     position: absolute;
@@ -16,7 +16,7 @@
     box-shadow: 0 8px 24px rgba(0,0,0,0.4);
 }
 
-.search-result-item {
+.search-result-item {       
     display: flex;
     align-items: center;
     gap: 12px;
